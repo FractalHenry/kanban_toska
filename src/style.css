@@ -1,0 +1,110 @@
+body {
+  --primary: #4D869C;
+  --secondary: #EEF7FF;
+  --primary-btn: var(--secondary);
+  --secondary-btn: var(--primary);
+  --disabled-btn: lightgray;
+  background-color: var(--secondary);
+  height: 100vh;
+  min-height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a{
+  text-decoration:none;
+}
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+.flex-row{
+  display: flex;
+  flex-direction: row;
+}
+.wrapper{
+  position: absolute;
+  height: 90%;
+  width: 100%;
+}
+.center{
+  align-items: center;
+  justify-content: center;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.fill{
+  flex-grow: 1;
+}
+.header{
+  background-color: var(--primary);
+}
+.p-4{
+  padding: 4px;
+}
+.mr-2{
+  margin: 2px;
+}
+.mr-4{
+  margin: 4px;
+}
+.gap-8{
+  gap: 8px;
+}
+h1{
+  color: var(--primary);
+  font-size: 24px;
+}
+.btn{
+  background-color: transparent;
+  text-align: center;
+  text-decoration:none;
+  display: flex;
+  border-radius: 8px;
+  border-width: 2px;
+  border-style: solid;
+}
+input[type="submit"]{
+  border-radius: 4px;
+}
+.btn:hover,input[type="submit"]{
+  cursor: pointer;
+  filter: brightness(85%);
+}
+.btn-primary{
+  background-color: none;
+  border-color:var(--primary-btn);
+  color: var(--primary-btn);
+}
+.btn-secondary{
+  background-color: none;
+  border-color:var(--secondary-btn);
+  color: var(--secondary-btn);
+}
+.btn-disabled{
+  background-color: none;
+  border-color:var(--disabled-btn);
+  color: var(--disabled-btn);
+}
+.txt-primary{
+  color: var(--primary-btn)
+}
+.txt-secondary{
+  color: var(--secondary-btn);
+}
+.txt-disabled{
+  color: var(--disabled-btn);
+}
+form{
+  align-items: center;
+  padding: 8px;
+  border-color: var(--primary);
+  border-radius: 16px;
+  border-width: 2px;
+  border-style: solid;
+}
