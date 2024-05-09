@@ -7,8 +7,8 @@ const authform= () =>{
     return(
         <form className="flex-col gap-8" action={submit}>
             <h1>Авторизация</h1>
-            <input type="text" placeholder="Логин"></input>
-            <input type="text" placeholder="Пароль"></input>
+            <input type="text" placeholder="Логин"/>
+            <input type="password" placeholder="Пароль"/>
             <input className="btn btn-secondary text-secondary p-4" type="submit" value="Войти"/>
             <Link to="/restore" className="t-16">Забыли Пароль?</Link>
         </form>

@@ -6,7 +6,7 @@ let header = () =>{
             <img className="logo"></img>
             <Button caption="home" link="/" cls="primary"/>
             <div className="fill"/>
-            <Button caption="My Boards" link="/" cls="primary"/>
+            <Button caption="My Boards" link="/boards" cls="primary"/>
             <Button caption="Sign In" link="/auth" cls="primary"/>
             <Button caption="Sign Up" link="/reg"/>
         </div>

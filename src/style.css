@@ -17,6 +17,9 @@ body {
 a{
   text-decoration:none;
 }
+.overflow{
+  flex-wrap: wrap;
+}
 .flex-col{
   display: flex;
   flex-direction: column;
@@ -107,4 +110,18 @@ form{
   border-radius: 16px;
   border-width: 2px;
   border-style: solid;
+}
+.boardcard{
+  max-width: 160px;
+  max-height: 120px;
+  border-radius: 8px;
+  border-width: 2px;
+  border-style: solid;
+}
+.trim{
+  overflow: hidden;
+  object-fit:cover;
+}
+.between{
+  justify-content: space-between;
 }
