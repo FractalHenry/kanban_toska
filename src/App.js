@@ -3,6 +3,7 @@ import Header from "./components/header"
 import Auth from './pages/auth/auth';
 import Reg from './pages/reg/reg';
 import Boards from './pages/boards/boards';
+import Error from './pages/error/error';
 import {Route,Routes,Navigate } from 'react-router-dom';
 function App() {
   
@@ -15,7 +16,7 @@ function App() {
           <Route path="/auth" element={<Auth/>}/>
           <Route path="/reg" element={<Reg/>}/>
           <Route path="/boards" element={<Boards/>}/>
-          <Route path="*" element={<Navigate to="/error" replace={true} />}/>
+          <Route path="*" element={<Error/>}/>
         </Routes>
       </div>
     </div>
