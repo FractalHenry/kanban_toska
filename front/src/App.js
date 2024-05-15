@@ -1,4 +1,4 @@
-import Header from "./front/components/header"
+import Header from "./components/header"
 import Auth from './pages/auth/auth';
 import Reg from './pages/reg/reg';
 import Boards from './pages/boards/boards';

@@ -5,7 +5,9 @@ let card = ({cardheader}) =>{
             <div>
                 <h1>{cardheader}</h1>
             </div>
+            <hr/>
             <div className="taskwrapper">There will be tasks</div>
         </div>
     )
 }
+export default card
