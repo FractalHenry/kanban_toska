@@ -1,9 +1,10 @@
 import React from "react";
 import Button from "./button"
+import logo from '../logo.svg';
 let header = () =>{
     return(
         <div className="flex-row header p-4">
-            <img className="logo"></img>
+            <img className="logo" src={logo}/>
             <Button caption="home" link="/" cls="primary"/>
             <div className="fill"/>
             <Button caption="My Boards" link="/boards" cls="primary"/>

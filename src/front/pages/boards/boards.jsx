@@ -3,7 +3,7 @@ import BoardCard from "./boardcard";
 let Boards = () =>{
     return(
         <div className="boards flex-row overflow gap-8 between">
-            <BoardCard/>
+            <BoardCard link="/board"/>
             <BoardCard/>
             <BoardCard/>
             <BoardCard/>
