@@ -16,7 +16,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Формируем строку подключения к PostgreSQL
-	dsn := ""
+	dsn := "host=localhost port=5433 user=postgres dbname=postgres password=web sslmode=disable"
 	// Подключаемся к базе данных SQLite
 	db, err := gorm.Open("postgres", dsn)
 	if err != nil {
