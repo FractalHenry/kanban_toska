@@ -4,24 +4,32 @@ import Reg from './pages/reg/reg';
 import Boards from './pages/boards/boards';
 import Board from './pages/boards/board/board';
 import Error from './pages/error/error';
-import {Route,Routes } from 'react-router-dom';
+import ProtectedPage from "./pages/protected/protected";
+import { Route, Routes, useParams } from 'react-router-dom';
+import { AuthProvider } from './components/AuthContext';
+
 function App() {
-  
+  const { login } = useParams();
+
   return (
-    <div>
-      <Header/>
-      <div className='wrapper flex-col center'>
-        <Routes>
-          <Route path="/" element=""/>
-          <Route path="/auth" element={<Auth/>}/>
-          <Route path="/reg" element={<Reg/>}/>
-          <Route path="/boards" element={<Boards/>}/>
-          <Route path="/board" element={<Board/>}/>
-          <Route path="*" element={<Error/>}/>
-        </Routes>
+    <AuthProvider> {/* Оборачиваем в AuthProvider */}
+      <div>
+        <Header />
+        <div className='wrapper flex-col center'>
+          <Routes>
+            <Route path="/" element="" />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/reg" element={<Reg />} />
+            <Route path="/boards" element={<Boards />} />
+            <Route path="/board" element={<Board />} />
+            <Route path="/protected/:login" element={<ProtectedPage login={login} />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </AuthProvider>
   );
 }
+
 
 export default App;
