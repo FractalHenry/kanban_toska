@@ -14,6 +14,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   max-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 .logo{
   width: auto;
@@ -37,6 +39,8 @@ a{
   position: absolute;
   height: 90%;
   width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 .center{
   align-items: center;
@@ -109,6 +113,7 @@ input[type="submit"]{
   color: var(--disabled-btn);
 }
 form{
+  width: fit-content;
   align-items: center;
   padding: 8px;
   border-color: var(--primary);
@@ -136,8 +141,17 @@ form{
   width: max-content;
 }
 hr{
-  margin: 0px 8px 0px 8px;
   color: var(--primary);
+}
+.cardswrapper{
+  gap: 4px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  max-width: 75%;
+  width: 75%;
 }
 .cardwrapper{
   border-width: 2px;
@@ -145,4 +159,10 @@ hr{
   border-style: solid;
   border-color: var(--primary);
   min-width: 250px;
+  padding: 8px;
+  height: min-content;
+}
+.boardinfo{
+  width: 23%;
+  min-height: 550px
 }
