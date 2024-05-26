@@ -13,20 +13,16 @@ function App() {
 
   return (
     <AuthProvider> {/* Оборачиваем в AuthProvider */}
-      <div>
-        <Header />
-        <div className='wrapper flex-col center'>
-          <Routes>
-            <Route path="/" element="" />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/reg" element={<Reg />} />
-            <Route path="/boards" element={<Boards />} />
-            <Route path="/board" element={<Board />} />
-            <Route path="/protected/:login" element={<ProtectedPage login={login} />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-        </div>
-      </div>
+      <Header />
+        <Routes>
+          <Route path="/" element="" />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/reg" element={<Reg />} />
+          <Route path="/boards" element={<Boards />} />
+          <Route path="/board" element={<Board />} />
+          <Route path="/protected/:login" element={<ProtectedPage login={login} />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
     </AuthProvider>
   );
 }

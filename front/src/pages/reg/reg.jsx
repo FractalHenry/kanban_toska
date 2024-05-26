@@ -38,7 +38,8 @@ const RegForm = () => {
   };
 
   return (
-    <form className="flex-col gap-8" onSubmit={handleSubmit}>
+    <div className="flex center vh-80">
+    <form className="flex-col gap-8 " onSubmit={handleSubmit}>
       <h1>Регистрация</h1>
       {error && <div className="error">{error}</div>}
       <input
@@ -71,6 +72,7 @@ const RegForm = () => {
         value="Зарегистрироваться"
       />
     </form>
+    </div>
   );
 };
 

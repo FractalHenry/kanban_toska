@@ -2,8 +2,8 @@ import React from "react";
 import Card from "../../../components/card";
 let board = ({boardID,boardName="Noname"}) =>{
     return(
-        <div>
-            <div className="header flex-col fill">{boardName}</div>
+        <div className="">
+            <div className="header h2">{boardName}</div>
             <div className="flex-row">
                 <div className="boardinfo">
                     info block

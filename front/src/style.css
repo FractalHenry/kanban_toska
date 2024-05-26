@@ -35,16 +35,22 @@ a{
   display: flex;
   flex-direction: row;
 }
+.flex{
+  display: flex;
+}
 .wrapper{
-  position: absolute;
+  min-height: 85%;
   height: 90%;
   width: 100%;
   max-width: 100%;
   flex-wrap: wrap;
+  flex-grow: 1;
 }
 .center{
   align-items: center;
   justify-content: center;
+  align-self: center;
+  justify-self: center;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -64,6 +70,9 @@ code {
 }
 .mr-4{
   margin: 4px;
+}
+.m-8{
+  margin: 8px;
 }
 .gap-8{
   gap: 8px;
@@ -143,6 +152,10 @@ form{
 hr{
   color: var(--primary);
 }
+.h2{
+  font-size:36px;
+  font-weight: bold;
+}
 .cardswrapper{
   gap: 4px;
   flex-grow: 1;
@@ -164,5 +177,8 @@ hr{
 }
 .boardinfo{
   width: 23%;
-  min-height: 550px
+  min-height: 80vh
+}
+.vh-80{
+  min-height: 80vh;
 }

@@ -33,6 +33,7 @@ const AuthForm = () => {
   };
 
   return (
+    <div className='flex center vh-80'>
     <form className="flex-col gap-8" onSubmit={handleSubmit}>
       <h1>Авторизация</h1>
       <input
@@ -52,6 +53,7 @@ const AuthForm = () => {
         Забыли Пароль?
       </Link>
     </form>
+    </div>
   );
 };
 
