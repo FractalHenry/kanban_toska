@@ -30,7 +30,7 @@ func main() {
 	router.HandleFunc("/login", handlers.Login).Methods("POST")
 	//router.Handle("/protected", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpoint))).Methods("GET")
 
-	router.Handle("/protected/{login}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("POST")
+	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("POST")
 
 	// Настройка CORS
 	c := cors.New(cors.Options{

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -81,12 +82,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 // ProtectedEndpoint - защищенный маршрут, доступный только аутентифицированным пользователям
 func ProtectedEndpoint(w http.ResponseWriter, r *http.Request) {
-	login := r.Header.Get("login")
+	login := r.URL.Path
 	json.NewEncoder(w).Encode(map[string]string{"message": "Hello " + login})
 }
 
-// ProtectedEndpointWithLogin - защищенный маршрут с динамическим логином
 func ProtectedEndpointWithLogin(w http.ResponseWriter, r *http.Request) {
-	login := r.Header.Get("login")
-	json.NewEncoder(w).Encode(map[string]string{"message": "Hello " + login})
+	vars := mux.Vars(r)
+	name := vars["name"]
+	json.NewEncoder(w).Encode(map[string]string{"message": "Hello " + name})
 }

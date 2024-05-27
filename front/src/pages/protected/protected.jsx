@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const ProtectedPage = ({ login }) => {
+const ProtectedPage = () => {
+    const {login} = useParams();
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
 
@@ -19,15 +20,13 @@ const ProtectedPage = ({ login }) => {
                 const response = await fetch(`http://localhost:8000/protected/${login}`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`, 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ login })
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    setMessage(data.message);  
+                    setMessage(data.message);
                 } else {
                     throw new Error('Что-то пошло не так');
                 }
@@ -38,7 +37,7 @@ const ProtectedPage = ({ login }) => {
         };
 
         fetchData();
-    }, [navigate, login]); 
+    }, [navigate]);
 
     return (
         <div>

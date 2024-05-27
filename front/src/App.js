@@ -9,7 +9,6 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
 
 function App() {
-  const { login } = useParams();
 
   return (
     <AuthProvider> {/* Оборачиваем в AuthProvider */}
@@ -20,7 +19,7 @@ function App() {
           <Route path="/reg" element={<Reg />} />
           <Route path="/boards" element={<Boards />} />
           <Route path="/board/:id" element={<Board />} />
-          <Route path="/protected/:login" element={<ProtectedPage login={login} />} />
+          <Route path="/protected/:login" element={<ProtectedPage />} />
           <Route path="*" element={<Error />} />
         </Routes>
     </AuthProvider>
