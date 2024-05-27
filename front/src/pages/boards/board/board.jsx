@@ -1,14 +1,19 @@
 import React from "react";
 import Card from "../../../components/card";
-let board = ({boardID,boardName="Noname"}) =>{
+import { useParams } from 'react-router-dom';
+
+let Board = ({boardName="Noname"}) =>{
+    const { id } = useParams();
     return(
         <div className="">
-            <div className="header h2">{boardName}</div>
-            <div className="flex-row">
-                <div className="boardinfo">
-                    info block
+            <div className="header h2">{boardName} || TESTING { id }</div>
+            <div className="flex-row mt-8 mb-8 ml-8">
+                <div className="boardinfo overflow-y">
+                    <h2>Info</h2>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint nobis natus dicta nemo unde. Dolores modi asperiores ad iste vero voluptas distinctio laboriosam soluta, natus, molestias quaerat, odio delectus?
+                    <h2>About</h2>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint nobis natus dicta nemo unde. Dolores modi asperiores ad iste vero voluptas distinctio laboriosam soluta, natus, molestias quaerat, odio delectus?
+                    <h2>Anything else</h2>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint nobis natus dicta nemo unde. Dolores modi asperiores ad iste vero voluptas distinctio laboriosam soluta, natus, molestias quaerat, odio delectus?
 
                 </div>
@@ -23,4 +28,4 @@ let board = ({boardID,boardName="Noname"}) =>{
         </div>
     )
 }
-export default board
+export default Board

@@ -1,13 +1,22 @@
 import React from "react";
-let card = ({cardheader}) =>{
+import Task from './task'
+import { SquarePlus } from "lucide-react";
+let Card = ({cardheader}) =>{
     return(
-        <div className="cardwrapper">
+        <div className="cardwrapper gap-8">
             <div>
                 <h1>{cardheader}</h1>
             </div>
             <hr/>
-            <div className="taskwrapper">There will be tasks</div>
+            <div id="tasks">
+            <Task></Task>
+            </div>
+            <button className="flex taskwrapper max-x center">
+                Add new task 
+                <div className="fill"/>
+                <SquarePlus />
+            </button>
         </div>
     )
 }
-export default card
+export default Card

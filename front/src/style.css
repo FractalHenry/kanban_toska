@@ -27,6 +27,10 @@ a{
 .overflow{
   flex-wrap: wrap;
 }
+.overflow-y{
+  overflow-y: scroll;
+  flex-wrap: wrap;
+}
 .flex-col{
   display: flex;
   flex-direction: column;
@@ -73,6 +77,15 @@ code {
 }
 .m-8{
   margin: 8px;
+}
+.mt-8{
+  margin-top: 8px;
+}
+.ml-8{
+  margin-left: 8px;
+}
+.mb-8{
+  margin-bottom: 8px;
 }
 .gap-8{
   gap: 8px;
@@ -163,8 +176,8 @@ hr{
   flex-direction: row;
   flex-wrap: nowrap;
   overflow-x: scroll;
-  max-width: 75%;
-  width: 75%;
+  max-width: 80%;
+  width: 80%;
 }
 .cardwrapper{
   border-width: 2px;
@@ -177,8 +190,25 @@ hr{
 }
 .boardinfo{
   width: 23%;
-  min-height: 80vh
+  min-height: 80vh;
+  max-height: 80vh;
 }
 .vh-80{
   min-height: 80vh;
+}
+.taskwrapper{
+  border-radius: 8px;
+  border-color: var(--primary);
+  border-style: solid;
+  border-width: 1px;
+  padding: 4px;
+}
+.max-x{
+  width: 100%;
+}
+.max-y{
+  height: 100%;
+}
+button{
+  background-color: transparent;
 }

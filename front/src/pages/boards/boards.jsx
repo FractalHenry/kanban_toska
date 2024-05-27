@@ -2,13 +2,18 @@ import React from "react";
 import BoardCard from "./boardcard"; 
 let Boards = () =>{
     return(
-        <div className="boards flex-row overflow gap-8 between vh-80 center">
-            <BoardCard link="/board"/>
-            <BoardCard/>
-            <BoardCard/>
-            <BoardCard/>
-            <BoardCard/>
-            <BoardCard/>
+        <div className="flex-col vh-80">
+            <div className="m-8">
+                <h2>Добро пожаловать в ваше пространство</h2> 
+            </div>
+            <div className="flex-row overflow gap-8 center">
+                <BoardCard link="/board/1"/>
+                <BoardCard link="/board/2"/>
+                <BoardCard/>
+                <BoardCard/>
+                <BoardCard/>
+                <BoardCard/>
+            </div>
         </div>
     )
 }
