@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../components/AuthContext';
 
 const AuthForm = () => {
+  const navigate = useNavigate();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,7 +24,7 @@ const AuthForm = () => {
       if (response.ok) {
         const data = await response.json();
         loginUser(data.token);
-        alert('Вы вошли');
+        navigate("/user/"+login);//TODO: get USERID
       } else {
         alert('Неверный логин или пароль');
       }

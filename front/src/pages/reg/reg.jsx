@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../components/AuthContext'; // Импортируем AuthContext
 
 const RegForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +28,7 @@ const RegForm = () => {
       });
 
       if (response.ok) {
-        alert("Вы успешно зарегистрировались")
+        navigate("/auth");
       } else {
         const error = await response.text();
         alert(error);

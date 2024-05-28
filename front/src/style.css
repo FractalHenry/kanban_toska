@@ -165,6 +165,10 @@ form{
 hr{
   color: var(--primary);
 }
+.hr{
+  color: var(--primary);
+  border:1px solid;
+}
 .h2{
   font-size:36px;
   font-weight: bold;
