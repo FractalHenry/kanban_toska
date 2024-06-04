@@ -4,6 +4,21 @@ import { useParams } from 'react-router-dom';
 
 let Board = ({boardName="Noname"}) =>{
     const { id } = useParams();
+    // Cards = query //NOT EMPLEMENTED  
+    const Cards =[
+        {
+            id:1,
+            name:"Card numerus uno"
+        },{
+            id:2,
+            name:"Card numerus dos"
+        }
+    ]
+    const loadCards = Cards.map((item)=>{
+        return (
+            <Card card={item}></Card>
+        )
+    })
     return(
         <div className="">
             <div className="header h2">{boardName} || TESTING { id }</div>
@@ -18,11 +33,7 @@ let Board = ({boardName="Noname"}) =>{
 
                 </div>
                 <div className="cardswrapper">
-                    <Card cardheader="card1"></Card>
-                    <Card cardheader="card2"></Card>
-                    <Card cardheader="card3"></Card>
-                    <Card cardheader="card4"></Card>
-                    <Card cardheader="card5"></Card>
+                    {loadCards}
                 </div>
             </div>
         </div>

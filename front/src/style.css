@@ -90,6 +90,9 @@ code {
 .gap-8{
   gap: 8px;
 }
+.gap-4{
+  gap: 4px;
+}
 h1{
   color: var(--primary);
   font-size: 24px;
@@ -201,11 +204,17 @@ hr{
   min-height: 80vh;
 }
 .taskwrapper{
+  cursor: pointer;
   border-radius: 8px;
   border-color: var(--primary);
   border-style: solid;
   border-width: 1px;
   padding: 4px;
+  max-width: 270px;
+
+}
+.wrap{
+  flex-wrap: wrap;
 }
 .max-x{
   width: 100%;
@@ -215,4 +224,14 @@ hr{
 }
 button{
   background-color: transparent;
+}
+.markwrapper{
+  color: white;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 8px;
+  font-size: small;
+}
+.mix{
+  mix-blend-mode: difference;
 }

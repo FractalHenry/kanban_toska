@@ -10,7 +10,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
 
 function App() {
-
+  
   return (
     <AuthProvider> {/* Оборачиваем в AuthProvider */}
       <Header />
