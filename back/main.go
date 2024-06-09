@@ -22,15 +22,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Инициализируем базу данных
-	handlers.InitDatabase(db)
+	handlers.InitHandlers(db)
 
 	// Определяем маршруты
 	router.HandleFunc("/register", handlers.Register).Methods("POST")
 	router.HandleFunc("/login", handlers.Login).Methods("POST")
-	//router.Handle("/protected", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpoint))).Methods("GET")
-
-	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("POST")
+	// Определяем зыщищенные маршруты (нужно авторизоваться)
+	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
 
 	// Настройка CORS
 	c := cors.New(cors.Options{
