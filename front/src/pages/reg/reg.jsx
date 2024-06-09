@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../components/AuthContext'; // Импортируем AuthContext
+import { useToast } from '../../components/Toast/toastprovider';
 
 const RegForm = () => {
+  const {showToast} = useToast();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState("");
@@ -14,7 +16,7 @@ const RegForm = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Пароли не совпадают");
+      showToast("Пароли не совпадают");
       return;
     }
 
@@ -31,10 +33,10 @@ const RegForm = () => {
         navigate("/auth");
       } else {
         const error = await response.text();
-        alert(error);
+        showToast(error);
       }
     } catch (err) {
-        alert("Произошла ошибка при отправке данных на сервер");
+      showToast("Произошла ошибка при отправке данных на сервер");
     }
   };
 
