@@ -6,7 +6,7 @@ const BoardCard = ({
     boardname = "NoName", 
     creator = "None", 
     imageurl = "https://img.freepik.com/premium-photo/there-is-cat-that-is-laying-down-bed-generative-ai_900833-57491.jpg?w=740", 
-    link = "404"
+    BoardID = "-1"
     }) => {
     return (
         <div className="boardcard flex-col p-4 btn-secondary">
@@ -15,10 +15,10 @@ const BoardCard = ({
             <div className="fill"/>
             <EllipsisVertical />
         </div>
-        <Link to={link} className="flex-col trim">
+        <Link to={"/board/"+BoardID} className="flex-col trim">
             <img className="flex-col trim" src={imageurl} alt="Board"/>
         </Link>
-        создано: {creator}
+        <div className="text-overflow h-50">создано: {creator}</div>
         </div>
     );
 };

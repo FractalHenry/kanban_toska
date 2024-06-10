@@ -10,6 +10,9 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
 import { Toast } from "./components/Toast/toast";
 import { ToastProvider } from "./components/Toast/toastprovider";
+import { Welcome } from "./pages/welcome/welcome";
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "./components/dialog/dialog";
+import { X } from "lucide-react";
 
 function App() {
   
@@ -19,7 +22,7 @@ function App() {
         <div id="toast-root"></div>
         <Header />
           <Routes>
-            <Route path="/" element=""/>
+            <Route path="/" element={<Welcome/>}/>
             <Route path="/auth" element={<Auth />} />
             <Route path="/reg" element={<Reg />} />
             <Route path="/boards" element={<Boards />} />

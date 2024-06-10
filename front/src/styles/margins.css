@@ -5,6 +5,9 @@
   .p-8{
     padding: 8px;
   }
+  .p-16{
+    padding: 16px;
+  }
   .mr-2{
     margin: 2px;
   }
@@ -13,6 +16,9 @@
   }
   .m-8{
     margin: 8px;
+  }
+  .m-16{
+    margin: 16px;
   }
   .mt-8{
     margin-top: 8px;
