@@ -6,7 +6,6 @@ const AuthForm = () => {
   const navigate = useNavigate();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { login: loginUser } = useContext(AuthContext);
   const { showToast } = useToast();
   const handleSubmit = async (e) => {

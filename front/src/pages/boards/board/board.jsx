@@ -42,7 +42,7 @@ let Board = ({boardName="Noname"}) =>{
         },
     ]
     function cardRemover(cardID){
-        setCards(cardsState.filter(card => card.id!=cardID))
+        setCards(cardsState.filter(card => card.id!==cardID))
     }
     return(
         <div className="">

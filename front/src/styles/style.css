@@ -7,11 +7,20 @@
   width: auto;
   height: 32px;
 }
+.h-50{
+  height: 50px;
+}
 .h-250{
   height: 250px;
 }
 .h-150{
   height: 150px;
+}
+.h-max-100{
+  max-height: 100vh;
+}
+.w-min-300{
+  min-width: 300px;
 }
 .w-100{
   width: 100px;
@@ -27,6 +36,11 @@
 }
 .word-break{
   word-break: break-all;
+}
+.text-overflow{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .no-oveflow-x{
   overflow-x:hidden;
@@ -96,6 +110,34 @@
 .absolute{
   position: absolute;
 }
+.dialogheader{
+  min-height: 75px;
+  min-width: 500px;
+  width: auto;
+  max-width: 1024px;
+  background-color: var(--secondary);
+
+}
+.dialogbody{
+  min-height: 75px;
+  width: auto;
+  min-width: 500px;
+  max-width: 1024px;
+  background-color: var(--secondary);
+}
+.dialogfooter{
+  min-height: 75px;
+  width: auto;
+  min-width: 500px;
+  max-width: 1024px;
+  background-color: var(--secondary);
+}
+.rounded-top{
+  border-radius: 16px 16px 0px 0px;
+}
+.rounded-bottom{
+  border-radius: 0px 0px 16px 16px;
+}
 .rounded-lg{
   border-radius: 32px;
 }
@@ -130,6 +172,9 @@
 }
 .vh-80{
   min-height: 80vh;
+}
+.overlay{
+  background-color: rgba(0,0,0,0.5);
 }
 .taskwrapper{
   cursor: pointer;

@@ -8,7 +8,7 @@ let Header = () =>{
     const { isLoggedIn, login , logout} = useContext(AuthContext);
     return(
         <div className="flex-row header p-4">
-            <img className="logo" src={logo}/>
+            <img className="logo" src={logo} alt=""/>
             <Button caption="home" link="/" cls="primary"/>
             <div className="fill"/>
             {!isLoggedIn ? <>

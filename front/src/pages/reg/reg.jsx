@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import { AuthContext } from '../../components/AuthContext'; // Импортируем AuthContext
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from '../../components/Toast/toastprovider';
 
 const RegForm = () => {

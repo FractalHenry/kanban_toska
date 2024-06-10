@@ -1,7 +1,7 @@
 import React from "react";
 import Task from './task'
 import { SquarePlus, X } from "lucide-react";
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 
 let Card = ({card,removeCard}) =>{
     const DummyTasks = [{
@@ -39,7 +39,7 @@ let Card = ({card,removeCard}) =>{
         ]);
       }
     function taskRemover(taskToRemove){
-        setTasks(tasks.filter(task => task.id!=taskToRemove))
+        setTasks(tasks.filter(task => task.id!==taskToRemove))
     }
     function remove(){
         removeCard(card.id)

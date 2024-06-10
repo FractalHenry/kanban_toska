@@ -94,7 +94,7 @@ const PanelItem = ({space}) =>{
 
 export const SpacesPanel = () =>{
     return (
-        <div className="overflow-y max-y-max">
+        <div className="overflow-y w-min-300 h-max-100">
             <h3>Доступные пространства:</h3>
             {spaces.map((item,index)=>(<PanelItem key={index} space={item}/>))}
         </div>
