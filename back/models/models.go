@@ -35,12 +35,12 @@ type RoleOnSpace struct {
 
 type UserRoleOnSpace struct {
 	RoleOnSpaceID uint   `gorm:"primaryKey"`
-	Login         string `gorm:"primaryKey;type:varchar(30);not null"`
+	Login         string `gorm:"primaryKey;type:varchar(30);not null; unique"`
 }
 
 type UserBoardRoleOnBoard struct {
 	BoardRoleOnBoardID uint   `gorm:"primaryKey"`
-	Login              string `gorm:"primaryKey;type:varchar(30);not null"`
+	Login              string `gorm:"primaryKey;type:varchar(30);not null; unique"`
 }
 type Space struct {
 	SpaceID        uint   `gorm:"column:space_id;primaryKey;autoIncrement"`
