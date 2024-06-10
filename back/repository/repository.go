@@ -29,6 +29,10 @@ func (r *Repository) findBoardAndRoles(input interface{}, userLogin string) (mod
 		cardID = v.CardID
 	case *models.Card:
 		cardID = v.CardID
+	case *models.Checklist:
+		cardID = v.Task.CardID
+	case *models.ChecklistElement:
+		cardID = v.Checklist.Task.CardID
 	default:
 		return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, errors.New("unsupported input type")
 	}

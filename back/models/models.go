@@ -16,12 +16,15 @@ type RoleOnBoard struct {
 	RoleOnBoardID   uint   `gorm:"primaryKey;autoIncrement"`
 	RoleOnBoardName string `gorm:"type:varchar(50);not null"`
 	SpaceID         uint   `gorm:"not null"`
+	Space           Space  `gorm:"foreignKey:SpaceID"`
 }
 
 type BoardRoleOnBoard struct {
-	RoleOnBoardID uint `gorm:"primaryKey"`
-	BoardID       uint `gorm:"primaryKey"`
-	CanEdit       bool `gorm:"not null;default:false"`
+	RoleOnBoardID uint        `gorm:"primaryKey"`
+	BoardID       uint        `gorm:"primaryKey"`
+	CanEdit       bool        `gorm:"not null;default:false"`
+	RoleOnBoard   RoleOnBoard `gorm:"foreignKey:RoleOnBoardID"`
+	Board         Board       `gorm:"foreignKey:BoardID"`
 }
 
 type RoleOnSpace struct {
@@ -31,17 +34,23 @@ type RoleOnSpace struct {
 	IsOwner         bool   `gorm:"not null;default:false"`
 	CanEdit         bool   `gorm:"not null;default:false"`
 	SpaceID         uint   `gorm:"not null"`
+	Space           Space  `gorm:"foreignKey:SpaceID"`
 }
 
 type UserRoleOnSpace struct {
-	RoleOnSpaceID uint   `gorm:"primaryKey"`
-	Login         string `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	RoleOnSpaceID uint        `gorm:"primaryKey"`
+	Login         string      `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	RoleOnSpace   RoleOnSpace `gorm:"foreignKey:RoleOnSpaceID"`
+	User          User        `gorm:"foreignKey:Login"`
 }
 
 type UserBoardRoleOnBoard struct {
-	BoardRoleOnBoardID uint   `gorm:"primaryKey"`
-	Login              string `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	BoardRoleOnBoardID uint             `gorm:"primaryKey"`
+	Login              string           `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	BoardRoleOnBoard   BoardRoleOnBoard `gorm:"foreignKey:BoardRoleOnBoardID"`
+	User               User             `gorm:"foreignKey:Login"`
 }
+
 type Space struct {
 	SpaceID        uint   `gorm:"column:space_id;primaryKey;autoIncrement"`
 	SpaceName      string `gorm:"column:space_name;type:varchar(70);not null"`
