@@ -1,5 +1,6 @@
 :root {
   --primary: #4D869C;
+  --primary-darker:#45798C;
   --secondary: #EEF7FF;
   --primary-btn: var(--secondary);
   --secondary-btn: var(--primary);

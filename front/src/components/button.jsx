@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import cn from "classnames"
-let button = ({caption,link="/error",cls="primary"}) =>{
+let button = ({className,caption,link="/error",cls="primary"}) =>{
     const variants={
             primary:"mr-2 p-4 btn-primary txt-primary",
             secondary:"mr-2 p-4 btn-secondary txt-secondary",

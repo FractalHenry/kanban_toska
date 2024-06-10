@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import Button from "./button"
-import logo from '../logo.svg';
+import logo from '../logo-white.svg';
 import { AuthContext } from "./AuthContext";
 
 

@@ -42,7 +42,7 @@ const RegForm = () => {
 
   return (
     <div className="flex center vh-80">
-    <form className="flex-col gap-8 " onSubmit={handleSubmit}>
+    <form className="flex-col gap-8 p-16" onSubmit={handleSubmit}>
       <h1>Регистрация</h1>
       {error && <div className="error">{error}</div>}
       <input
@@ -70,7 +70,7 @@ const RegForm = () => {
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
       <input
-        className="btn btn-secondary text-secondary p-4"
+        className="btn btn-secondary text-secondary p-8 txt-large"
         type="submit"
         value="Зарегистрироваться"
       />
