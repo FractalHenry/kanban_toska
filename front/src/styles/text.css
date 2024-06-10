@@ -1,0 +1,14 @@
+@import url('./variables.css');
+
+.txt-primary{
+    color: var(--primary-btn)
+}
+.txt-secondary{
+    color: var(--secondary-btn);
+}
+.txt-disabled{
+    color: var(--disabled-btn);
+}
+.txt-error{
+    color: var(--error);
+}

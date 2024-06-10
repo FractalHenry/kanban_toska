@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../components/AuthContext';
-
+import { useToast } from '../../components/Toast/toastprovider';
 const AuthForm = () => {
   const navigate = useNavigate();
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login: loginUser } = useContext(AuthContext);
-
+  const { showToast } = useToast();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,10 +26,10 @@ const AuthForm = () => {
         loginUser(data.token);
         navigate("/user/"+login);//TODO: get USERID
       } else {
-        alert('Неверный логин или пароль');
+        showToast('Неверный логин или пароль');
       }
     } catch (err) {
-      alert('Произошла ошибка при отправке данных на сервер');
+      showToast('Произошла ошибка при отправке данных на сервер');
     }
   };
 

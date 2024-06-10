@@ -8,23 +8,28 @@ import User from './pages/user/user'
 import ProtectedPage from "./pages/protected/protected";
 import { Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
+import { Toast } from "./components/Toast/toast";
+import { ToastProvider } from "./components/Toast/toastprovider";
 
 function App() {
   
   return (
-    <AuthProvider> {/* Оборачиваем в AuthProvider */}
-      <Header />
-        <Routes>
-          <Route path="/" element=""/>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/reg" element={<Reg />} />
-          <Route path="/boards" element={<Boards />} />
-          <Route path="/board/:id" element={<Board />} />
-          <Route path="/protected/:login" element={<ProtectedPage />} />
-          <Route path="/user/:login" element={<User />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider> {/* Оборачиваем в AuthProvider */}
+        <div id="toast-root"></div>
+        <Header />
+          <Routes>
+            <Route path="/" element=""/>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/reg" element={<Reg />} />
+            <Route path="/boards" element={<Boards />} />
+            <Route path="/board/:id" element={<Board />} />
+            <Route path="/protected/:login" element={<ProtectedPage />} />
+            <Route path="/user/:login" element={<User />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+      </AuthProvider>
+    </ToastProvider>
   );
 }
 

@@ -1,0 +1,32 @@
+@import url('./variables.css');
+.btn{
+    background-color: transparent;
+    text-align: center;
+    text-decoration:none;
+    display: flex;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+  }
+  input[type="submit"]{
+    border-radius: 4px;
+  }
+  .btn:hover,input[type="submit"]{
+    cursor: pointer;
+    filter: brightness(85%);
+  }
+  .btn-primary{
+    background-color: none;
+    border-color:var(--primary-btn);
+    color: var(--primary-btn);
+  }
+  .btn-secondary{
+    background-color: none;
+    border-color:var(--secondary-btn);
+    color: var(--secondary-btn);
+  }
+  .btn-disabled{
+    background-color: none;
+    border-color:var(--disabled-btn);
+    color: var(--disabled-btn);
+  }

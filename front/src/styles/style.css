@@ -1,0 +1,161 @@
+@import url('./variables.css');
+@import url('./inputs.css');
+@import url('./base.css');
+@import url('./text.css');
+@import url('./margins.css');
+.logo{
+  width: auto;
+  height: 32px;
+}
+.t-0{
+  top:0px;
+}
+.l-0{
+  left: 0px;
+}
+.fixed{
+  position: fixed;
+}
+.overflow{
+  flex-wrap: wrap;
+}
+.overflow-y{
+  overflow-y: scroll;
+  flex-wrap: wrap;
+}
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+.flex-row{
+  display: flex;
+  flex-direction: row;
+}
+.flex{
+  display: flex;
+}
+.wrapper{
+  min-height: 85%;
+  height: 90%;
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+.center{
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  justify-self: center;
+}
+.fill{
+  flex-grow: 1;
+}
+.header{
+  background-color: var(--primary);
+}
+.boardcard{
+  max-width: 160px;
+  max-height: 120px;
+  border-radius: 8px;
+  border-width: 2px;
+  border-style: solid;
+}
+.trim{
+  overflow: hidden;
+  object-fit:cover;
+}
+.between{
+  justify-content: space-between;
+}
+.line{
+  stroke: var(--primary);
+  width: 2px;
+  width: max-content;
+}
+.cardswrapper{
+  gap: 4px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  max-width: 80%;
+  width: 80%;
+}
+.cardwrapper{
+  border-width: 2px;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: var(--primary);
+  min-width: 250px;
+  padding: 8px;
+  height: min-content;
+}
+.boardinfo{
+  width: 23%;
+  min-height: 80vh;
+  max-height: 80vh;
+}
+.vh-80{
+  min-height: 80vh;
+}
+.taskwrapper{
+  cursor: pointer;
+  border-radius: 8px;
+  border-color: var(--primary);
+  border-style: solid;
+  border-width: 1px;
+  padding: 4px;
+  max-width: 270px;
+
+}
+.wrap{
+  flex-wrap: wrap;
+}
+.max-x{
+  width: 100%;
+}
+.max-y{
+  height: 100%;
+}
+.max-y-max{
+  max-height: 75vh;
+}
+.markwrapper{
+  color: white;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 8px;
+  font-size: small;
+}
+.mix{
+  mix-blend-mode: difference;
+}
+.boardlink{
+  color: white;
+  margin: 4px;
+  padding: 4px;
+  border-radius: 6px;
+}
+.userlink{
+  color: black;
+  margin: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+}
+.SpaceCard{
+  margin: 4px;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+}
+.toast{
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; 
+  -webkit-box-sizing: border-box;
+  background-color: black;
+  opacity: 70%;
+}

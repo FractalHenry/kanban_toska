@@ -1,0 +1,8 @@
+:root {
+  --primary: #4D869C;
+  --secondary: #EEF7FF;
+  --primary-btn: var(--secondary);
+  --secondary-btn: var(--primary);
+  --disabled-btn: lightgray;
+  --error: rgb(255, 3, 3);
+}
