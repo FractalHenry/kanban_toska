@@ -66,11 +66,13 @@ func (r *Repository) UpdateBoardName(boardID uint, newBoardName, userLogin strin
 // Возвращает доски пользователя
 func (r *Repository) GetUserBoards(userLogin string) ([]models.Board, error) {
 	var boards []models.Board
-	err := r.db.Model(&models.Board{}).
-		Joins("JOIN board_role_on_boards ON board_role_on_boards.board_id = boards.board_id").
-		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = board_role_on_boards.role_on_board_id").
-		Joins("JOIN user_board_role_on_boards ON user_board_role_on_boards.board_role_on_board_id = board_role_on_boards.board_role_on_board_id AND user_board_role_on_boards.login = ?", userLogin).
+
+	err := r.db.Table("boards").
+		Joins("JOIN board_role_on_boards br ON br.board_id = boards.board_id").
+		Joins("JOIN user_board_role_on_boards ubr ON ubr.board_role_on_board_id = br.role_on_board_id").
+		Where("ubr.login = ?", userLogin).
 		Find(&boards).Error
+
 	if err != nil {
 		return nil, err
 	}
