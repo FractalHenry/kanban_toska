@@ -127,10 +127,17 @@ type TaskDateStart struct {
 	Task          Task      `gorm:"foreignKey:TaskID"`
 }
 
+type TaskDateEnd struct {
+	TaskDateEndID uint      `gorm:"column:task_date_end_id;primaryKey;autoIncrement"`
+	TaskDateEnd   time.Time `gorm:"column:task_date_end;type:datetime;not null"`
+	TaskID        uint      `gorm:"column:task_id;not null;unique"`
+	Task          Task      `gorm:"foreignKey:TaskID"`
+}
+
 type TaskNotification struct {
-	NotificationID uint          `gorm:"column:notification_id;not null;primaryKey"`
-	TaskDateEndID  uint          `gorm:"column:task_date_end_id;not null"`
-	TaskDateStart  TaskDateStart `gorm:"foreignKey:TaskDateEndID"`
+	NotificationID uint        `gorm:"column:notification_id;not null;primaryKey"`
+	TaskDateEndID  uint        `gorm:"column:task_date_end_id;not null"`
+	TaskDateEnd    TaskDateEnd `gorm:"foreignKey:TaskDateEndID"`
 }
 
 type Notification struct {

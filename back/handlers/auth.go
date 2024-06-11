@@ -16,6 +16,30 @@ var repo *repository.Repository
 
 func InitHandlers(db *gorm.DB) {
 	repo = repository.NewRepository(db)
+
+	// Автоматическое создание таблиц
+	db.AutoMigrate(
+		&models.User{},
+		&models.RoleOnBoard{},
+		&models.BoardRoleOnBoard{},
+		&models.RoleOnSpace{},
+		&models.UserRoleOnSpace{},
+		&models.UserBoardRoleOnBoard{},
+		&models.Space{},
+		&models.Board{},
+		&models.Card{},
+		&models.Task{},
+		&models.Mark{},
+		&models.MarkName{},
+		&models.Checklist{},
+		&models.ChecklistElement{},
+		&models.TaskColor{},
+		&models.TaskDescription{},
+		&models.TaskDateStart{},
+		&models.TaskDateEnd{},
+		&models.TaskNotification{},
+		&models.Notification{},
+	)
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
