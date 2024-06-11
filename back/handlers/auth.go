@@ -57,6 +57,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Такой пользователь уже сущесвует", http.StatusConflict)
 		return
 	}
+	if _, _, err := repo.CreateSpaceWithOwnerRole("test", user.Login, ""); err != nil {
+		http.Error(w, "Ошибка создания пространства", http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
 }
 
