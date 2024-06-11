@@ -69,7 +69,7 @@ func (r *Repository) GetUserBoards(userLogin string) ([]models.Board, error) {
 	err := r.db.Model(&models.Board{}).
 		Joins("JOIN board_role_on_boards ON board_role_on_boards.board_id = boards.board_id").
 		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = board_role_on_boards.role_on_board_id").
-		Joins("JOIN user_board_role_on_boards ON user_board_role_on_boards.role_on_board_id = role_on_boards.role_on_board_id").
+		Joins("JOIN user_board_role_on_boards ON user_board_role_on_boards.board_role_on_board_id = board_role_on_boards.board_role_on_board_id").
 		Where("user_board_role_on_boards.login = ?", userLogin).
 		Find(&boards).Error
 	if err != nil {
