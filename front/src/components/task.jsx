@@ -1,5 +1,5 @@
 import {Check, X} from 'lucide-react'
-let task = ({task, removeTask})=>{
+let task = ({onClick, task, removeTask})=>{
     const marks = task.marks ? task.marks.map((item)=>{
         return(
             <div className="flex center markwrapper" id={item.id} style={{backgroundColor: item.color, borderColor: item.color}}>
@@ -8,11 +8,8 @@ let task = ({task, removeTask})=>{
             </div>
         )
     }) : null;
-    function remove(){
-        removeTask(task.id)
-    }
     return(
-        <div className="taskwrapper flex-row" id={"Task:"+task.id}>
+        <div className="taskwrapper flex-row" id={"Task:"+task.id} onClick={onClick}>
             <div className="flex-col">
                 {task.name}
                 <div className='flex-row wrap gap-4'>
@@ -20,7 +17,7 @@ let task = ({task, removeTask})=>{
                 </div>
             </div>
             <div className='fill'></div>
-            <X onClick={remove}></X>
+            <X onClick={(e) => { e.stopPropagation(); removeTask(task.id); }}></X>
         </div>
     )
 }

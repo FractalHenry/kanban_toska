@@ -13,10 +13,13 @@ import { ToastProvider } from "./components/Toast/toastprovider";
 import { Welcome } from "./pages/welcome/welcome";
 import { Dialog, DialogBody, DialogFooter, DialogHeader } from "./components/dialog/dialog";
 import { X } from "lucide-react";
+import { DialogProvider } from "./components/dialog/taskdialogprovider";
 
 function App() {
   
   return (
+    
+    <DialogProvider>
     <ToastProvider>
       <AuthProvider> {/* Оборачиваем в AuthProvider */}
         <div id="toast-root"></div>
@@ -33,6 +36,7 @@ function App() {
           </Routes>
       </AuthProvider>
     </ToastProvider>
+    </DialogProvider>
   );
 }
 
