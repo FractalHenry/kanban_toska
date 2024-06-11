@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Button from "./button"
 import logo from '../logo-white.svg';
 import { AuthContext } from "./AuthContext";
+import { Link } from "react-router-dom";
 
 
 let Header = () =>{
@@ -9,16 +10,29 @@ let Header = () =>{
     return(
         <div className="flex-row header p-4">
             <img className="logo" src={logo} alt=""/>
-            <Button caption="home" link="/" cls="primary"/>
+            <Button cls="primary">
+                <Link to="/">Главная</Link>
+            </Button>
             <div className="fill"/>
-            {!isLoggedIn ? <>
-            <Button caption="My Boards" link="/boards" cls="primary"/>
-            <Button caption="Sign In" link="/auth" cls="primary"/>
-            <Button caption="Sign Up" link="/reg"/>
+            {!isLoggedIn ? 
+            <>
+            <Button >
+                <Link to="/auth">Войти</Link>
+            </Button>
+            <Button>
+                <Link to="/reg">Зарегистрироваться</Link>
+            </Button>
             </>:
             <>
-            <Button caption="Profile" link="/user" />
-            <Button caption="Logout" onClick={logout}/>
+            <Button>
+                <Link to="/boards">Доски</Link>
+            </Button>
+            <Button>
+                <Link to="/user">Профиль</Link>
+            </Button>
+            <Button onClick={logout}>
+                Выйти
+            </Button>
             </>
             }
         </div>

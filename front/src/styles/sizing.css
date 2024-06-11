@@ -1,0 +1,31 @@
+
+.h-50{
+    height: 50px;
+}
+.h-250{
+    height: 250px;
+}
+.h-150{
+    height: 150px;
+}
+.h-max-100{
+    max-height: 100vh;
+}
+.w-min-300{
+    min-width: 300px;
+}
+.w-100{
+    width: 100px;
+}
+.vh-80{
+    min-height: 80vh;
+}
+.max-x{
+    width: 100%;
+}
+.max-y{
+    height: 100%;
+}
+.max-y-max{
+    max-height: 75vh;
+}

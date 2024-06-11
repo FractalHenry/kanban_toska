@@ -3,37 +3,14 @@
 @import url('./base.css');
 @import url('./text.css');
 @import url('./margins.css');
+@import url('./positioning.css');
+@import url('./sizing.css');
+
 .logo{
   width: auto;
   height: 32px;
 }
-.h-50{
-  height: 50px;
-}
-.h-250{
-  height: 250px;
-}
-.h-150{
-  height: 150px;
-}
-.h-max-100{
-  max-height: 100vh;
-}
-.w-min-300{
-  min-width: 300px;
-}
-.w-100{
-  width: 100px;
-}
-.t-0{
-  top:0px !important;
-}
-.l-0{
-  left: 0px;
-}
-.fixed{
-  position: break-word;
-}
+
 .word-break{
   word-break: break-all;
 }
@@ -100,16 +77,12 @@
   overflow: hidden;
   object-fit:cover;
 }
-.between{
-  justify-content: space-between;
-}
+
 .banner{
   object-fit:cover ;
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0));
 }
-.absolute{
-  position: absolute;
-}
+
 .dialogheader{
   min-height: 75px;
   min-width: 500px;
@@ -170,9 +143,7 @@
   min-height: 80vh;
   max-height: 80vh;
 }
-.vh-80{
-  min-height: 80vh;
-}
+
 .overlay{
   background-color: rgba(0,0,0,0.5);
 }
@@ -189,15 +160,7 @@
 .wrap{
   flex-wrap: wrap;
 }
-.max-x{
-  width: 100%;
-}
-.max-y{
-  height: 100%;
-}
-.max-y-max{
-  max-height: 75vh;
-}
+
 .markwrapper{
   color: white;
   border-style: solid;

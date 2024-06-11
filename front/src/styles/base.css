@@ -13,7 +13,8 @@ body {
     width: 100%;
     overflow-x: hidden;
   }
-  a{
+  a,a:visited{
+    color: var(--secondary);
     text-decoration:none;
   }
   code {

@@ -1,11 +1,12 @@
 import { createContext, useState } from "react";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 function AuthProvider(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const navigate = useNavigate()
   const login = (jwtToken) => {
     setIsLoggedIn(true);
     Cookies.set('authToken', jwtToken, { expires: 1 });
@@ -14,6 +15,7 @@ function AuthProvider(props) {
   const logout = () => {
     setIsLoggedIn(false);
     Cookies.remove('authToken');
+    navigate("/");
   };
 
   const value = { isLoggedIn, login, logout };
