@@ -45,10 +45,13 @@ type UserRoleOnSpace struct {
 }
 
 type UserBoardRoleOnBoard struct {
-	BoardRoleOnBoardID uint             `gorm:"primaryKey"`
-	Login              string           `gorm:"primaryKey;type:varchar(30);not null; unique"`
-	BoardRoleOnBoard   BoardRoleOnBoard `gorm:"foreignKey:BoardRoleOnBoardID"`
-	User               User             `gorm:"foreignKey:Login"`
+	BoardRoleOnBoardID uint        `gorm:"primaryKey"`
+	Login              string      `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	RoleOnBoardID      uint        `gorm:"not null"`
+	BoardID            uint        `gorm:"not null"`
+	User               User        `gorm:"foreignKey:Login"`
+	RoleOnBoard        RoleOnBoard `gorm:"foreignKey:RoleOnBoardID;references:RoleOnBoard"`
+	Board              Board       `gorm:"foreignKey:BoardID;references:Board"`
 }
 
 type Space struct {
@@ -89,8 +92,8 @@ type Mark struct {
 }
 
 type MarkName struct {
-	MarkID   uint   `gorm:"column:mark_id;not null;uniqueIndex:idx_mark_id"`
-	MarkName string `gorm:"column:mark_name;type:varchar(30);not null;primaryKey"`
+	MarkID   uint   `gorm:"column:mark_id;primaryKey;not null"`
+	MarkName string `gorm:"column:mark_name;type:varchar(30);primaryKey"`
 	Mark     Mark   `gorm:"foreignKey:MarkID"`
 }
 
@@ -111,13 +114,13 @@ type ChecklistElement struct {
 
 type TaskColor struct {
 	TaskColor string `gorm:"column:task_color;type:char(7);primaryKey"`
-	TaskID    uint   `gorm:"column:task_id;not null"`
+	TaskID    uint   `gorm:"column:task_id;not null;primaryKey;unique"`
 	Task      Task   `gorm:"foreignKey:TaskID"`
 }
 
 type TaskDescription struct {
-	TaskDescription string `gorm:"column:task_description;type:varchar(300);not null;primaryKey"`
-	TaskID          uint   `gorm:"column:task_id;not null"`
+	TaskDescription string `gorm:"column:task_description;type:varchar(300);primaryKey"`
+	TaskID          uint   `gorm:"column:task_id;not null;primaryKey;unique"`
 	Task            Task   `gorm:"foreignKey:TaskID"`
 }
 

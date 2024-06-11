@@ -28,19 +28,12 @@ func (r *Repository) CreateSpaceWithOwnerRole(spaceName, userLogin, roleOnSpaceN
 		IsOwner:         true,
 		SpaceID:         space.SpaceID,
 	}
-	if err := r.db.Create(role).Error; err != nil {
+
+	if err := r.db.Create(&role).Error; err != nil {
 		return nil, nil, err
 	}
 
-	if err := r.db.Model(space).Association("RoleOnSpaces").Append(role).Error; err != nil {
-		return nil, nil, err
-	}
-
-	user, err := r.FindUserByLogin(userLogin)
-	if err != nil {
-		return nil, nil, err
-	}
-	if err := r.db.Model(role).Association("Users").Append(user).Error; err != nil {
+	if err := r.associateUserWithRole(userLogin, role.RoleOnSpaceID, "space"); err != nil {
 		return nil, nil, err
 	}
 

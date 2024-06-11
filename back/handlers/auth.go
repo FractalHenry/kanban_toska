@@ -5,11 +5,12 @@ import (
 	"backend/repository"
 	"backend/utils"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 var repo *repository.Repository
@@ -17,14 +18,8 @@ var repo *repository.Repository
 func InitHandlers(db *gorm.DB) {
 	repo = repository.NewRepository(db)
 
-	// Автоматическое создание таблиц
-	db.AutoMigrate(
+	models := []interface{}{
 		&models.User{},
-		&models.RoleOnBoard{},
-		&models.BoardRoleOnBoard{},
-		&models.RoleOnSpace{},
-		&models.UserRoleOnSpace{},
-		&models.UserBoardRoleOnBoard{},
 		&models.Space{},
 		&models.Board{},
 		&models.Card{},
@@ -39,7 +34,19 @@ func InitHandlers(db *gorm.DB) {
 		&models.TaskDateEnd{},
 		&models.TaskNotification{},
 		&models.Notification{},
-	)
+		&models.RoleOnBoard{},
+		&models.RoleOnSpace{},
+		&models.BoardRoleOnBoard{},
+		&models.UserRoleOnSpace{},
+		&models.UserBoardRoleOnBoard{},
+	}
+
+	for _, model := range models {
+		err := db.AutoMigrate(model)
+		if err != nil {
+			log.Fatalf("AutoMigrate failed for model %T: %v", model, err)
+		}
+	}
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {

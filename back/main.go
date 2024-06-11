@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq" // Импортируем PostgreSQL драйвер
 	"github.com/rs/cors"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	// Формируем строку подключения к PostgreSQL
 	dsn := "host=localhost port=5433 user=postgres dbname=postgres password=web sslmode=disable"
 	// Подключаемся к базе данных SQLite
-	db, err := gorm.Open("postgres", dsn)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}

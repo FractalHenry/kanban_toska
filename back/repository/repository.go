@@ -4,7 +4,7 @@ import (
 	"backend/models"
 	"errors"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Repository struct {
