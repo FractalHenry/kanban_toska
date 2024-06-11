@@ -49,9 +49,6 @@ const AuthForm = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <input className="btn btn-secondary text-secondary p-4" type="submit" value="Войти" />
-      <Link to="/restore" className="t-16">
-        Забыли Пароль?
-      </Link>
     </form>
     </div>
   );

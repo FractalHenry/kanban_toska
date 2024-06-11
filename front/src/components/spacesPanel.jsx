@@ -99,7 +99,7 @@ export const SpacesPanel = () => {
   const navigate = useNavigate();
 const { showToast } = useToast();
 
-const { spaces, setSpaces } = useState();
+const [spaces, setSpaces] = useState();
 useEffect(() => {
   const fetchData = async () => {
     const token = Cookies.get('authToken');
@@ -118,11 +118,12 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json();
         setSpaces(data);
+        console.log(data)
       } else {
-        throw new Error('Что-то пошло не так');
+        throw new Error(response.statusText);
       }
     } catch (error) {
-      showToast("Произошла ошибка при получении пространств");
+      showToast("Произошла ошибка при получении пространств" + error);
     }
   };
   fetchData();

@@ -1,10 +1,11 @@
 import React, { useState,useEffect } from "react";
 import BoardCard from "./boardcard"; 
 import { SpacesPanel } from "../../components/spacesPanel";
-import { Plus, X } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie'
 import { useToast } from "../../components/Toast/toastprovider";
+import { NewBoard } from "./newBoard";
 let Boards = () =>{
     const navigate = useNavigate();
     const { showToast } = useToast();
@@ -25,7 +26,7 @@ let Boards = () =>{
 
                 if (response.ok) {
                     const data = await response.json();
-                    setBoards(data.message);
+                    setBoards(data);
                 } else {
                     throw new Error('Что-то пошло не так');
                 }
@@ -52,6 +53,7 @@ let Boards = () =>{
         }
     ]
     const [boards, setBoards] = useState(boardsArr.slice());
+    
     return(
         <div className="flex-col vh-80">
             <div className="flex flex-row">
@@ -61,8 +63,8 @@ let Boards = () =>{
                     Добро пожаловать в ваше пространство
                 </div>
                 <div className="flex-row overflow gap-8">
-                    {boards && boards.map((item)=>(<BoardCard boardname={item.name} BoardID={item.id} creator={item.author}/>))}
-                    <div className="flex boardcard flex-col p-4 btn-secondary center"><Plus/> New Board</div>
+                    {boards && boards.map((item)=>(<BoardCard key={item.id} boardname={item.name} BoardID={item.id} creator={item.author}/>))}
+                    <NewBoard/>
                 </div>
                 </div>
                 
