@@ -12,6 +12,9 @@
 .txt-error{
     color: var(--error);
 }
+.txt-black{
+    color: black !important;
+}
 .txt-large{
     font-size: large;
 }

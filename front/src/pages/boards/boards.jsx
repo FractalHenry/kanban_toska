@@ -1,9 +1,43 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import BoardCard from "./boardcard"; 
 import { SpacesPanel } from "../../components/spacesPanel";
 import { Plus, X } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'
+import { useToast } from "../../components/Toast/toastprovider";
 let Boards = () =>{
+    const navigate = useNavigate();
+    const { showToast } = useToast();
+
+    const {User, setUser} = useState();
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:8000/boards`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setBoards(data.message);
+                } else {
+                    throw new Error('Что-то пошло не так');
+                }
+
+            } catch (error) {
+                showToast("Произошла ошибка при отправке данных на сервер");
+            }
+        };
+        fetchData();
+    }, [navigate]);
     const boardsArr = [
         {
             id:1,

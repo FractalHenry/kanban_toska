@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 function AuthProvider(props) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const initialLoginState = Boolean(Cookies.get('authToken'));
+  const [isLoggedIn, setIsLoggedIn] = useState(initialLoginState);
   const navigate = useNavigate()
   const login = (jwtToken) => {
     setIsLoggedIn(true);
