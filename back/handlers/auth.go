@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
@@ -94,6 +95,112 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func CreateCardHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID доски из пути запроса
+	vars := mux.Vars(r)
+	boardID, err := strconv.ParseUint(vars["boardId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid board ID", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Name string `json:"name"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Создаем новую карточку
+	card := &models.Card{
+		CardName: reqBody.Name,
+		BoardID:  uint(boardID),
+	}
+	err = repo.CreateCard(card, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusCreated)
+}
+
+func UpdateUserDescription(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		NewDescription string `json:"newDescription"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Обновляем описание пользователя
+	err = repo.UpdateUserDescription(userLogin, reqBody.NewDescription)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
+
+func CreateBoard(w http.ResponseWriter, r *http.Request) {
+	userLogin := r.Header.Get("login")
+
+	var boardData struct {
+		BoardName string `json:"boardname"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&boardData)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	board := &models.Board{
+		BoardName: boardData.BoardName,
+	}
+
+	err = repo.CreateBoard(board, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
+
+func GetUserLogin(w http.ResponseWriter, r *http.Request) {
+	login := r.Header.Get("login")
+
+	user, err := repo.FindUserByLogin(login)
+	if err != nil {
+		http.Error(w, "Пользователь не найден", http.StatusNotFound)
+		return
+	}
+
+	response := struct {
+		Login string `json:"login"`
+	}{
+		Login: user.Login,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func GetUserInfo(w http.ResponseWriter, r *http.Request) {

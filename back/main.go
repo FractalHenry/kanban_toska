@@ -34,7 +34,10 @@ func main() {
 	router.Handle("/user/{login}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserInfo))).Methods("GET")
 	router.Handle("/boards", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserBoards))).Methods("GET")
 	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
-
+	router.Handle("/user", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserLogin))).Methods("GET")
+	router.Handle("/board", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateBoard))).Methods("POST")
+	router.Handle("/description", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserDescription))).Methods("PUT")
+	router.Handle("/board/{boardId}/card", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCardHandler))).Methods("POST")
 	// Настройка CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Разрешенные источники
