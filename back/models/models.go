@@ -129,7 +129,7 @@ type TaskDateStart struct {
 
 type TaskDateEnd struct {
 	TaskDateEndID uint      `gorm:"column:task_date_end_id;primaryKey;autoIncrement"`
-	TaskDateEnd   time.Time `gorm:"column:task_date_end;type:datetime;not null"`
+	TaskDateEnd   time.Time `gorm:"column:task_date_end;type:timestamp;not null"`
 	TaskID        uint      `gorm:"column:task_id;not null;unique"`
 	Task          Task      `gorm:"foreignKey:TaskID"`
 }
