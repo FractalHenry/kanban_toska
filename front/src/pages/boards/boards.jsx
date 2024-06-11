@@ -8,8 +8,6 @@ import { useToast } from "../../components/Toast/toastprovider";
 let Boards = () =>{
     const navigate = useNavigate();
     const { showToast } = useToast();
-
-    const {User, setUser} = useState();
     useEffect(() => {
         const fetchData = async () => {
             const token = Cookies.get('authToken');
@@ -33,7 +31,7 @@ let Boards = () =>{
                 }
 
             } catch (error) {
-                showToast("Произошла ошибка при отправке данных на сервер");
+                showToast("Произошла ошибка при получении досок");
             }
         };
         fetchData();
@@ -63,7 +61,7 @@ let Boards = () =>{
                     Добро пожаловать в ваше пространство
                 </div>
                 <div className="flex-row overflow gap-8">
-                    {boards.map((item)=>(<BoardCard boardname={item.name} BoardID={item.id} creator={item.author}/>))}
+                    {boards && boards.map((item)=>(<BoardCard boardname={item.name} BoardID={item.id} creator={item.author}/>))}
                     <div className="flex boardcard flex-col p-4 btn-secondary center"><Plus/> New Board</div>
                 </div>
                 </div>
