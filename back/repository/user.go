@@ -23,3 +23,11 @@ func (r *Repository) FindUserByLogin(login string) (*models.User, error) {
 	}
 	return &user, nil
 }
+
+func (r *Repository) UpdateEmailVisibility(login string, emailVisibility bool) error {
+	return r.db.Model(&models.User{}).Where("login = ?", login).Update("email_visibility", emailVisibility).Error
+}
+
+func (r *Repository) UpdateUserDescription(login string, description string) error {
+	return r.db.Model(&models.User{}).Where("login = ?", login).Update("user_description", description).Error
+}

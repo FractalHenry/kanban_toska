@@ -152,3 +152,53 @@ func (r *Repository) checkUserOwnership(spaceID uint, userLogin string) error {
 
 	return nil
 }
+
+func (r *Repository) GetSpaceOwner(spaceID uint) (string, error) {
+	var roleOnSpace models.RoleOnSpace
+	err := r.db.Where("space_id = ? AND is_owner = true", spaceID).First(&roleOnSpace).Error
+	if err != nil {
+		return "", err
+	}
+
+	var userRoleOnSpace models.UserRoleOnSpace
+	err = r.db.Where("role_on_space_id = ?", roleOnSpace.RoleOnSpaceID).First(&userRoleOnSpace).Error
+	if err != nil {
+		return "", err
+	}
+
+	var user models.User
+	err = r.db.Where("login = ?", userRoleOnSpace.Login).First(&user).Error
+	if err != nil {
+		return "", err
+	}
+
+	return user.Login, nil
+}
+
+func (r *Repository) GetSpaceBoards(spaceID uint) ([]models.Board, error) {
+	var boards []models.Board
+	err := r.db.Where("space_id = ?", spaceID).Find(&boards).Error
+	if err != nil {
+		return nil, err
+	}
+	return boards, nil
+}
+
+func (r *Repository) GetSpaceUsers(spaceID uint) ([]string, error) {
+	var userRoleOnSpaces []models.UserRoleOnSpace
+	err := r.db.Where("role_on_space.space_id = ?", spaceID).
+		Joins("JOIN role_on_spaces ON user_role_on_spaces.role_on_space_id = role_on_spaces.role_on_space_id").
+		Joins("JOIN users ON user_role_on_spaces.login = users.login").
+		Select("users.login").
+		Find(&userRoleOnSpaces).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var users []string
+	for _, userRoleOnSpace := range userRoleOnSpaces {
+		users = append(users, userRoleOnSpace.Login)
+	}
+
+	return users, nil
+}
