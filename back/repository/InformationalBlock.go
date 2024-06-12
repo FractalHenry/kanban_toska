@@ -3,6 +3,8 @@ package repository
 import (
 	"backend/models"
 	"fmt"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Создание InformationalBlock
@@ -72,14 +74,18 @@ func (r *Repository) findBoardAndRolesForBlock(boardID uint, userLogin string) (
 	if err := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, user.Login).
 		First(&roleOnSpace).Error; err != nil {
-		return nil, nil, nil, nil, err
+		if err != gorm.ErrRecordNotFound {
+			return nil, nil, nil, nil, err
+		}
 	}
 
 	var boardRole *models.BoardRoleOnBoard
 	if err := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", boardID, user.Login).
 		First(&boardRole).Error; err != nil {
-		return nil, nil, nil, nil, err
+		if err != gorm.ErrRecordNotFound {
+			return nil, nil, nil, nil, err
+		}
 	}
 
 	return user, board, roleOnSpace, boardRole, nil
