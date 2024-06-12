@@ -208,11 +208,11 @@ func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card
 	return &board, cards, tasks, infoBlocks, nil
 }
 
-func (r *Repository) GetBoardUsers(boardID uint) ([]struct {
+func (r *Repository) GetBoardUsers(boardID uint) (*[]struct {
 	Login       string
 	RoleOnBoard models.BoardRoleOnBoard
 }, error) {
-	var users []struct {
+	var users *[]struct {
 		Login       string
 		RoleOnBoard models.BoardRoleOnBoard
 	}

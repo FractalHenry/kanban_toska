@@ -60,33 +60,45 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		Cards:      cards,
 		Tasks:      tasks,
 		InfoBlocks: infoBlocks,
-		BoardUsers: nil, // Инициализируем пустой слайс
-		SpaceUsers: nil, // Инициализируем пустой слайс
-	}
-
-	// Заполняем информацию о пользователях
-	for _, user := range boardUsers {
-		response.BoardUsers = append(response.BoardUsers, struct {
+		BoardUsers: make([]struct {
 			Login   string `json:"login"`
 			CanEdit bool   `json:"can_edit"`
-		}{
-			Login:   user.Login,
-			CanEdit: user.RoleOnBoard.CanEdit,
-		})
-	}
-
-	for _, user := range *spaceUsers {
-		response.SpaceUsers = append(response.SpaceUsers, struct {
+		}, 0),
+		SpaceUsers: make([]struct {
 			Login   string `json:"login"`
 			IsAdmin bool   `json:"is_admin"`
 			IsOwner bool   `json:"is_owner"`
 			CanEdit bool   `json:"can_edit"`
-		}{
-			Login:   user.Login,
-			IsAdmin: user.RoleOnSpace.IsAdmin,
-			IsOwner: user.RoleOnSpace.IsOwner,
-			CanEdit: user.RoleOnSpace.CanEdit,
-		})
+		}, 0),
+	}
+
+	// Заполняем информацию о пользователях
+	if boardUsers != nil {
+		for _, user := range *boardUsers {
+			response.BoardUsers = append(response.BoardUsers, struct {
+				Login   string `json:"login"`
+				CanEdit bool   `json:"can_edit"`
+			}{
+				Login:   user.Login,
+				CanEdit: user.RoleOnBoard.CanEdit,
+			})
+		}
+	}
+
+	if spaceUsers != nil {
+		for _, user := range *spaceUsers {
+			response.SpaceUsers = append(response.SpaceUsers, struct {
+				Login   string `json:"login"`
+				IsAdmin bool   `json:"is_admin"`
+				IsOwner bool   `json:"is_owner"`
+				CanEdit bool   `json:"can_edit"`
+			}{
+				Login:   user.Login,
+				IsAdmin: user.RoleOnSpace.IsAdmin,
+				IsOwner: user.RoleOnSpace.IsOwner,
+				CanEdit: user.RoleOnSpace.CanEdit,
+			})
+		}
 	}
 
 	// Отправляем ответ в формате JSON

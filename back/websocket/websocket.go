@@ -1,6 +1,6 @@
 package websocket
 
-import (
+/* import (
 	"log"
 	"net/http"
 
@@ -68,3 +68,4 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		boardConnections[conn] = BoardConnection{SpaceID: spaceID, BoardID: boardID, Conn: conn}
 	}
 }
+*/
