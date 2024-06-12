@@ -16,24 +16,28 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 	}
 
 	var roleOnSpace models.RoleOnSpace
+	var roleOnSpaceFound bool
 	roleOnSpaceErr := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, userLogin).
 		First(&roleOnSpace).Error
-
-	var boardRole models.BoardRoleOnBoard
-	boardRoleErr := r.db.Model(&models.BoardRoleOnBoard{}).
-		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, userLogin).
-		First(&boardRole).Error
-
-	if roleOnSpaceErr != nil && !errors.Is(roleOnSpaceErr, gorm.ErrRecordNotFound) {
+	if roleOnSpaceErr == nil {
+		roleOnSpaceFound = true
+	} else if !errors.Is(roleOnSpaceErr, gorm.ErrRecordNotFound) {
 		return roleOnSpaceErr
 	}
 
-	if boardRoleErr != nil && !errors.Is(boardRoleErr, gorm.ErrRecordNotFound) {
+	var boardRole models.BoardRoleOnBoard
+	var boardRoleFound bool
+	boardRoleErr := r.db.Model(&models.BoardRoleOnBoard{}).
+		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, userLogin).
+		First(&boardRole).Error
+	if boardRoleErr == nil {
+		boardRoleFound = true
+	} else if !errors.Is(boardRoleErr, gorm.ErrRecordNotFound) {
 		return boardRoleErr
 	}
 
-	if r.hasEditPermissions(roleOnSpace, boardRole) {
+	if (roleOnSpaceFound || boardRoleFound) && r.hasEditPermissions(roleOnSpace, boardRole) {
 		return r.db.Create(card).Error
 	}
 	return fmt.Errorf("у пользователя нет прав для создания карточки на этой доске")
