@@ -97,6 +97,97 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
 
+func CreateInfoblockHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID доски из пути запроса
+	vars := mux.Vars(r)
+	boardID, err := strconv.ParseUint(vars["boardId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid board ID", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Header string `json:"header"`
+		Body   string `json:"body"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Создаем новый инфоблок
+	InformationalBlock := &models.InformationalBlock{
+		Header:  reqBody.Header,
+		Body:    reqBody.Body,
+		BoardID: uint(boardID),
+	}
+	err = repo.CreateInformationalBlock(InformationalBlock, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusCreated)
+}
+
+func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID доски и карточки из пути запроса
+	vars := mux.Vars(r)
+
+	cardID, err := strconv.ParseUint(vars["cardId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid card ID", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Name  string `json:"name"`
+		Color string `json:"color"` // Цвет не является обязательным
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Создаем новый таск
+	task := &models.Task{
+		TaskName: reqBody.Name,
+		CardID:   uint(cardID),
+	}
+	err = repo.CreateTask(task, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Если был указан цвет, создаем запись о цвете таска
+	if reqBody.Color != "" {
+		taskColor := &models.TaskColor{
+			TaskColor: reqBody.Color,
+			TaskID:    task.TaskID,
+		}
+		err = repo.CreateTaskColor(taskColor, userLogin)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusCreated)
+}
+
 func CreateCardHandler(w http.ResponseWriter, r *http.Request) {
 	// Получаем логин пользователя из заголовка
 	userLogin := r.Header.Get("login")
@@ -159,7 +250,7 @@ func UpdateUserDescription(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func CreateBoard(w http.ResponseWriter, r *http.Request) {
+func CreateBoardHandler(w http.ResponseWriter, r *http.Request) {
 	userLogin := r.Header.Get("login")
 
 	var boardData struct {

@@ -29,15 +29,18 @@ func main() {
 	// Определяем маршруты
 	router.HandleFunc("/register", handlers.Register).Methods("POST")
 	router.HandleFunc("/login", handlers.Login).Methods("POST")
+
 	// Определяем зыщищенные маршруты (нужно авторизоваться)
 	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
 	router.Handle("/user/{login}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserInfo))).Methods("GET")
 	router.Handle("/boards", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserBoards))).Methods("GET")
 	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
 	router.Handle("/user", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserLogin))).Methods("GET")
-	router.Handle("/board", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateBoard))).Methods("POST")
+	router.Handle("/board", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateBoardHandler))).Methods("POST")
 	router.Handle("/description", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserDescription))).Methods("PUT")
 	router.Handle("/board/{boardId}/card", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCardHandler))).Methods("POST")
+	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
+
 	// Настройка CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Разрешенные источники

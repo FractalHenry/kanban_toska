@@ -147,3 +147,11 @@ type Notification struct {
 	NotificationID          uint   `gorm:"column:notification_id;primaryKey;autoIncrement"`
 	NotificationDescription string `gorm:"column:notification_description;type:varchar(50);not null;unique"`
 }
+
+type InformationalBlock struct {
+	InformationalBlockID uint   `gorm:"primaryKey;autoIncrement"`
+	Header               string `gorm:"type:varchar(100);not null"`
+	Body                 string `gorm:"type:varchar(500);not null"`
+	BoardID              uint   `gorm:"not null;unique"`
+	Board                Board  `gorm:"foreignKey:BoardID"`
+}

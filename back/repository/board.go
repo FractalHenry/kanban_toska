@@ -135,7 +135,7 @@ func (r *Repository) checkUserPermissionsForSpace(spaceID uint, userLogin, actio
 	}
 
 	switch action {
-	case "createBoard", "associateRoleWithBoards":
+	case "createBoard", "associateRoleWithBoards", "createInformationalBlock", "deleteInformationalBlock":
 		if currentRole.IsOwner || currentRole.IsAdmin || currentRole.CanEdit {
 			return nil
 		}
