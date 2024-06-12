@@ -67,5 +67,5 @@ func DeleteInfoblockHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Отправляем ответ
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 }
