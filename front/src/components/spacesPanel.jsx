@@ -80,13 +80,14 @@ import { useToast } from "./Toast/toastprovider";
 ] */
 
 const PanelItem = ({ space }) => {
+  console.log(space)
   return (
     <div className="SpaceCard">
-      <h4> Пространство: {space.name} </h4>
+      <h4> Пространство: {space.SpaceOwner} </h4>
       <h5> Доски: </h5>
-      {space.boards.map(
+      {space.boards ? space.boards.map(
         (item, index) => (<BoardLink key={index} board={item} />)
-      )}
+      ): <div> В этом пространстве нет досок </div>}
       <h5>Участники пространства:</h5>
       {space.users.map(
         (item, index) => (<UserLink key={index} user={item} />)
@@ -132,7 +133,7 @@ useEffect(() => {
   return (
     <div className="overflow-y w-min-300 h-max-100">
       <h3>Доступные пространства:</h3>
-      {spaces&& spaces.map((item, index) => (<PanelItem key={index} space={item} />))}
+      {spaces && spaces.map((item, index) => (<PanelItem key={index} space={item} />))}
     </div>
   )
 }

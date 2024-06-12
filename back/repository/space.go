@@ -179,7 +179,7 @@ func (r *Repository) GetSpaceBoards(spaceID uint) ([]models.Board, error) {
 
 func (r *Repository) GetSpaceUsers(spaceID uint) ([]string, error) {
 	var userRoleOnSpaces []models.UserRoleOnSpace
-	err := r.db.Where("role_on_space.space_id = ?", spaceID).
+	err := r.db.Where("role_on_spaces.space_id = ?", spaceID).
 		Joins("JOIN role_on_spaces ON user_role_on_spaces.role_on_space_id = role_on_spaces.role_on_space_id").
 		Joins("JOIN users ON user_role_on_spaces.login = users.login").
 		Select("users.login").

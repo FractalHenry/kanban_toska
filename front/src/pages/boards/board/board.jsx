@@ -48,7 +48,7 @@ let Board = ({boardName="Noname"}) =>{
         <div className="">
             <div className="header flex flex-row between p-8">
                 <div className="h2">{boardName} || TESTING { id }</div>
-                {isAuthor && <Button className="center" caption="Manage Users"/>}
+                {isAuthor && <Button className="center" >Управление пользователями</Button>}
             </div>
             <div className="flex-row mt-8 mb-8 ml-8">
                 <div className="boardinfo overflow-y no-oveflow-x">

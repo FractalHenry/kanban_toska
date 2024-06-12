@@ -2,7 +2,7 @@ import React from "react";
 import Task from './task'
 import { SquarePlus, X } from "lucide-react";
 import { useState } from 'react'
-import { DialogProvider, useDialog } from "./dialog/taskdialogprovider";
+import { useDialog } from "./dialog/taskdialogprovider";
 let Card = ({card,removeCard}) =>{
     const {openDialog} = useDialog();
     const DummyTasks = [{
@@ -26,9 +26,6 @@ let Card = ({card,removeCard}) =>{
         ]
     }]
     const [tasks, setTasks] = useState(DummyTasks.slice());
-    const [selectedTask, setSelectedTask] =useState(null);
-    const [isDialog, setIsDialog] =useState(false);
-
     function newTask() {
         console.log("Tasks:", tasks);
         setTasks((prevTasks) => [

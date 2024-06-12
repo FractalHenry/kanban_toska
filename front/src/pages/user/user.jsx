@@ -48,7 +48,7 @@ let User = () =>{
     return(
         <div className="flex-col center mt-8">
             <h2>Welcome to {User && User.login} page!</h2>
-            <Toggle isOwner={true} initState={User.emailVisibility}><div><b>Contact me: </b> {User && User.email} </div></Toggle>
+            <Toggle isOwner={true} initState={User && User.emailVisibility}><div><b>Contact me: </b> {User && User.email} </div></Toggle>
             <hr className="hr max-x"/>
             <div className="flex-col center">
                 <h2> About me </h2>

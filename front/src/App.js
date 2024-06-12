@@ -8,11 +8,8 @@ import User from './pages/user/user'
 import ProtectedPage from "./pages/protected/protected";
 import { Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from './components/AuthContext';
-import { Toast } from "./components/Toast/toast";
 import { ToastProvider } from "./components/Toast/toastprovider";
 import { Welcome } from "./pages/welcome/welcome";
-import { Dialog, DialogBody, DialogFooter, DialogHeader } from "./components/dialog/dialog";
-import { X } from "lucide-react";
 import { DialogProvider } from "./components/dialog/taskdialogprovider";
 
 function App() {
