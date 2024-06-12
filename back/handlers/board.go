@@ -19,7 +19,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получаем детальную информацию о доске
-	board, cards, tasks, infoBlock, err := repo.GetBoardDetails(uint(boardID))
+	board, cards, tasks, infoBlocks, err := repo.GetBoardDetails(uint(boardID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -34,10 +34,10 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Создаем ответ в формате JSON
 	response := struct {
-		ID         uint                       `json:"id"`
-		Cards      []models.Card              `json:"cards"`
-		Tasks      []models.Task              `json:"tasks"`
-		InfoBlocks *models.InformationalBlock `json:"infoBlocks,omitempty"`
+		ID         uint                        `json:"id"`
+		Cards      []models.Card               `json:"cards"`
+		Tasks      []models.Task               `json:"tasks"`
+		InfoBlocks []models.InformationalBlock `json:"infoBlocks,omitempty"`
 		Users      []struct {
 			Login       string `json:"login"`
 			RoleOnBoard string `json:"role_on_board"`
@@ -46,7 +46,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		ID:         board.BoardID,
 		Cards:      cards,
 		Tasks:      tasks,
-		InfoBlocks: infoBlock,
+		InfoBlocks: infoBlocks,
 		Users:      nil, // Инициализируем пустой слайс
 	}
 

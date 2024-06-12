@@ -180,7 +180,7 @@ func (r *Repository) checkUserPermissionsForSpaceByBoardID(boardID uint, userLog
 	return r.checkUserPermissionsForSpace(board.SpaceID, userLogin, action)
 }
 
-func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card, []models.Task, *models.InformationalBlock, error) {
+func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card, []models.Task, []models.InformationalBlock, error) {
 	var board models.Board
 	if err := r.db.First(&board, boardID).Error; err != nil {
 		return nil, nil, nil, nil, err
@@ -200,12 +200,12 @@ func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card
 		tasks = append(tasks, cardTasks...)
 	}
 
-	infoBlock, err := r.GetInformationalBlockByBoardID(boardID)
+	infoBlocks, err := r.GetInformationalBlocksByBoardID(boardID)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
 
-	return &board, cards, tasks, infoBlock, nil
+	return &board, cards, tasks, infoBlocks, nil
 }
 
 func (r *Repository) GetBoardUsers(boardID uint) ([]struct {

@@ -152,6 +152,6 @@ type InformationalBlock struct {
 	InformationalBlockID uint   `gorm:"primaryKey;autoIncrement"`
 	Header               string `gorm:"type:varchar(100);not null"`
 	Body                 string `gorm:"type:varchar(500);not null"`
-	BoardID              uint   `gorm:"not null;unique"`
+	BoardID              uint   `gorm:"not null"`
 	Board                Board  `gorm:"foreignKey:BoardID"`
 }
