@@ -60,7 +60,7 @@ func (r *Repository) findBoardAndRoles(input interface{}, userLogin string) (mod
 	if err := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, user.Login).
 		First(&boardRole).Error; err != nil {
-		if err != nil && err != gorm.ErrRecordNotFound {
+		if err != gorm.ErrRecordNotFound {
 			return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
 		}
 	}
