@@ -45,3 +45,25 @@ func CreateCardHandler(w http.ResponseWriter, r *http.Request) {
 	// Отправляем ответ
 	w.WriteHeader(http.StatusCreated)
 }
+
+func DeleteCardHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID доски из пути запроса
+	vars := mux.Vars(r)
+	cardID, err := strconv.ParseUint(vars["cardID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid card ID", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.DeleteCard(uint(cardID), userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
