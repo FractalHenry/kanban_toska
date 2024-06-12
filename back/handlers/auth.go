@@ -154,6 +154,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		Name  string `json:"name"`
 		Color string `json:"color"` // Цвет не является обязательным
 	}
+
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -165,6 +166,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		TaskName: reqBody.Name,
 		CardID:   uint(cardID),
 	}
+
 	err = repo.CreateTask(task, userLogin)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
