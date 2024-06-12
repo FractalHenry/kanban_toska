@@ -59,6 +59,19 @@ func (r *Repository) GetInformationalBlocksByBoardID(boardID uint) ([]models.Inf
 	return blocks, nil
 }
 
+func (r *Repository) UpdateInformationalBlocks(infoBlock *models.InformationalBlock, userLogin string) error {
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRolesForBlock(infoBlock.BoardID, userLogin)
+	if err != nil {
+		return err
+	}
+
+	if r.hasEditPermissions(*roleOnSpace, *boardRole) {
+		return r.db.Save(infoBlock).Error
+	}
+	return fmt.Errorf("у пользователя нет прав для обновления информационного блока на этой доске")
+}
+
 func (r *Repository) findBoardAndRolesForBlock(boardID uint, userLogin string) (*models.User, *models.Board, *models.RoleOnSpace, *models.BoardRoleOnBoard, error) {
 	user, err := r.FindUserByLogin(userLogin)
 	if err != nil {

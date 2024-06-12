@@ -52,7 +52,7 @@ func DeleteInfoblockHandler(w http.ResponseWriter, r *http.Request) {
 	// Получаем логин пользователя из заголовка
 	userLogin := r.Header.Get("login")
 
-	// Получаем ID доски из пути запроса
+	// Получаем ID из пути запроса
 	vars := mux.Vars(r)
 	InfoBlockID, err := strconv.ParseUint(vars["InfoBlockID"], 10, 64)
 	if err != nil {
@@ -61,6 +61,47 @@ func DeleteInfoblockHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = repo.DeleteInformationalBlockByID(uint(InfoBlockID), userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
+
+func UpdateInfoblockHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	vars := mux.Vars(r)
+	InfoBlockID, err := strconv.ParseUint(vars["InfoBlockID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid InfoBlock ID", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Header string `json:"header"`
+		Body   string `json:"body"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	var InfoBlock *models.InformationalBlock
+	InfoBlock, err = repo.GetInformationalBlockByID(uint(InfoBlockID))
+	if err != nil {
+		http.Error(w, "Invalid InfoBlock ID", http.StatusBadRequest)
+		return
+	}
+	InfoBlock.Header = reqBody.Header
+	InfoBlock.Body = reqBody.Body
+
+	err = repo.UpdateInformationalBlocks(InfoBlock, userLogin)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

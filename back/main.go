@@ -46,6 +46,7 @@ func main() {
 	router.Handle("/board/{boardId}/Infoblock", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateInfoblockHandler))).Methods("POST")
 	router.Handle("/removeCard/{cardID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCardHandler))).Methods("DELETE")
 	router.Handle("/removeInfoBlock/{InfoBlockID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteInfoblockHandler))).Methods("DELETE")
+	router.Handle("/updateInfoBlock/{InfoBlockID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateInfoblockHandler))).Methods("PUT")
 	// Настройка CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Разрешенные источники
