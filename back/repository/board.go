@@ -179,3 +179,54 @@ func (r *Repository) checkUserPermissionsForSpaceByBoardID(boardID uint, userLog
 
 	return r.checkUserPermissionsForSpace(board.SpaceID, userLogin, action)
 }
+
+func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card, []models.Task, *models.InformationalBlock, error) {
+	var board models.Board
+	if err := r.db.First(&board, boardID).Error; err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	var cards []models.Card
+	if err := r.db.Where("board_id = ?", boardID).Find(&cards).Error; err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	var tasks []models.Task
+	for _, card := range cards {
+		cardTasks, err := r.GetCardTasks(card.CardID)
+		if err != nil {
+			return nil, nil, nil, nil, err
+		}
+		tasks = append(tasks, cardTasks...)
+	}
+
+	infoBlock, err := r.GetInformationalBlockByBoardID(boardID)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+
+	return &board, cards, tasks, infoBlock, nil
+}
+
+func (r *Repository) GetBoardUsers(boardID uint) ([]struct {
+	Login       string
+	RoleOnBoard models.RoleOnBoard
+}, error) {
+	var users []struct {
+		Login       string
+		RoleOnBoard models.RoleOnBoard
+	}
+
+	err := r.db.Table("user_board_role_on_boards").
+		Select("users.login, role_on_boards.role_on_board_id, role_on_boards.role_on_board_name, role_on_boards.space_id").
+		Joins("JOIN users ON users.login = user_board_role_on_boards.login").
+		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = user_board_role_on_boards.role_on_board_id").
+		Where("user_board_role_on_boards.board_id = ?", boardID).
+		Scan(&users).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}

@@ -42,6 +42,7 @@ func main() {
 	router.Handle("/description", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserDescription))).Methods("PUT")
 	router.Handle("/board/{boardId}/card", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCardHandler))).Methods("POST")
 	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
+	router.Handle("/board/{boardId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("GET")
 
 	// Настройка CORS
 	c := cors.New(cors.Options{
