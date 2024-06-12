@@ -26,7 +26,6 @@ let User = () =>{
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data);

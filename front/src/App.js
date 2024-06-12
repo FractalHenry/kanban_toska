@@ -28,6 +28,7 @@ function App() {
             <Route path="/boards" element={<Boards />} />
             <Route path="/board/:id" element={<Board />} />
             <Route path="/protected/:login" element={<ProtectedPage />} />
+            <Route path="/user" element={<User />} />
             <Route path="/user/:login" element={<User />} />
             <Route path="*" element={<Error />} />
           </Routes>
