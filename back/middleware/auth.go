@@ -12,7 +12,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		// Извлекаем заголовок Authorization
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			http.Error(w, "No token provided", http.StatusUnauthorized)
+			http.Error(w, "Не предоставлен токен", http.StatusUnauthorized)
 			return
 		}
 		// Извлекаем токен из заголовка
@@ -20,7 +20,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		// Проверяем валидность токена
 		claims, err := utils.ValidateJWT(tokenString)
 		if err != nil {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			http.Error(w, "Не верный токен", http.StatusUnauthorized)
 			return
 		}
 		// Добавляем логин пользователя в заголовок запроса

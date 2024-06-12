@@ -18,7 +18,9 @@ func main() {
 	// Формируем строку подключения к PostgreSQL
 	dsn := "host=localhost port=5433 user=postgres dbname=postgres password=web sslmode=disable"
 	// Подключаемся к базе данных SQLite
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

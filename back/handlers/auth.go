@@ -258,6 +258,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request) {
 	var boardData struct {
 		BoardName string `json:"boardname"`
 	}
+
 	err := json.NewDecoder(r.Body).Decode(&boardData)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -265,6 +266,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	board := &models.Board{
+		SpaceID:   1,
 		BoardName: boardData.BoardName,
 	}
 
@@ -387,6 +389,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 
 	// Создаем слайс для хранения пространств с дополнительной информацией
 	var spaceList []struct {
+		SpaceID    uint   `json:"spaceId"`
 		SpaceOwner string `json:"SpaceOwner"`
 		Boards     []struct {
 			ID   uint   `json:"id"`
@@ -429,6 +432,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 		}
 
 		spaceList = append(spaceList, struct {
+			SpaceID    uint   `json:"spaceId"`
 			SpaceOwner string `json:"SpaceOwner"`
 			Boards     []struct {
 				ID   uint   `json:"id"`
@@ -436,6 +440,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 			} `json:"boards"`
 			Users []string `json:"users"`
 		}{
+			SpaceID:    space.SpaceID,
 			SpaceOwner: SpaceOwner,
 			Boards:     boardList,
 			Users:      users,
