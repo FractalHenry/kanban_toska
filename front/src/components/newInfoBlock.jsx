@@ -6,7 +6,6 @@ import Cookies from "js-cookie"
 import { useEffect } from "react";
 
 export const NewInfoBlock = ({boardid}) =>{
-    console.log(boardid)
     const {showToast} = useToast();
     const navigate = useNavigate();
     const [headerData,setHeaderData] = useState('');

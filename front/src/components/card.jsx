@@ -7,27 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
 import { useEffect } from "react";
+import { NewTask } from "./newTask";
 let Card = ({card}) =>{
     const {showToast} = useToast()
     const navigate = useNavigate()
     const {openDialog} = useDialog();
     const [tasks, setTasks] = useState();
-    function newTask() {
-        /* console.log("Tasks:", tasks);
-        setTasks((prevTasks) => [
-          ...prevTasks,
-          {
-            id: prevTasks.length+1,
-            color: null,
-            name: "Empty task",
-            description: null,
-            marks: null,
-          },
-        ]); */
-      }
-    function taskRemover(taskToRemove){
-        setTasks(tasks.filter(task => task.id!==taskToRemove))
-    }
     const remove = async () =>{
         try
         {
@@ -59,21 +44,17 @@ let Card = ({card}) =>{
             <div className="flex-col cardwrapper gap-8">
                 <div className="flex flex-row between">
                     <h1>{card.CardName}</h1>
-                    <X onClick={remove}/>
+                    <X onClick={remove} className="pointer"/>
                 </div>
                 <hr/>
                 <div className="flex flex-col gap-8" id={"Card:"+ card.id}>
                 {tasks&&tasks.length > 0 ? 
                 (tasks.map((item) => {
-                    return <Task task={item} removeTask={taskRemover} onClick={() => handleTaskClick(item)}/>;
+                    return <Task task={item} onClick={() => handleTaskClick(item)}/>;
                 })) 
                 : (<div>No tasks available.</div>)}
                 </div>
-                <div className="flex-row taskwrapper max-x center" onClick={newTask}>
-                    Add new task 
-                    <div className="fill"/>
-                    <SquarePlus />
-                </div>
+                <NewTask boardid={card.BoardID} cardid={card.CardID}/>
             </div>
     )
 }
