@@ -39,6 +39,7 @@ func InitHandlers(db *gorm.DB) {
 		&models.BoardRoleOnBoard{},
 		&models.UserRoleOnSpace{},
 		&models.UserBoardRoleOnBoard{},
+		&models.InformationalBlock{},
 	}
 
 	for _, model := range models {
