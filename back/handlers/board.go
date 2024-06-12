@@ -26,7 +26,14 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получаем пользователей и их роли на доске
-	users, err := repo.GetBoardUsers(uint(boardID))
+	boardUsers, err := repo.GetBoardUsers(uint(boardID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	space, _ := repo.GetSpaceByBoard(uint(boardID))
+	spaceUsers, err := repo.GetSpaceUsers(space.SpaceID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -37,27 +44,48 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		ID         uint                        `json:"id"`
 		Cards      []models.Card               `json:"cards"`
 		Tasks      []models.Task               `json:"tasks"`
-		InfoBlocks []models.InformationalBlock `json:"infoBlocks,omitempty"`
-		Users      []struct {
-			Login       string `json:"login"`
-			RoleOnBoard string `json:"role_on_board"`
-		} `json:"users"`
+		InfoBlocks []models.InformationalBlock `json:"infoBlocks"`
+		BoardUsers []struct {
+			Login   string `json:"login"`
+			CanEdit bool   `json:"can_edit"`
+		} `json:"boardUsers"`
+		SpaceUsers []struct {
+			Login   string `json:"login"`
+			IsAdmin bool   `json:"is_admin"`
+			IsOwner bool   `json:"is_owner"`
+			CanEdit bool   `json:"can_edit"`
+		} `json:"spaceUsers"`
 	}{
 		ID:         board.BoardID,
 		Cards:      cards,
 		Tasks:      tasks,
 		InfoBlocks: infoBlocks,
-		Users:      nil, // Инициализируем пустой слайс
+		BoardUsers: nil, // Инициализируем пустой слайс
+		SpaceUsers: nil, // Инициализируем пустой слайс
 	}
 
 	// Заполняем информацию о пользователях
-	for _, user := range users {
-		response.Users = append(response.Users, struct {
-			Login       string `json:"login"`
-			RoleOnBoard string `json:"role_on_board"`
+	for _, user := range boardUsers {
+		response.BoardUsers = append(response.BoardUsers, struct {
+			Login   string `json:"login"`
+			CanEdit bool   `json:"can_edit"`
 		}{
-			Login:       user.Login,
-			RoleOnBoard: user.RoleOnBoard.RoleOnBoardName,
+			Login:   user.Login,
+			CanEdit: user.RoleOnBoard.CanEdit,
+		})
+	}
+
+	for _, user := range *spaceUsers {
+		response.SpaceUsers = append(response.SpaceUsers, struct {
+			Login   string `json:"login"`
+			IsAdmin bool   `json:"is_admin"`
+			IsOwner bool   `json:"is_owner"`
+			CanEdit bool   `json:"can_edit"`
+		}{
+			Login:   user.Login,
+			IsAdmin: user.RoleOnSpace.IsAdmin,
+			IsOwner: user.RoleOnSpace.IsOwner,
+			CanEdit: user.RoleOnSpace.CanEdit,
 		})
 	}
 

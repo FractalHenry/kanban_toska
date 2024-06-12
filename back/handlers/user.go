@@ -159,6 +159,11 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var userLogins []string
+		for _, user := range *users {
+			userLogins = append(userLogins, user.Login)
+		}
+
 		spaceList = append(spaceList, struct {
 			SpaceID    uint   `json:"spaceId"`
 			SpaceOwner string `json:"SpaceOwner"`
@@ -171,7 +176,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 			SpaceID:    space.SpaceID,
 			SpaceOwner: SpaceOwner,
 			Boards:     boardList,
-			Users:      users,
+			Users:      userLogins,
 		})
 	}
 

@@ -177,8 +177,8 @@ func (r *Repository) GetSpaceBoards(spaceID uint) ([]models.Board, error) {
 	return boards, nil
 }
 
-func (r *Repository) GetSpaceUsers(spaceID uint) ([]string, error) {
-	var userRoleOnSpaces []models.UserRoleOnSpace
+func (r *Repository) GetSpaceUsers(spaceID uint) (*[]models.UserRoleOnSpace, error) {
+	var userRoleOnSpaces *[]models.UserRoleOnSpace
 	err := r.db.Where("role_on_spaces.space_id = ?", spaceID).
 		Joins("JOIN role_on_spaces ON user_role_on_spaces.role_on_space_id = role_on_spaces.role_on_space_id").
 		Joins("JOIN users ON user_role_on_spaces.login = users.login").
@@ -188,10 +188,5 @@ func (r *Repository) GetSpaceUsers(spaceID uint) ([]string, error) {
 		return nil, err
 	}
 
-	var users []string
-	for _, userRoleOnSpace := range userRoleOnSpaces {
-		users = append(users, userRoleOnSpace.Login)
-	}
-
-	return users, nil
+	return userRoleOnSpaces, nil
 }

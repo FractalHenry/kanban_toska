@@ -210,15 +210,15 @@ func (r *Repository) GetBoardDetails(boardID uint) (*models.Board, []models.Card
 
 func (r *Repository) GetBoardUsers(boardID uint) ([]struct {
 	Login       string
-	RoleOnBoard models.RoleOnBoard
+	RoleOnBoard models.BoardRoleOnBoard
 }, error) {
 	var users []struct {
 		Login       string
-		RoleOnBoard models.RoleOnBoard
+		RoleOnBoard models.BoardRoleOnBoard
 	}
 
 	err := r.db.Table("user_board_role_on_boards").
-		Select("users.login, role_on_boards.role_on_board_id, role_on_boards.role_on_board_name, role_on_boards.space_id").
+		Select("users.login, user_board_role_on_boards.board_id, user_board_role_on_boards.role_on_board_id, role_on_boards.role_on_board_name, role_on_boards.space_id, user_board_role_on_boards.can_edit").
 		Joins("JOIN users ON users.login = user_board_role_on_boards.login").
 		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = user_board_role_on_boards.role_on_board_id").
 		Where("user_board_role_on_boards.board_id = ?", boardID).
