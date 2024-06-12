@@ -256,6 +256,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request) {
 	userLogin := r.Header.Get("login")
 
 	var boardData struct {
+		SpaceID   uint   `json:"spaceid"`
 		BoardName string `json:"boardname"`
 	}
 
@@ -266,7 +267,7 @@ func CreateBoardHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	board := &models.Board{
-		SpaceID:   1,
+		SpaceID:   boardData.SpaceID,
 		BoardName: boardData.BoardName,
 	}
 
