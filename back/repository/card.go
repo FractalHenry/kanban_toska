@@ -37,29 +37,29 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 		}
 
 		return fmt.Errorf("у пользователя нет прав для создания карточки на этой доске")
-	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+	} else if errors.Is(err, gorm.ErrRecordNotFound) {
 		// Произошла ошибка, не связанная с отсутствием записи
 		return err
 	}
 
 	// Если роль на доске не найдена, проверяем роль пользователя в пространстве
-	var userRoleOnSpace models.UserRoleOnSpace
-	if err := r.db.Where("login = ? AND space_id = ?", userLogin, board.SpaceID).First(&userRoleOnSpace).Error; err == nil {
-		// Роль на пространстве найдена
-		var roleOnSpace models.RoleOnSpace
-		if err := r.db.Where("role_on_space_id = ?", userRoleOnSpace.RoleOnSpaceID).First(&roleOnSpace).Error; err != nil {
-			return err
-		}
+	var roleOnSpace models.RoleOnSpace
+	if err := r.db.Table("user_role_on_spaces").
+		Select("role_on_spaces.*").
+		Joins("JOIN users ON user_role_on_spaces.login = users.login").
+		Joins("JOIN role_on_spaces ON user_role_on_spaces.role_on_space_id = role_on_spaces.role_on_space_id").
+		Where("users.login = ? AND role_on_spaces.space_id = ?", userLogin, board.SpaceID).
+		First(&roleOnSpace).Error; err == nil {
 
 		// Проверяем, есть ли у пользователя права на редактирование пространства
 		if roleOnSpace.CanEdit || roleOnSpace.IsAdmin || roleOnSpace.IsOwner {
-			return r.db.Create(card).Error
+			return r.db.Create(&card).Error
 		}
 
 		return fmt.Errorf("у пользователя нет прав для создания карточки в этом пространстве")
-	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
-		// Произошла ошибка, не связанная с отсутствием записи
-		return err
+	} else if errors.Is(err, gorm.ErrRecordNotFound) {
+		// Запись не найдена, возвращаем ошибку
+		return fmt.Errorf("пользователь или пространство не найдены")
 	}
 
 	// Если роль пользователя не найдена ни на доске, ни в пространстве
