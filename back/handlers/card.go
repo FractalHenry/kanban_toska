@@ -50,7 +50,7 @@ func DeleteCardHandler(w http.ResponseWriter, r *http.Request) {
 	// Получаем логин пользователя из заголовка
 	userLogin := r.Header.Get("login")
 
-	// Получаем ID доски из пути запроса
+	// Получаем ID карточки из пути запроса
 	vars := mux.Vars(r)
 	cardID, err := strconv.ParseUint(vars["cardID"], 10, 64)
 	if err != nil {
