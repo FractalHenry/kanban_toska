@@ -41,26 +41,28 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 		return err
 	}
 
-	// Роль на доске не найдена, проверяем роль на пространстве
-	var userSpaceRole models.UserRoleOnSpace
-	if err := r.db.Where("login = ? AND space_id = ?", userLogin, space.SpaceID).First(&userSpaceRole).Error; err == nil {
+	// Если роль на доске не найдена, проверяем роль пользователя в пространстве
+	var userRoleOnSpace models.UserRoleOnSpace
+	if err := r.db.Where("login = ? AND space_id = ?", userLogin, board.SpaceID).First(&userRoleOnSpace).Error; err == nil {
 		// Роль на пространстве найдена
-		var spaceRole models.RoleOnSpace
-		if err := r.db.Where("role_on_space_id = ?", userSpaceRole.RoleOnSpaceID).First(&spaceRole).Error; err != nil {
+		var roleOnSpace models.RoleOnSpace
+		if err := r.db.Where("role_on_space_id = ?", userRoleOnSpace.RoleOnSpaceID).First(&roleOnSpace).Error; err != nil {
 			return err
 		}
 
 		// Проверяем, есть ли у пользователя права на редактирование пространства
-		if spaceRole.CanEdit || spaceRole.IsAdmin || spaceRole.IsOwner {
+		if roleOnSpace.CanEdit || roleOnSpace.IsAdmin || roleOnSpace.IsOwner {
 			return r.db.Create(card).Error
 		}
+
+		return fmt.Errorf("у пользователя нет прав для создания карточки в этом пространстве")
 	} else if err != gorm.ErrRecordNotFound {
 		// Произошла ошибка, не связанная с отсутствием записи
 		return err
 	}
 
-	// Ни роли на доске, ни роли на пространстве не найдены
-	return fmt.Errorf("у пользователя нет прав для создания карточки на этой доске")
+	// Если роль пользователя не найдена ни на доске, ни в пространстве
+	return fmt.Errorf("у пользователя нет прав для создания карточки")
 }
 
 // Функция обновления карточки

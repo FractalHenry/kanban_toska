@@ -73,19 +73,15 @@ func (r *Repository) findBoardAndRolesForBlock(boardID uint, userLogin string) (
 	var roleOnSpace *models.RoleOnSpace
 	if err := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, user.Login).
-		First(&roleOnSpace).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return nil, nil, nil, nil, err
-		}
+		First(&roleOnSpace).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, nil, nil, nil, err
 	}
 
 	var boardRole *models.BoardRoleOnBoard
 	if err := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", boardID, user.Login).
-		First(&boardRole).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return nil, nil, nil, nil, err
-		}
+		First(&boardRole).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, nil, nil, nil, err
 	}
 
 	return user, board, roleOnSpace, boardRole, nil
