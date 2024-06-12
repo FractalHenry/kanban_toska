@@ -218,10 +218,10 @@ func (r *Repository) GetBoardUsers(boardID uint) (*[]struct {
 	}
 
 	err := r.db.Table("user_board_role_on_boards").
-		Select("users.login, user_board_role_on_boards.board_id, user_board_role_on_boards.role_on_board_id, role_on_boards.role_on_board_name, role_on_boards.space_id, user_board_role_on_boards.can_edit").
+		Select("users.login, user_board_role_on_boards.*").
 		Joins("JOIN users ON users.login = user_board_role_on_boards.login").
-		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = user_board_role_on_boards.role_on_board_id").
-		Where("user_board_role_on_boards.board_id = ?", boardID).
+		Joins("JOIN board_role_on_boards ON board_role_on_boards.role_on_board_id = user_board_role_on_boards.role_on_board_id AND board_role_on_boards.board_id = ?", boardID).
+		Joins("JOIN role_on_boards ON role_on_boards.role_on_board_id = board_role_on_boards.role_on_board_id").
 		Scan(&users).Error
 
 	if err != nil {
