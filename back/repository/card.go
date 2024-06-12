@@ -2,7 +2,6 @@ package repository
 
 import (
 	"backend/models"
-	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -37,7 +36,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 		}
 
 		return fmt.Errorf("у пользователя нет прав для создания карточки на этой доске")
-	} else if errors.Is(err, gorm.ErrRecordNotFound) {
+	} else if err != nil && err != gorm.ErrRecordNotFound {
 		// Произошла ошибка, не связанная с отсутствием записи
 		return err
 	}
@@ -57,7 +56,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 		}
 
 		return fmt.Errorf("у пользователя нет прав для создания карточки в этом пространстве")
-	} else if errors.Is(err, gorm.ErrRecordNotFound) {
+	} else if err != nil && err != gorm.ErrRecordNotFound {
 		// Запись не найдена, возвращаем ошибку
 		return fmt.Errorf("пользователь или пространство не найдены")
 	}
