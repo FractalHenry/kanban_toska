@@ -2,7 +2,10 @@ package repository
 
 import (
 	"backend/models"
+	"errors"
 	"fmt"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Функция создания карточки
@@ -13,17 +16,21 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 	}
 
 	var roleOnSpace models.RoleOnSpace
-	if err := r.db.Model(&models.RoleOnSpace{}).
+	roleOnSpaceErr := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, userLogin).
-		First(&roleOnSpace).Error; err != nil {
-		return err
-	}
+		First(&roleOnSpace).Error
 
 	var boardRole models.BoardRoleOnBoard
-	if err := r.db.Model(&models.BoardRoleOnBoard{}).
+	boardRoleErr := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, userLogin).
-		First(&boardRole).Error; err != nil {
-		return err
+		First(&boardRole).Error
+
+	if roleOnSpaceErr != nil && !errors.Is(roleOnSpaceErr, gorm.ErrRecordNotFound) {
+		return roleOnSpaceErr
+	}
+
+	if boardRoleErr != nil && !errors.Is(boardRoleErr, gorm.ErrRecordNotFound) {
+		return boardRoleErr
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
