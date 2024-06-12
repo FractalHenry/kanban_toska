@@ -6,4 +6,5 @@
   --secondary-btn: var(--primary);
   --disabled-btn: lightgray;
   --error: rgb(255, 3, 3);
+  --btn-terminate:var(--error)
 }

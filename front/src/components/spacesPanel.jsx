@@ -5,80 +5,6 @@ import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
 import { useToast } from "./Toast/toastprovider";
 
-/* const spaces = [
-  {
-    name: "Space1",
-    boards: [
-      {
-        id: 1,
-        name: "Board1",
-        color: "red"
-      },
-      {
-        id: 2,
-        name: "Board2",
-        color: "blue"
-      }, {
-        id: 3,
-        name: "Board3",
-        color: "#EF23AA"
-      }
-    ],
-    users: [
-      {
-        id: 1,
-        login: "Star",
-        username: "StarLord"
-      },
-      {
-        id: 2,
-        login: "CryBaby",
-        username: "Drax"
-      },
-      {
-        id: 3,
-        login: "Chicka",
-        username: "Gamora"
-      }
-    ]
-  }, {
-    name: "Space1",
-    boards: [
-      {
-        id: 1,
-        name: "Board1",
-        color: "red"
-      },
-      {
-        id: 2,
-        name: "Board2",
-        color: "blue"
-      }, {
-        id: 3,
-        name: "Board3",
-        color: "#EF23AA"
-      }
-    ],
-    users: [
-      {
-        id: 1,
-        login: "Star",
-        username: "StarLord"
-      },
-      {
-        id: 2,
-        login: "CryBaby",
-        username: "Drax"
-      },
-      {
-        id: 3,
-        login: "Chicka",
-        username: "Gamora"
-      }
-    ]
-  }
-] */
-
 const PanelItem = ({ space }) => {
   console.log(space)
   return (
@@ -97,7 +23,7 @@ const PanelItem = ({ space }) => {
 }
 
 export const SpacesPanel = () => {
-  const navigate = useNavigate();
+const navigate = useNavigate();
 const { showToast } = useToast();
 
 const [spaces, setSpaces] = useState();
@@ -119,7 +45,6 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json();
         setSpaces(data);
-        console.log(data)
       } else {
         throw new Error(response.statusText);
       }

@@ -43,13 +43,15 @@ body {
   }
   hr{
     color: var(--primary);
+    border:1px solid;
+    width: 100%;
   }
   button{
     background-color: transparent;
   }
   .hr{
     color: var(--primary);
-    border:1px solid;
+    border:100px solid;
   }
   .h2{
     font-size:36px;

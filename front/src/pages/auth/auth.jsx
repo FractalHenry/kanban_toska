@@ -22,7 +22,7 @@ const AuthForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        loginUser(data.token);
+        loginUser(data.token,login);
         navigate("/user/"+login);//TODO: get USERID
       } else {
         showToast('Неверный логин или пароль');

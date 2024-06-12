@@ -3,7 +3,7 @@ import { AuthContext } from "../../components/AuthContext"
 import Button from "../../components/button"
 import { Link } from "react-router-dom"
 export const Welcome = () =>{
-    const{isLoggedIn,login,logout} = useContext(AuthContext)
+    const{isLoggedIn,currentUser,login,logout} = useContext(AuthContext)
     return(
         <div className="max-x">
             <div className="flex flex-col center">

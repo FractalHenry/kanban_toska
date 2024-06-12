@@ -1,5 +1,10 @@
 import {Check, X} from 'lucide-react'
-let task = ({onClick, task, removeTask})=>{
+import { useState } from 'react';
+let Task = ({onClick, task, removeTask})=>{
+    const [done, setDone] =useState(false)
+    function handleChange(){
+        setDone(!done)
+    }
     const marks = task.marks ? task.marks.map((item)=>{
         return(
             <div className="flex center markwrapper" id={item.id} style={{backgroundColor: item.color, borderColor: item.color}}>
@@ -9,11 +14,13 @@ let task = ({onClick, task, removeTask})=>{
         )
     }) : null;
     return(
-        <div className="taskwrapper flex-row" id={"Task:"+task.id} onClick={onClick}>
-            <div className="flex-col">
+        <div className={`taskwrapper flex-row`} style={{backgroundColor: done ? "lightgreen" : task.color}} id={"Task:"+task.id} >
+            <input type="checkbox" checked={done} onChange={handleChange}/>
+            <div className="flex-col" onClick={onClick}>
                 {task.name}
                 <div className='flex-row wrap gap-4'>
                 {marks}
+                { task.color}
                 </div>
             </div>
             <div className='fill'></div>
@@ -21,4 +28,4 @@ let task = ({onClick, task, removeTask})=>{
         </div>
     )
 }
-export default task
+export default Task

@@ -7,9 +7,11 @@ const AuthContext = createContext();
 function AuthProvider(props) {
   const initialLoginState = Boolean(Cookies.get('authToken'));
   const [isLoggedIn, setIsLoggedIn] = useState(initialLoginState);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate()
-  const login = (jwtToken) => {
+  const login = (jwtToken,userData) => {
     setIsLoggedIn(true);
+    setCurrentUser(userData);
     Cookies.set('authToken', jwtToken, { expires: 1 });
   };
 
@@ -19,7 +21,7 @@ function AuthProvider(props) {
     navigate("/");
   };
 
-  const value = { isLoggedIn, login, logout };
+  const value = { isLoggedIn, currentUser, login, logout };
 
   return <AuthContext.Provider value={value} {...props} />;
 }

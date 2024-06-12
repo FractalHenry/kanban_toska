@@ -7,7 +7,7 @@ let Card = ({card,removeCard}) =>{
     const {openDialog} = useDialog();
     const DummyTasks = [{
         id: 1,
-        color: "#EF23FE",
+        color: "#237623",
         name: "DummyData",
         description:"There is no decription",
         marks:[{

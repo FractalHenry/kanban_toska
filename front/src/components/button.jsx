@@ -5,7 +5,8 @@ let Button = ({onClick,cls="primary",children}) =>{
     const variants={
             primary:"mr-2 p-4 btn-primary txt-primary",
             secondary:"mr-2 p-4 btn-secondary txt-secondary",
-            disabled:"mr-2 p-4 btn-disabled txt-disabled"
+            disabled:"mr-2 p-4 btn-disabled txt-disabled",
+            terminate:"mr-2 p-4 btn-terminate"
     }
     const btnClass = cn('btn', variants[cls])
     return(

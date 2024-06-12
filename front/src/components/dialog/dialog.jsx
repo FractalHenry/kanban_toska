@@ -23,7 +23,7 @@ export const DialogBody = ({cn="", children})=>{
 }
 export const DialogFooter = ({cn="", children})=>{
     return(
-        <div className={cn + "dialogfooter rounded-bottom p-16"}>
+        <div className={cn + " dialogfooter rounded-bottom p-16"}>
             {children}
         </div>
     )

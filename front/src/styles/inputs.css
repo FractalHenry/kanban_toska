@@ -30,3 +30,8 @@
     border-color:var(--disabled-btn);
     color: var(--disabled-btn) !important; 
   }
+  .btn-terminate{
+    background-color: var(--btn-terminate);
+    border-color:var(--btn-terminate);
+    color: white; 
+  }

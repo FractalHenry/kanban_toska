@@ -2,6 +2,7 @@
 import React, { createContext, useState, useContext } from "react";
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from "./dialog";
 import { X } from "lucide-react";
+import Button from "../button";
 
 const DialogContext = createContext();
 
@@ -31,7 +32,11 @@ export const DialogProvider = ({ children }) => {
                         </div>
                     </DialogHeader>
                     <DialogBody>{task.description}</DialogBody>
-                    <DialogFooter>{"hehe"}</DialogFooter>
+                    <DialogFooter cn="flex flex-row center">
+                        <Button cls="secondary">Отметить выполненной</Button>
+                        <Button cls="secondary">Архивировать</Button>
+                        <Button cls="terminate">Удалить задачу</Button>
+                    </DialogFooter>
                 </Dialog>
             )}
         </DialogContext.Provider>

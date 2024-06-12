@@ -3,7 +3,7 @@ import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/Toast/toastprovider";
 import Cookies from "js-cookie"
-export const NewBoard= ()=>{
+export const NewBoard= ({spaceid})=>{
     const [boardCreating,setCreating] = useState(false);
     const [data, setData] = useState('');
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ export const NewBoard= ()=>{
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        'spaceid': spaceid,
                         'boardname': data
                     })
                 });
