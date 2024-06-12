@@ -47,22 +47,18 @@ func (r *Repository) findBoardAndRoles(input interface{}, userLogin string) (mod
 		return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
 	}
 
-	var roleOnSpace models.RoleOnSpace
+	var roleOnSpace models.RoleOnSpace = models.RoleOnSpace{}
 	if err := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, user.Login).
-		First(&roleOnSpace).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
-		}
+		First(&roleOnSpace).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
 	}
 
-	var boardRole models.BoardRoleOnBoard
+	var boardRole models.BoardRoleOnBoard = models.BoardRoleOnBoard{}
 	if err := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, user.Login).
-		First(&boardRole).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
-		}
+		First(&boardRole).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return models.User{}, models.Board{}, models.RoleOnSpace{}, models.BoardRoleOnBoard{}, err
 	}
 
 	return user, board, roleOnSpace, boardRole, nil
