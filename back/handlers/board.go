@@ -42,6 +42,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	// Создаем ответ в формате JSON
 	response := struct {
 		ID         uint                        `json:"id"`
+		Name       string                      `json:"name"`
 		Cards      []models.Card               `json:"cards"`
 		Tasks      []models.Task               `json:"tasks"`
 		InfoBlocks []models.InformationalBlock `json:"infoBlocks"`
@@ -57,6 +58,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		} `json:"spaceUsers"`
 	}{
 		ID:         board.BoardID,
+		Name:       board.BoardName,
 		Cards:      cards,
 		Tasks:      tasks,
 		InfoBlocks: infoBlocks,
