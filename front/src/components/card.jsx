@@ -3,31 +3,17 @@ import Task from './task'
 import { SquarePlus, X } from "lucide-react";
 import { useState } from 'react'
 import { useDialog } from "./dialog/taskdialogprovider";
-let Card = ({card,removeCard}) =>{
+import { useNavigate } from "react-router-dom";
+import { useToast } from "./../components/Toast/toastprovider";
+import Cookies from "js-cookie"
+import { useEffect } from "react";
+let Card = ({card}) =>{
+    const {showToast} = useToast()
+    const navigate = useNavigate()
     const {openDialog} = useDialog();
-    const DummyTasks = [{
-        id: 1,
-        color: "#237623",
-        name: "DummyData",
-        description:"There is no decription",
-        marks:[{
-                id:1,
-                color: "#333333",
-                name: "Design"
-            },{
-                id:2,
-                color: "red",
-                name: "Programming"
-            },{
-                id:3,
-                color: "#EE22FF",
-                name: "Marketing"
-            }
-        ]
-    }]
-    const [tasks, setTasks] = useState(DummyTasks.slice());
+    const [tasks, setTasks] = useState();
     function newTask() {
-        console.log("Tasks:", tasks);
+        /* console.log("Tasks:", tasks);
         setTasks((prevTasks) => [
           ...prevTasks,
           {
@@ -37,13 +23,34 @@ let Card = ({card,removeCard}) =>{
             description: null,
             marks: null,
           },
-        ]);
+        ]); */
       }
     function taskRemover(taskToRemove){
         setTasks(tasks.filter(task => task.id!==taskToRemove))
     }
-    function remove(){
-        removeCard(card.id)
+    const remove = async () =>{
+        try
+        {
+            const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            const response = await fetch(`http://localhost:8000/removeCard/${card.CardID}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            });
+        if (response.ok) {
+            window.location.reload(false);
+        } else {
+            const error = await response.text();
+            showToast(error);
+        }
+        } catch (err) {
+            showToast("Произошла ошибка при отправке удалении карточки");
+        }
     }
     function handleTaskClick(task) {
         openDialog(task);
@@ -51,12 +58,12 @@ let Card = ({card,removeCard}) =>{
     return(
             <div className="flex-col cardwrapper gap-8">
                 <div className="flex flex-row between">
-                    <h1>{card.name}</h1>
+                    <h1>{card.CardName}</h1>
                     <X onClick={remove}/>
                 </div>
                 <hr/>
                 <div className="flex flex-col gap-8" id={"Card:"+ card.id}>
-                {tasks.length > 0 ? 
+                {tasks&&tasks.length > 0 ? 
                 (tasks.map((item) => {
                     return <Task task={item} removeTask={taskRemover} onClick={() => handleTaskClick(item)}/>;
                 })) 

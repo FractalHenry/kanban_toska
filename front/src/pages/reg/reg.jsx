@@ -68,6 +68,7 @@ const RegForm = () => {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
+      <div className="txt-sm"> *Выбирайте с умом, нельзя изменить</div>
       <input
         className="btn btn-secondary text-secondary p-8 txt-large"
         type="submit"

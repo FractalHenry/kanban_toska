@@ -9,10 +9,9 @@ export const NewBoard= ({spaceid})=>{
     const navigate = useNavigate();
     const { showToast } = useToast();
     const [createBoardTrigger, setCreateBoardTrigger] = useState(false);
-
+    console.log(spaceid)
     useEffect(() => {
         if (!createBoardTrigger) return;
-
         const fetchData = async () => {
             const token = Cookies.get('authToken');
             if (!token) {
@@ -32,8 +31,7 @@ export const NewBoard= ({spaceid})=>{
                     })
                 });
                 if (response.ok) {
-                    const resp = await response.json();
-                    showToast(resp.message);
+                    window.location.reload(false);
                 } else {
                     throw new Error(response.statusText);
                 }

@@ -163,7 +163,11 @@
 .wrap{
   flex-wrap: wrap;
 }
-
+.outline{
+  border-radius: 8px;
+  border-width: 2px;
+  border-style: solid;
+}
 .markwrapper{
   color: white;
   border-style: solid;

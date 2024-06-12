@@ -59,4 +59,6 @@ body {
   }
   textarea {
     resize: none;
+    color: var(--primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }

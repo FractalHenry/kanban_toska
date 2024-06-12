@@ -39,23 +39,7 @@ let Boards = () =>{
         };
         fetchData();
     }, [navigate]);
-    const boardsArr = [
-        {
-            id:1,
-            name:"MyProject",
-            author: "IsamiAkira"
-        },{
-            id:2,
-            name:"WIP DoNot Enter",
-            author: "Andrew"
-        },{
-            id:3,
-            name:"HeheHuhuh",
-            author:"SomeBodyOnceToldMe"
-        }
-    ]
-    const [boards, setBoards] = useState(boardsArr.slice());
-    
+    const [boards, setBoards] = useState();
     return(
         <div className="flex-col vh-80">
             <div className="flex flex-row">
@@ -64,13 +48,10 @@ let Boards = () =>{
                 <div className="m-8 flex flex-row">
                     <div className="h2 txt-secondary">Добро пожаловать в ваше пространство</div>
                     <div className="fill"/>
-                    <Button cls="secondary">Добавить пользователя</Button>
                 </div>
                 <div className="overflow gap-8">
                     {boards && boards.map((item)=>(<BoardCard key={item.id} boardname={item.name} BoardID={item.id} creator={item.author}/>))}
-                    {/* <NewBoard/> */}
                     <Spaces/>
-                    {/* <NewSpace/> */}
                 </div>
                 </div>
                 

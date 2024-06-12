@@ -48,13 +48,13 @@ let User = () =>{
         <div className="flex-col center mt-8">
             <h2>Welcome to {User && User.login} page!</h2>
             <Toggle isOwner={true} initState={User && User.emailVisibility}><div><b>Contact me: </b> {User && User.email} </div></Toggle>
-            <hr className="hr max-x"/>
+            <hr className="max-x"/>
             <div className="flex-col center">
                 <h2> About me </h2>
                 {User && 
                     <Input isOwner={true} text={description&& description} onSubmit={setnewDescription}/>}
             </div>
-            <hr className="hr max-x"/>
+            <hr className="max-x"/>
         </div>
     )
 }
