@@ -10,6 +10,14 @@ import (
 )
 
 func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
+
+	type CardResponse struct {
+		CardID        uint          `json:"id"`
+		CardName      string        `json:"name"`
+		CardInArchive bool          `json:"in_archive"`
+		Tasks         []models.Task `json:"tasks"`
+	}
+
 	// Получаем ID доски из пути запроса
 	vars := mux.Vars(r)
 	boardID, err := strconv.ParseUint(vars["boardId"], 10, 64)
@@ -19,7 +27,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получаем детальную информацию о доске
-	board, cards, tasks, infoBlocks, err := repo.GetBoardDetails(uint(boardID))
+	board, cards, _, infoBlocks, err := repo.GetBoardDetails(uint(boardID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -43,8 +51,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	response := struct {
 		ID         uint                        `json:"id"`
 		Name       string                      `json:"name"`
-		Cards      []models.Card               `json:"cards"`
-		Tasks      []models.Task               `json:"tasks"`
+		Cards      []CardResponse              `json:"cards"`
 		InfoBlocks []models.InformationalBlock `json:"infoBlocks"`
 		BoardUsers []struct {
 			Login   string `json:"login"`
@@ -59,8 +66,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		ID:         board.BoardID,
 		Name:       board.BoardName,
-		Cards:      cards,
-		Tasks:      tasks,
+		Cards:      make([]CardResponse, 0),
 		InfoBlocks: infoBlocks,
 		BoardUsers: make([]struct {
 			Login   string `json:"login"`
@@ -72,6 +78,24 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			IsOwner bool   `json:"is_owner"`
 			CanEdit bool   `json:"can_edit"`
 		}, 0),
+	}
+
+	if boardUsers != nil {
+		for _, card := range cards {
+			cardTasks, err := repo.GetCardTasks(card.CardID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			cardResponse := CardResponse{
+				CardID:        card.CardID,
+				CardName:      card.CardName,
+				CardInArchive: card.CardInArchive,
+				Tasks:         cardTasks,
+			}
+			response.Cards = append(response.Cards, cardResponse)
+		}
 	}
 
 	// Заполняем информацию о пользователях
