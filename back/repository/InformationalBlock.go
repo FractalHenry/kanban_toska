@@ -22,8 +22,8 @@ func (r *Repository) CreateInformationalBlock(block *models.InformationalBlock, 
 }
 
 // Удаление InformationalBlock по ID
-func (r *Repository) DeleteInformationalBlockByBoardID(blockID uint, userLogin string) error {
-	block, err := r.GetInformationalBlockByID(blockID)
+func (r *Repository) DeleteInformationalBlockByID(infoBlockID uint, userLogin string) error {
+	block, err := r.GetInformationalBlockByID(infoBlockID)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (r *Repository) DeleteInformationalBlockByBoardID(blockID uint, userLogin s
 	}
 
 	if r.hasEditPermissions(*roleOnSpace, *boardRole) {
-		return r.db.Where("informational_block_id = ?", blockID).Delete(&models.InformationalBlock{}).Error
+		return r.db.Where("informational_block_id = ?", infoBlockID).Delete(&models.InformationalBlock{}).Error
 	} else {
 		return fmt.Errorf("у пользователя нет прав для удаления информационного блока")
 	}

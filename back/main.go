@@ -44,8 +44,8 @@ func main() {
 	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
 	router.Handle("/board/{boardId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetBoardDetailsHandler))).Methods("GET")
 	router.Handle("/board/{boardId}/Infoblock", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateInfoblockHandler))).Methods("POST")
-	router.Handle("removeCard/{cardID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCardHandler))).Methods("DELETE")
-
+	router.Handle("/removeCard/{cardID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCardHandler))).Methods("DELETE")
+	router.Handle("/removeInfoBlock/{InfoBlockID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteInfoblockHandler))).Methods("DELETE")
 	// Настройка CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Разрешенные источники

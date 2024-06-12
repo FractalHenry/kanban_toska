@@ -47,3 +47,25 @@ func CreateInfoblockHandler(w http.ResponseWriter, r *http.Request) {
 	// Отправляем ответ
 	w.WriteHeader(http.StatusCreated)
 }
+
+func DeleteInfoblockHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID доски из пути запроса
+	vars := mux.Vars(r)
+	InfoBlockID, err := strconv.ParseUint(vars["InfoBlockID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid InfoBlock ID", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.DeleteInformationalBlockByID(uint(InfoBlockID), userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusCreated)
+}
