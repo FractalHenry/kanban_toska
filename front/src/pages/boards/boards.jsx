@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie'
 import { useToast } from "../../components/Toast/toastprovider";
 import { NewBoard } from "./newBoard";
+import Button from "../../components/button";
 let Boards = () =>{
     const navigate = useNavigate();
     const { showToast } = useToast();
@@ -58,8 +59,10 @@ let Boards = () =>{
             <div className="flex flex-row">
                 <SpacesPanel/>
                 <div className="flex flex-col">
-                <div className="m-8 h2 txt-secondary">
-                    Добро пожаловать в ваше пространство
+                <div className="m-8 flex flex-row">
+                    <div className="h2 txt-secondary">Добро пожаловать в ваше пространство</div>
+                    <div className="fill"/>
+                    <Button cls="secondary">Добавить пользователя</Button>
                 </div>
                 <div className="flex-row overflow gap-8">
                     {boards && boards.map((item)=>(<BoardCard key={item.id} boardname={item.name} BoardID={item.id} creator={item.author}/>))}
