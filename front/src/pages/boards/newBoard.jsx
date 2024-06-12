@@ -50,7 +50,8 @@ export const NewBoard= ()=>{
         setCreating(true)
     }
     function newBoardCreated(){
-        setCreateBoardTrigger(true);
+        if(data.length>0)
+            setCreateBoardTrigger(true);
     }
     function newBoardAborted(){
         setCreating(false)
@@ -63,7 +64,7 @@ export const NewBoard= ()=>{
                 :
                 <div className="flex boardcard flex-row p-4 btn-secondary center">
                     <input className="w-100" placeholder="Имя доски" value={data} onChange={(e)=>setData(e.target.value)}></input>
-                    <Check className="pointer" onClick={newBoardCreated}/>
+                    <Check className={`${data.length > 0 ? '' : 'btn-disabled'} pointer`} onClick={newBoardCreated}/>
                     <X className="pointer" onClick={newBoardAborted}/>
                     </div>
             }
