@@ -8,17 +8,20 @@ import (
 )
 
 // Функция создания карточки
+// Функция создания карточки
 func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
 		// Получаем доску, к которой относится карточка
 		var board models.Board
 		if err := tx.Where("board_id = ?", card.BoardID).First(&board).Error; err != nil {
+			fmt.Printf("Board not found for board_id: %d\n", card.BoardID)
 			return err
 		}
 
 		// Получаем пространство, к которому относится доска
 		var space models.Space
 		if err := tx.Where("space_id = ?", board.SpaceID).First(&space).Error; err != nil {
+			fmt.Printf("Space not found for space_id: %d\n", board.SpaceID)
 			return err
 		}
 
@@ -28,6 +31,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 			// Роль на доске найдена
 			var boardRole models.BoardRoleOnBoard
 			if err := tx.Where("role_on_board_id = ?", userBoardRole.RoleOnBoardID).First(&boardRole).Error; err != nil {
+				fmt.Printf("Board role not found for role_on_board_id: %d\n", userBoardRole.RoleOnBoardID)
 				return err
 			}
 
@@ -39,6 +43,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 			return fmt.Errorf("у пользователя нет прав для создания карточки на этой доске")
 		} else if err != gorm.ErrRecordNotFound {
 			// Произошла ошибка, не связанная с отсутствием записи
+			fmt.Printf("Error querying user board role: %v\n", err)
 			return err
 		}
 
@@ -48,6 +53,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 			// Роль на пространстве найдена
 			var roleOnSpace models.RoleOnSpace
 			if err := tx.Where("role_on_space_id = ?", userRoleOnSpace.RoleOnSpaceID).First(&roleOnSpace).Error; err != nil {
+				fmt.Printf("Role on space not found for role_on_space_id: %d\n", userRoleOnSpace.RoleOnSpaceID)
 				return err
 			}
 
@@ -59,6 +65,7 @@ func (r *Repository) CreateCard(card *models.Card, userLogin string) error {
 			return fmt.Errorf("у пользователя нет прав для создания карточки в этом пространстве")
 		} else if err != gorm.ErrRecordNotFound {
 			// Произошла ошибка, не связанная с отсутствием записи
+			fmt.Printf("Error querying user role on space: %v\n", err)
 			return err
 		}
 
