@@ -145,7 +145,7 @@ func UpdateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Декодируем полученные данные
 	var reqBody struct {
-		Checked bool `json:"checked"`
+		Checked bool `json:"Checked"`
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
