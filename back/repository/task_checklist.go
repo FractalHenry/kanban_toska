@@ -205,7 +205,7 @@ func (r *Repository) getNextChecklistElementOrder(checklistID uint) (uint, error
 	var maxOrder uint
 	err := r.db.Model(&models.ChecklistElement{}).
 		Where("checklist_id = ?", checklistID).
-		Select("COALESCE(MAX(order), 0)").
+		Select("COALESCE(MAX(`order`), 0)").
 		Scan(&maxOrder).Error
 	if err != nil {
 		return 0, err
