@@ -115,9 +115,86 @@ func GetUsersNotOnSpace(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	spaceID, err := strconv.ParseUint(vars["spaceID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid space ID", http.StatusBadRequest)
+		return
+	}
 
+	userLogin := r.Header.Get("login")
+
+	var reqBody struct {
+		TargetUserLogin string `json:"targetUserLogin"`
+		RoleOnSpaceID   uint   `json:"roleOnSpaceID"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.AssociateUserWithRoleOnSpace(userLogin, reqBody.TargetUserLogin, reqBody.RoleOnSpaceID, uint(spaceID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func RemoveUserFromSpace(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	_, err := strconv.ParseUint(vars["spaceID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Некорректный space ID", http.StatusBadRequest)
+		return
+	}
 
+	userLogin := r.Header.Get("login")
+
+	var reqBody struct {
+		TargetUserLogin string `json:"targetUserLogin"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.DeleteUserRoleOnSpace(userLogin, reqBody.TargetUserLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func DeleteSpaceRole(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	_, err := strconv.ParseUint(vars["spaceID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Некорректный space ID", http.StatusBadRequest)
+		return
+	}
+
+	userLogin := r.Header.Get("login")
+
+	var reqBody struct {
+		RoleOnSpaceID uint `json:"roleOnSpaceID"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.DeleteRoleOnSpace(reqBody.RoleOnSpaceID, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

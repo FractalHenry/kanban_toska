@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend/models"
+	"errors"
 	"fmt"
 )
 
@@ -313,6 +314,16 @@ func (r *Repository) DeleteRoleOnSpace(roleOnSpaceID uint, userLogin string) err
 		return fmt.Errorf("не удалось найти роль: %v", err)
 	}
 
+	// Проверка на наличие пользователей с ролью, которую собираются удалить
+	var usersWithRole []models.UserRoleOnSpace
+	err = r.db.Where("role_on_space_id = ?", roleOnSpaceID).Find(&usersWithRole).Error
+	if err != nil {
+		return fmt.Errorf("не удалось проверить наличие пользователей с ролью: %v", err)
+	}
+	if len(usersWithRole) > 0 {
+		return fmt.Errorf("невозможно удалить роль, так как есть пользователи с этой ролью")
+	}
+
 	if roleToDelete.IsOwner {
 		return fmt.Errorf("роль владельца не может быть удалена")
 	}
@@ -532,4 +543,44 @@ func (r *Repository) GetSpaceRoles(spaceID uint) ([]models.RoleOnSpace, error) {
 	}
 
 	return roles, nil
+}
+
+func (r *Repository) DeleteUserRoleOnSpace(userLogin, targetUserLogin string) error {
+	// Найти пользователя, который выполняет удаление
+	currentUser, err := r.FindUserByLogin(userLogin)
+	if err != nil {
+		return err
+	}
+
+	// Найти целевого пользователя, у которого будет удалена роль
+	targetUser, err := r.FindUserByLogin(targetUserLogin)
+	if err != nil {
+		return err
+	}
+
+	// Найти роль целевого пользователя на пространстве
+	var targetRole models.RoleOnSpace
+	err = r.db.Model(&models.RoleOnSpace{}).
+		Where("role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", targetUser.Login).
+		First(&targetRole).Error
+	if err != nil {
+		return err
+	}
+
+	// Проверить, что текущий пользователь имеет права на удаление роли
+	_, _, currentRole, _, err := r.findBoardAndRoles(nil, currentUser.Login)
+	if err != nil {
+		return err
+	}
+
+	if !currentRole.IsOwner && !currentRole.IsAdmin {
+		return errors.New("у пользователя нет прав для удаления роли")
+	}
+
+	if targetRole.IsOwner {
+		return errors.New("нельзя удалить роль владельца")
+	}
+
+	// Удалить связь между пользователем и ролью
+	return r.db.Where("login = ? AND role_on_space_id = ?", targetUser.Login, targetRole.RoleOnSpaceID).Delete(&models.UserRoleOnSpace{}).Error
 }
