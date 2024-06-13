@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 import { useToast } from "./Toast/toastprovider";
 
 const PanelItem = ({ space }) => {
-  console.log(space)
   return (
     <div className="SpaceCard">
       <h4> Пространство: {space.SpaceOwner} </h4>

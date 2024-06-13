@@ -9,7 +9,6 @@ export const NewBoard= ({spaceid})=>{
     const navigate = useNavigate();
     const { showToast } = useToast();
     const [createBoardTrigger, setCreateBoardTrigger] = useState(false);
-    console.log(spaceid)
     useEffect(() => {
         if (!createBoardTrigger) return;
         const fetchData = async () => {
