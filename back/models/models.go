@@ -39,7 +39,7 @@ type RoleOnSpace struct {
 
 type UserRoleOnSpace struct {
 	RoleOnSpaceID uint        `gorm:"primaryKey"`
-	Login         string      `gorm:"primaryKey;type:varchar(30);not null; unique"`
+	Login         string      `gorm:"primaryKey;type:varchar(30);not null"`
 	RoleOnSpace   RoleOnSpace `gorm:"foreignKey:RoleOnSpaceID"`
 	User          User        `gorm:"foreignKey:Login"`
 }
