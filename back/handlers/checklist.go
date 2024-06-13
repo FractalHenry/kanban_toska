@@ -107,3 +107,67 @@ func CreateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 	// Отправляем ответ
 	w.WriteHeader(http.StatusCreated)
 }
+
+func DeleteCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID элемента чек-листа из пути запроса
+	vars := mux.Vars(r)
+	checkboxID, err := strconv.ParseUint(vars["checkboxid"], 10, 64)
+	if err != nil {
+		http.Error(w, "Неправильный ID элемента чек-листа", http.StatusBadRequest)
+		return
+	}
+
+	// Удаляем элемент чек-листа из базы данных
+	err = repo.DeleteChecklistElement(uint(checkboxID), userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
+
+func UpdateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID элемента чек-листа из пути запроса
+	vars := mux.Vars(r)
+	checkboxID, err := strconv.ParseUint(vars["checkboxid"], 10, 64)
+	if err != nil {
+		http.Error(w, "Неправильный ID элемента чек-листа", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Checked bool `json:"checked"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Неправильный request body", http.StatusBadRequest)
+		return
+	}
+
+	// Получаем элемент чек-листа по ID
+	element, err := repo.GetChecklistElementByID(uint(checkboxID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Обновляем состояние элемента чек-листа
+	element.Checked = reqBody.Checked
+	err = repo.UpdateChecklistElement(element, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}

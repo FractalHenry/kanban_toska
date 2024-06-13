@@ -73,6 +73,8 @@ func main() {
 
 	// ChecklistElement
 	router.Handle("/addCheckListElement/{CheckListID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCheckListElementHandler))).Methods("POST")
+	router.Handle("/deleteCheckListElement/{checkboxid}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCheckListElementHandler))).Methods("DELETE")
+	router.Handle("/updateCheckListElementState/{checkboxid}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateCheckListElementHandler))).Methods("PUT")
 
 	// RoleOnspace
 	router.Handle("/spaces/{spaceId}/roles", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetSpaceRolesHandler))).Methods("GET")
