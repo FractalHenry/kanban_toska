@@ -39,11 +39,6 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	type MarkNameWithMark struct {
-		MarkName models.MarkName `json:"markName"`
-		Mark     models.Mark     `json:"mark"`
-	}
-
 	type ChecklistWithElements struct {
 		Checklist         models.Checklist          `json:"checklist"`
 		ChecklistElements []models.ChecklistElement `json:"checklistElements"`
@@ -56,7 +51,8 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		TaskDateStart     *models.TaskDateStart    `json:"taskDateStart,omitempty"`
 		TaskDateEnd       *models.TaskDateEnd      `json:"taskDateEnd,omitempty"`
 		TaskNotifications *[]models.Notification   `json:"taskNotifications,omitempty"`
-		TaskMarkNames     *[]MarkNameWithMark      `json:"taskMarkNames,omitempty"`
+		TaskMarkNames     *[]models.MarkName       `json:"taskMarkNames,omitempty"`
+		TaskMarks         *[]models.Mark           `json:"taskMarks,omitempty"`
 		Checklists        *[]ChecklistWithElements `json:"checklists,omitempty"`
 	}
 
@@ -112,16 +108,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskDateStart, _ := repo.GetTaskStartDate(task.TaskID)
 			taskDateEnd, _ := repo.GetTaskEndDate(task.TaskID)
 			taskNotifications, _ := repo.GetTaskNotifications(task.TaskID)
-			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
-			var markNamesWithMarks []MarkNameWithMark
-			if taskMarkNames != nil {
-				for _, markName := range *taskMarkNames {
-					markNamesWithMarks = append(markNamesWithMarks, MarkNameWithMark{
-						MarkName: markName,
-						Mark:     markName.Mark,
-					})
-				}
-			}
+			taskMarkNames, taskMarks, _ := repo.GetTaskMarkNamesAndMarks(task.TaskID)
 			checklists, _ := repo.GetChecklistsByTaskID(task.TaskID)
 			checklistWithElements := []ChecklistWithElements{}
 			if checklists != nil {
@@ -145,7 +132,8 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				TaskDateStart:     taskDateStart,
 				TaskDateEnd:       taskDateEnd,
 				TaskNotifications: taskNotifications,
-				TaskMarkNames:     &markNamesWithMarks,
+				TaskMarkNames:     taskMarkNames,
+				TaskMarks:         taskMarks,
 				Checklists:        &checklistWithElements,
 			})
 		}
