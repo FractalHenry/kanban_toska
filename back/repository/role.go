@@ -503,3 +503,13 @@ func (r *Repository) TransferOwnership(userLogin, newOwnerLogin string, roleOnSp
 
 	return nil
 }
+
+func (r *Repository) GetSpaceRoles(spaceID uint) ([]models.RoleOnSpace, error) {
+	var roles []models.RoleOnSpace
+	err := r.db.Where("space_id = ?", spaceID).Find(&roles).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return roles, nil
+}

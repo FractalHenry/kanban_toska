@@ -61,6 +61,7 @@ func main() {
 
 	// Space
 	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
+	router.Handle("/{spaceID}/addUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("POST")
 
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateSpaceHandler))).Methods("PUT")
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceHandler))).Methods("DELETE")
@@ -72,6 +73,11 @@ func main() {
 
 	// ChecklistElement
 	router.Handle("/addCheckListElement/{CheckListID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCheckListElementHandler))).Methods("POST")
+
+	// RoleOnspace
+	router.Handle("/spaces/{spaceId}/roles", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetSpaceRolesHandler))).Methods("GET")
+	router.Handle("/spaces/{spaceId}/roles", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateSpaceRoleHandler))).Methods("POST")
+	router.Handle("/spaces/roles/{roleOnSpaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceRoleHandler))).Methods("DELETE")
 
 	// Protected
 	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")

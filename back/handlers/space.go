@@ -100,3 +100,16 @@ func CreateSpaceHandler(w http.ResponseWriter, r *http.Request) {
 		OwnerRoleName: ownerRole.RoleOnSpaceName,
 	})
 }
+
+func GetUsersNotOnSpace(w http.ResponseWriter, r *http.Request) {
+	// Декодируем полученные данные
+	var reqBody struct {
+		SpaceID string `json:"spaceID"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+}
