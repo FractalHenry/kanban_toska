@@ -216,7 +216,7 @@ func (r *Repository) getNextChecklistElementOrder(checklistID uint) (uint, error
 // Вспомогательная функция для обновления порядковых номеров элементов чек-листа после удаления одного из них
 func (r *Repository) updateChecklistElementOrders(checklistID, deletedOrder uint) error {
 	var elements []models.ChecklistElement
-	err := r.db.Where("checklist_id = ? AND order > ?", checklistID, deletedOrder).
+	err := r.db.Where("checklist_id = ? AND element_order > ?", checklistID, deletedOrder).
 		Order("order ASC").
 		Find(&elements).Error
 	if err != nil {
