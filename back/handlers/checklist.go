@@ -95,7 +95,7 @@ func CreateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 	checklistElement := &models.ChecklistElement{
 		ChecklistElementName: reqBody.Name,
 		ChecklistID:          uint(checklistID),
-		Order:                0,
+		ElementOrder:         0,
 	}
 
 	err = repo.CreateChecklistElement(checklistElement, userLogin)

@@ -127,7 +127,7 @@ func (r *Repository) CreateChecklistElement(element *models.ChecklistElement, us
 		if err != nil {
 			return err
 		}
-		element.Order = order
+		element.ElementOrder = order
 
 		return r.db.Create(element).Error
 	}
@@ -181,7 +181,7 @@ func (r *Repository) DeleteChecklistElement(elementID uint, userLogin string) er
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
 		// Обновляем порядковые номера остальных элементов чеклиста
-		err = r.updateChecklistElementOrders(element.ChecklistID, element.Order)
+		err = r.updateChecklistElementOrders(element.ChecklistID, element.ElementOrder)
 		if err != nil {
 			return err
 		}
@@ -205,7 +205,7 @@ func (r *Repository) getNextChecklistElementOrder(checklistID uint) (uint, error
 	var maxOrder uint
 	err := r.db.Model(&models.ChecklistElement{}).
 		Where("checklist_id = ?", checklistID).
-		Select("COALESCE(MAX(`order`), 0)").
+		Select("COALESCE(MAX(element_order), 0)").
 		Scan(&maxOrder).Error
 	if err != nil {
 		return 0, err
@@ -224,7 +224,7 @@ func (r *Repository) updateChecklistElementOrders(checklistID, deletedOrder uint
 	}
 
 	for _, element := range elements {
-		element.Order--
+		element.ElementOrder--
 		err = r.db.Save(&element).Error
 		if err != nil {
 			return err
