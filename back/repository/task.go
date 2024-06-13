@@ -160,12 +160,3 @@ func (r *Repository) GetTaskMarkNames(taskID uint) (*[]models.MarkName, error) {
 
 	return &markNames, nil
 }
-
-func (r *Repository) GetChecklistElementsByChecklistID(checklistID uint) (*[]models.ChecklistElement, error) {
-	var elements []models.ChecklistElement
-	err := r.db.Where("checklist_id = ?", checklistID).Find(&elements).Error
-	if err != nil {
-		return nil, err
-	}
-	return &elements, nil
-}

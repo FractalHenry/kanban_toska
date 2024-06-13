@@ -111,14 +111,19 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
 			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
 			checklists, _ := repo.GetChecklistsByTaskID(task.TaskID)
-
 			var checklistWithElements []ChecklistWithElements
-			for _, checklist := range *checklists {
-				checklistElements, _ := repo.GetChecklistElementsByChecklistID(checklist.ChecklistID)
-				checklistWithElements = append(checklistWithElements, ChecklistWithElements{
-					Checklist:         checklist,
-					ChecklistElements: *checklistElements,
-				})
+			if checklists != nil {
+				for _, checklist := range *checklists {
+					checklistElements, err := repo.GetChecklistElementsByChecklistID(checklist.ChecklistID)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					checklistWithElements = append(checklistWithElements, ChecklistWithElements{
+						Checklist:         checklist,
+						ChecklistElements: *checklistElements,
+					})
+				}
 			}
 
 			tasksWithDetails = append(tasksWithDetails, TaskWithDetails{
