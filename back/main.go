@@ -61,10 +61,8 @@ func main() {
 
 	// Space
 	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
-	router.Handle("/space/{spaceID}/addUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("POST")
-
-	router.Handle("/spaces/addUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.AddUserToSpace))).Methods("POST")
-	router.Handle("/spaces/removeUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.RemoveUserFromSpace))).Methods("DELETE")
+	router.Handle("/space/{spaceID}/addUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.AddUserToSpace))).Methods("POST")
+	router.Handle("/spaces/{spaceID}/removeUser", middleware.AuthMiddleware(http.HandlerFunc(handlers.RemoveUserFromSpace))).Methods("DELETE")
 
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateSpaceHandler))).Methods("PUT")
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceHandler))).Methods("DELETE")
