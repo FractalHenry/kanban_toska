@@ -82,34 +82,16 @@ func (r *Repository) DeleteTask(taskID uint, userLogin string) error {
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
-		// Удаляем все связанные данные
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.Mark{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.MarkName{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.Checklist{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("checklist_id IN (?)", r.db.Model(&models.Checklist{}).Where("task_id = ?", taskID).Select("checklist_id")).Delete(&models.ChecklistElement{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.TaskColor{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.TaskDescription{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.TaskDateStart{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_id = ?", taskID).Delete(&models.TaskDateEnd{}).Error; err != nil {
-			return err
-		}
-		if err := r.db.Where("task_date_end_id IN (?)", r.db.Model(&models.TaskDateEnd{}).Where("task_id = ?", taskID).Select("task_date_end_id")).Delete(&models.TaskNotification{}).Error; err != nil {
-			return err
-		}
+		// Удаляем все связанные данные, игнорируя ошибки отсутствия записей
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.Mark{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.MarkName{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.Checklist{}).Error
+		_ = r.db.Where("checklist_id IN (?)", r.db.Model(&models.Checklist{}).Where("task_id = ?", taskID).Select("checklist_id")).Delete(&models.ChecklistElement{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.TaskColor{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.TaskDescription{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.TaskDateStart{}).Error
+		_ = r.db.Where("task_id = ?", taskID).Delete(&models.TaskDateEnd{}).Error
+		_ = r.db.Where("task_date_end_id IN (?)", r.db.Model(&models.TaskDateEnd{}).Where("task_id = ?", taskID).Select("task_date_end_id")).Delete(&models.TaskNotification{}).Error
 
 		// Удаляем само задание
 		return r.db.Delete(&task).Error
