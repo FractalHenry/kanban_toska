@@ -59,7 +59,18 @@ func (r *Repository) DeleteTaskDescription(taskID uint, userLogin string) error 
 		taskDescription := models.TaskDescription{
 			TaskID: taskID,
 		}
-		return r.db.Delete(&taskDescription).Error
+
+		result := r.db.Unscoped().Where("task_id = ?", taskID).Delete(&taskDescription)
+		if result.RowsAffected == 0 {
+			// Запись не найдена, но это не ошибка
+			return nil
+		}
+
+		if result.Error != nil {
+			return result.Error
+		}
+
+		return nil
 	} else {
 		return fmt.Errorf("у пользователя нет прав для удаления описания задания")
 	}
