@@ -71,7 +71,7 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	taskID, err := strconv.ParseUint(vars["taskId"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		http.Error(w, "Некорректный task ID", http.StatusBadRequest)
 		return
 	}
 
@@ -83,7 +83,7 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 
