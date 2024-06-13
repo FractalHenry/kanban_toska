@@ -8,8 +8,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func (r *Repository) UpdateTaskDescription(taskID uint, newDescription string, userLogin string) error {
-	task, err := r.GetTaskByID(taskID)
+func (r *Repository) CreateTaskDescription(taskDescription *models.TaskDescription, userLogin string) error {
+	task, err := r.GetTaskByID(taskDescription.TaskID)
 	if err != nil {
 		return err
 	}
@@ -20,11 +20,25 @@ func (r *Repository) UpdateTaskDescription(taskID uint, newDescription string, u
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
-		taskDescription := models.TaskDescription{
-			TaskDescription: newDescription,
-			TaskID:          taskID,
-		}
-		return r.db.Save(&taskDescription).Error
+		return r.db.Create(taskDescription).Error
+	} else {
+		return fmt.Errorf("у пользователя нет прав для создания описания задания")
+	}
+}
+
+func (r *Repository) UpdateTaskDescription(taskDescription *models.TaskDescription, userLogin string) error {
+	task, err := r.GetTaskByID(taskDescription.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
+	if err != nil {
+		return err
+	}
+
+	if r.hasEditPermissions(roleOnSpace, boardRole) {
+		return r.db.Save(taskDescription).Error
 	} else {
 		return fmt.Errorf("у пользователя нет прав для изменения описания задания")
 	}

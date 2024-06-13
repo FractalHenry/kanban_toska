@@ -230,3 +230,37 @@ func (r *Repository) GetBoardUsers(boardID uint) (*[]struct {
 
 	return users, nil
 }
+
+func (r *Repository) DeleteBoard(boardID uint, userLogin string) error {
+	board, err := r.GetBoard(boardID)
+	if err != nil {
+		return err
+	}
+
+	if err := r.checkUserPermissionsForSpaceByBoardID(boardID, userLogin, "deleteBoard"); err != nil {
+		return err
+	}
+
+	// Удаляем все связанные данные
+	cards, err := r.GetBoardCards(boardID)
+	if err != nil {
+		return err
+	}
+
+	for _, card := range cards {
+		if err := r.DeleteCard(card.CardID, userLogin); err != nil {
+			return err
+		}
+	}
+
+	if err := r.db.Where("board_id = ?", boardID).Delete(&models.InformationalBlock{}).Error; err != nil {
+		return err
+	}
+
+	if err := r.db.Where("board_id = ?", boardID).Delete(&models.BoardRoleOnBoard{}).Error; err != nil {
+		return err
+	}
+
+	// Удаляем саму доску
+	return r.db.Delete(&board).Error
+}

@@ -127,6 +127,17 @@ func (r *Repository) DeleteCard(cardID uint, userLogin string) error {
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
+		// Удаляем все связанные данные
+		tasks, err := r.GetCardTasks(cardID)
+		if err != nil {
+			return err
+		}
+
+		for _, task := range tasks {
+			r.DeleteTask(task.TaskID, userLogin)
+		}
+
+		// Удаляем саму карточку
 		return r.db.Delete(&card).Error
 	}
 	return fmt.Errorf("у пользователя нет прав для удаления карточки")

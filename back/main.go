@@ -52,7 +52,7 @@ func main() {
 	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
 
 	router.Handle("/task/{taskId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskHandler))).Methods("PUT")
-	router.Handle("/task/{taskId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler))).Methods("DELETE")
+	router.Handle("/removeTask/{TaskID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler))).Methods("DELETE")
 
 	// Infoblock
 	router.Handle("/board/{boardId}/Infoblock", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateInfoblockHandler))).Methods("POST")

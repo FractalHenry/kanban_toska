@@ -77,8 +77,9 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Декодируем полученные данные
 	var reqBody struct {
-		Name  string `json:"name"`
-		Color string `json:"color"`
+		Name        string `json:"name"`
+		Color       string `json:"color"`
+		Description string `json:"Dscription"`
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
@@ -115,6 +116,35 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
+		}
+	}
+
+	// Обновляем описание задания, если оно было передано
+	if reqBody.Description != "" {
+		taskDescription, _ := repo.GetTaskDescription(task.TaskID)
+		TaskDescription := &models.TaskDescription{
+			TaskDescription: reqBody.Description,
+			TaskID:          task.TaskID,
+		}
+		if taskDescription == "" {
+			err = repo.CreateTaskDescription(TaskDescription, userLogin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			err = repo.UpdateTaskDescription(TaskDescription, userLogin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	} else {
+		// Удаляем описание задания, если оно не было передано
+		err = repo.DeleteTaskDescription(task.TaskID, userLogin)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 
