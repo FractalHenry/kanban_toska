@@ -79,6 +79,9 @@ func main() {
 	router.Handle("/spaces/{spaceId}/roles", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateSpaceRoleHandler))).Methods("POST")
 	router.Handle("/spaces/roles/{roleOnSpaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceRoleHandler))).Methods("DELETE")
 
+	// Mark
+	router.Handle("/{taskid}/newMark", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateMarkHandler))).Methods("POST")
+
 	// Protected
 	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
 
