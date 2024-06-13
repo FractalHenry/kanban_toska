@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func (r *Repository) CreateTaskColor(taskColor *models.TaskColor, userLogin string) error {
