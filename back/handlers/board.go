@@ -40,16 +40,16 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type TaskWithDetails struct {
-		Task                  models.Task               `json:"task"`
-		TaskColor             string                    `json:"taskColor,omitempty"`
-		TaskDescription       string                    `json:"taskDescription,omitempty"`
-		TaskDateStart         *models.TaskDateStart     `json:"taskDateStart,omitempty"`
-		TaskDateEnd           *models.TaskDateEnd       `json:"taskDateEnd,omitempty"`
-		TaskNotifications     []models.Notification     `json:"taskNotifications,omitempty"`
-		TaskMarks             []models.Mark             `json:"taskMarks,omitempty"`
-		TaskMarkNames         []models.MarkName         `json:"taskMarkNames,omitempty"`
-		TaskChecklist         models.Checklist          `json:"taskChecklist,omitempty"`
-		TaskChecklistElements []models.ChecklistElement `json:"taskChecklistElements,omitempty"`
+		Task                  models.Task                `json:"task"`
+		TaskColor             string                     `json:"taskColor,omitempty"`
+		TaskDescription       string                     `json:"taskDescription,omitempty"`
+		TaskDateStart         *models.TaskDateStart      `json:"taskDateStart,omitempty"`
+		TaskDateEnd           *models.TaskDateEnd        `json:"taskDateEnd,omitempty"`
+		TaskNotifications     *[]models.Notification     `json:"taskNotifications,omitempty"`
+		TaskMarks             *[]models.Mark             `json:"taskMarks,omitempty"`
+		TaskMarkNames         *[]models.MarkName         `json:"taskMarkNames,omitempty"`
+		TaskChecklist         *models.Checklist          `json:"taskChecklist,omitempty"`
+		TaskChecklistElements *[]models.ChecklistElement `json:"taskChecklistElements,omitempty"`
 	}
 
 	type CardWithTasks struct {

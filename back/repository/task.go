@@ -105,7 +105,7 @@ func (r *Repository) getTaskByID(taskID uint) (models.Task, error) {
 	return task, nil
 }
 
-func (r *Repository) GetTaskNotifications(taskID uint) ([]models.Notification, error) {
+func (r *Repository) GetTaskNotifications(taskID uint) (*[]models.Notification, error) {
 	var notifications []models.Notification
 	var taskDateEnd models.TaskDateEnd
 
@@ -123,19 +123,19 @@ func (r *Repository) GetTaskNotifications(taskID uint) ([]models.Notification, e
 		return nil, err
 	}
 
-	return notifications, nil
+	return &notifications, nil
 }
 
-func (r *Repository) GetTaskMarks(taskID uint) ([]models.Mark, error) {
+func (r *Repository) GetTaskMarks(taskID uint) (*[]models.Mark, error) {
 	var marks []models.Mark
 	err := r.db.Where("task_id = ?", taskID).Find(&marks).Error
 	if err != nil {
 		return nil, err
 	}
-	return marks, nil
+	return &marks, nil
 }
 
-func (r *Repository) GetTaskMarkNames(taskID uint) ([]models.MarkName, error) {
+func (r *Repository) GetTaskMarkNames(taskID uint) (*[]models.MarkName, error) {
 	var markNames []models.MarkName
 	err := r.db.Model(&models.Mark{}).
 		Where("task_id = ?", taskID).
@@ -146,14 +146,14 @@ func (r *Repository) GetTaskMarkNames(taskID uint) ([]models.MarkName, error) {
 		return nil, err
 	}
 
-	return markNames, nil
+	return &markNames, nil
 }
 
-func (r *Repository) GetChecklistElementsByChecklistID(checklistID uint) ([]models.ChecklistElement, error) {
+func (r *Repository) GetChecklistElementsByChecklistID(checklistID uint) (*[]models.ChecklistElement, error) {
 	var elements []models.ChecklistElement
 	err := r.db.Where("checklist_id = ?", checklistID).Find(&elements).Error
 	if err != nil {
 		return nil, err
 	}
-	return elements, nil
+	return &elements, nil
 }

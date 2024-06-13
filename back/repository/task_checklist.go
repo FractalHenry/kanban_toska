@@ -50,12 +50,12 @@ func (r *Repository) DeleteChecklist(checklistID uint, userLogin string) error {
 }
 
 // Вспомогательная функция для получения чек-листа по ID
-func (r *Repository) GetChecklistByID(checklistID uint) (models.Checklist, error) {
+func (r *Repository) GetChecklistByID(checklistID uint) (*models.Checklist, error) {
 	var checklist models.Checklist
 	if err := r.db.First(&checklist, checklistID).Error; err != nil {
-		return checklist, err
+		return &checklist, err
 	}
-	return checklist, nil
+	return &checklist, nil
 }
 
 // Функция создания элемента чек-листа
