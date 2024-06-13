@@ -79,7 +79,7 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var reqBody struct {
 		Name        string `json:"name"`
 		Color       string `json:"color"`
-		Description string `json:"Dscription"`
+		Description string `json:"description"`
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
