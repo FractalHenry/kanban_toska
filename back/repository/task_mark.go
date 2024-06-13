@@ -3,8 +3,6 @@ package repository
 import (
 	"backend/models"
 	"fmt"
-
-	"github.com/jinzhu/gorm"
 )
 
 // Проверяет права пользователя на выполнение действия для задачи
@@ -120,11 +118,16 @@ func (r *Repository) GetTaskMarkNamesAndMarks(taskID uint) (*[]models.MarkName, 
 		markIDs = append(markIDs, mark.MarkID)
 	}
 
+	// Если у нас нет markIDs, то возвращаем пустые результаты
+	if len(markIDs) == 0 {
+		return &markNames, &marks, nil
+	}
+
 	// Получаем все MarkName по списку markIDs
 	err = r.db.Model(&models.MarkName{}).
-		Where("id IN (?)", markIDs).
+		Where("mark_id IN (?)", markIDs).
 		Find(&markNames).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil {
 		return nil, nil, err
 	}
 
