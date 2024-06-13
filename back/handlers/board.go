@@ -39,9 +39,22 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type TaskWithDetails struct {
+		Task                  models.Task               `json:"task"`
+		TaskColor             string                    `json:"taskColor,omitempty"`
+		TaskDescription       string                    `json:"taskDescription,omitempty"`
+		TaskDateStart         *models.TaskDateStart     `json:"taskDateStart,omitempty"`
+		TaskDateEnd           *models.TaskDateEnd       `json:"taskDateEnd,omitempty"`
+		TaskNotifications     []models.Notification     `json:"taskNotifications,omitempty"`
+		TaskMarks             []models.Mark             `json:"taskMarks,omitempty"`
+		TaskMarkNames         []models.MarkName         `json:"taskMarkNames,omitempty"`
+		TaskChecklist         models.Checklist          `json:"taskChecklist,omitempty"`
+		TaskChecklistElements []models.ChecklistElement `json:"taskChecklistElements,omitempty"`
+	}
+
 	type CardWithTasks struct {
-		Card  models.Card   `json:"card"`
-		Tasks []models.Task `json:"tasks"`
+		Card  models.Card       `json:"card"`
+		Tasks []TaskWithDetails `json:"tasks"`
 	}
 
 	// Создаем ответ в формате JSON
@@ -79,15 +92,40 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Заполняем информацию о карточках и задачах
 	for _, card := range cards {
+		var tasksWithDetails []TaskWithDetails
 		cardTasks, err := repo.GetCardTasks(card.CardID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		for _, task := range cardTasks {
+			taskColor, _ := repo.GetTaskColor(task.TaskID)
+			taskDescription, _ := repo.GetTaskDescription(task.TaskID)
+			taskDateStart, _ := repo.GetTaskStartDate(task.TaskID)
+			taskDateEnd, _ := repo.GetTaskEndDate(task.TaskID)
+			taskNotifications, _ := repo.GetTaskNotifications(task.TaskID)
+			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
+			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
+			taskChecklist, _ := repo.GetChecklistByID(task.TaskID)
+			taskChecklistElements, _ := repo.GetChecklistElementsByChecklistID(task.TaskID)
+
+			tasksWithDetails = append(tasksWithDetails, TaskWithDetails{
+				Task:                  task,
+				TaskColor:             taskColor,
+				TaskDescription:       taskDescription,
+				TaskDateStart:         taskDateStart,
+				TaskDateEnd:           taskDateEnd,
+				TaskNotifications:     taskNotifications,
+				TaskMarks:             taskMarks,
+				TaskMarkNames:         taskMarkNames,
+				TaskChecklist:         taskChecklist,
+				TaskChecklistElements: taskChecklistElements,
+			})
+		}
 
 		response.Cards = append(response.Cards, CardWithTasks{
 			Card:  card,
-			Tasks: cardTasks,
+			Tasks: tasksWithDetails,
 		})
 	}
 

@@ -107,7 +107,7 @@ func (r *Repository) RemoveTaskEndDate(taskID uint, userLogin string) error {
 }
 
 // Функция получения даты начала задачи
-func (r *Repository) GetTaskStartDate(taskID uint, userLogin string) (*models.TaskDateStart, error) {
+func (r *Repository) GetTaskStartDate(taskID uint) (*models.TaskDateStart, error) {
 	var taskDateStart models.TaskDateStart
 	if err := r.db.Where("task_id = ?", taskID).First(&taskDateStart).Error; err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ func (r *Repository) GetTaskStartDate(taskID uint, userLogin string) (*models.Ta
 }
 
 // Функция получения даты окончания задачи
-func (r *Repository) GetTaskEndDate(taskID uint, userLogin string) (*models.TaskDateEnd, error) {
+func (r *Repository) GetTaskEndDate(taskID uint) (*models.TaskDateEnd, error) {
 	var taskDateEnd models.TaskDateEnd
 	if err := r.db.Where("task_id = ?", taskID).First(&taskDateEnd).Error; err != nil {
 		return nil, err

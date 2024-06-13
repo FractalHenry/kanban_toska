@@ -104,3 +104,56 @@ func (r *Repository) getTaskByID(taskID uint) (models.Task, error) {
 	}
 	return task, nil
 }
+
+func (r *Repository) GetTaskNotifications(taskID uint) ([]models.Notification, error) {
+	var notifications []models.Notification
+	var taskDateEnd models.TaskDateEnd
+
+	err := r.db.Where("task_id = ?", taskID).First(&taskDateEnd).Error
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.db.Model(&models.TaskNotification{}).
+		Where("task_date_end_id = ?", taskDateEnd.TaskDateEndID).
+		Association("Notification").
+		Find(&notifications)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return notifications, nil
+}
+
+func (r *Repository) GetTaskMarks(taskID uint) ([]models.Mark, error) {
+	var marks []models.Mark
+	err := r.db.Where("task_id = ?", taskID).Find(&marks).Error
+	if err != nil {
+		return nil, err
+	}
+	return marks, nil
+}
+
+func (r *Repository) GetTaskMarkNames(taskID uint) ([]models.MarkName, error) {
+	var markNames []models.MarkName
+	err := r.db.Model(&models.Mark{}).
+		Where("task_id = ?", taskID).
+		Association("MarkName").
+		Find(&markNames)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return markNames, nil
+}
+
+func (r *Repository) GetChecklistElementsByChecklistID(checklistID uint) ([]models.ChecklistElement, error) {
+	var elements []models.ChecklistElement
+	err := r.db.Where("checklist_id = ?", checklistID).Find(&elements).Error
+	if err != nil {
+		return nil, err
+	}
+	return elements, nil
+}
