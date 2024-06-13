@@ -5,6 +5,15 @@ import (
 	"fmt"
 )
 
+// Функция для получения всех чек-листов по ID задачи
+func (r *Repository) GetChecklistsByTaskID(taskID uint) (*[]models.Checklist, error) {
+	var checklists *[]models.Checklist
+	if err := r.db.Where("task_id = ?", taskID).Find(&checklists).Error; err != nil {
+		return nil, err
+	}
+	return checklists, nil
+}
+
 // Функция создания чек-листа
 func (r *Repository) CreateChecklist(checklist *models.Checklist, userLogin string) error {
 	task, err := r.GetTaskByID(checklist.TaskID)

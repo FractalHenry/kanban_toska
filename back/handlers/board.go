@@ -39,17 +39,21 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type ChecklistWithElements struct {
+		Checklist         models.Checklist          `json:"checklist"`
+		ChecklistElements []models.ChecklistElement `json:"checklistElements"`
+	}
+
 	type TaskWithDetails struct {
-		Task                  models.Task                `json:"task"`
-		TaskColor             string                     `json:"taskColor,omitempty"`
-		TaskDescription       string                     `json:"taskDescription,omitempty"`
-		TaskDateStart         *models.TaskDateStart      `json:"taskDateStart,omitempty"`
-		TaskDateEnd           *models.TaskDateEnd        `json:"taskDateEnd,omitempty"`
-		TaskNotifications     *[]models.Notification     `json:"taskNotifications,omitempty"`
-		TaskMarks             *[]models.Mark             `json:"taskMarks,omitempty"`
-		TaskMarkNames         *[]models.MarkName         `json:"taskMarkNames,omitempty"`
-		TaskChecklist         *models.Checklist          `json:"taskChecklist,omitempty"`
-		TaskChecklistElements *[]models.ChecklistElement `json:"taskChecklistElements,omitempty"`
+		Task              models.Task             `json:"task"`
+		TaskColor         string                  `json:"taskColor,omitempty"`
+		TaskDescription   string                  `json:"taskDescription,omitempty"`
+		TaskDateStart     *models.TaskDateStart   `json:"taskDateStart,omitempty"`
+		TaskDateEnd       *models.TaskDateEnd     `json:"taskDateEnd,omitempty"`
+		TaskNotifications *[]models.Notification  `json:"taskNotifications,omitempty"`
+		TaskMarks         *[]models.Mark          `json:"taskMarks,omitempty"`
+		TaskMarkNames     *[]models.MarkName      `json:"taskMarkNames,omitempty"`
+		Checklists        []ChecklistWithElements `json:"checklists,omitempty"`
 	}
 
 	type CardWithTasks struct {
@@ -106,20 +110,27 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskNotifications, _ := repo.GetTaskNotifications(task.TaskID)
 			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
 			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
-			taskChecklist, _ := repo.GetChecklistByID(task.TaskID)
-			taskChecklistElements, _ := repo.GetChecklistElementsByChecklistID(task.TaskID)
+			checklists, _ := repo.GetChecklistsByTaskID(task.TaskID)
+
+			var checklistWithElements []ChecklistWithElements
+			for _, checklist := range *checklists {
+				checklistElements, _ := repo.GetChecklistElementsByChecklistID(checklist.ChecklistID)
+				checklistWithElements = append(checklistWithElements, ChecklistWithElements{
+					Checklist:         checklist,
+					ChecklistElements: *checklistElements,
+				})
+			}
 
 			tasksWithDetails = append(tasksWithDetails, TaskWithDetails{
-				Task:                  task,
-				TaskColor:             taskColor,
-				TaskDescription:       taskDescription,
-				TaskDateStart:         taskDateStart,
-				TaskDateEnd:           taskDateEnd,
-				TaskNotifications:     taskNotifications,
-				TaskMarks:             taskMarks,
-				TaskMarkNames:         taskMarkNames,
-				TaskChecklist:         taskChecklist,
-				TaskChecklistElements: taskChecklistElements,
+				Task:              task,
+				TaskColor:         taskColor,
+				TaskDescription:   taskDescription,
+				TaskDateStart:     taskDateStart,
+				TaskDateEnd:       taskDateEnd,
+				TaskNotifications: taskNotifications,
+				TaskMarks:         taskMarks,
+				TaskMarkNames:     taskMarkNames,
+				Checklists:        checklistWithElements,
 			})
 		}
 
