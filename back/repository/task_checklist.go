@@ -77,6 +77,19 @@ func (r *Repository) DeleteChecklist(checklistID uint, userLogin string) error {
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
+		var checklistElements []models.ChecklistElement
+		err = r.db.Where("checklist_id = ?", checklistID).Find(&checklistElements).Error
+		if err != nil {
+			return err
+		}
+
+		if len(checklistElements) > 0 {
+			err = r.db.Where("checklist_id = ?", checklistID).Delete(&models.ChecklistElement{}).Error
+			if err != nil {
+				return err
+			}
+		}
+
 		return r.db.Delete(&checklist).Error
 	}
 	return fmt.Errorf("у пользователя нет прав для удаления чек-листа")

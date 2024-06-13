@@ -68,6 +68,10 @@ func main() {
 
 	// Checklist
 	router.Handle("/addCheckList/{TaskID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCheckListHandler))).Methods("POST")
+	router.Handle("/removeChecklist/{checklistID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCheckListHandler))).Methods("DELETE")
+
+	// ChecklistElement
+	router.Handle("/addCheckListElement/{CheckListID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCheckListElementHandler))).Methods("POST")
 
 	// Protected
 	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
