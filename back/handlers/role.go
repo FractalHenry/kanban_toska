@@ -37,23 +37,23 @@ func CreateSpaceRoleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var requestBody struct {
+	var reqBody struct {
 		Name    string `json:"name"`
 		IsAdmin bool   `json:"is_admin"`
 		CanEdit bool   `json:"can_edit"`
 	}
 
-	err = json.NewDecoder(r.Body).Decode(&requestBody)
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "Некорректные данные", http.StatusBadRequest)
 		return
 	}
 
 	roleOnSpace := models.RoleOnSpace{
 		SpaceID:         uint(spaceId),
-		RoleOnSpaceName: requestBody.Name,
-		IsAdmin:         requestBody.IsAdmin,
-		CanEdit:         requestBody.CanEdit,
+		RoleOnSpaceName: reqBody.Name,
+		IsAdmin:         reqBody.IsAdmin,
+		CanEdit:         reqBody.CanEdit,
 		IsOwner:         false,
 	}
 

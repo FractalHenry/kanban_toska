@@ -17,7 +17,7 @@ func CreateCheckListHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	taskID, err := strconv.ParseUint(vars["TaskID"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid board ID", http.StatusBadRequest)
+		http.Error(w, "Неправильный board ID", http.StatusBadRequest)
 		return
 	}
 
@@ -27,7 +27,7 @@ func CreateCheckListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Неправильный request body", http.StatusBadRequest)
 		return
 	}
 
@@ -54,7 +54,7 @@ func DeleteCheckListHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	checklistId, err := strconv.ParseUint(vars["checklistID"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid CheckList ID", http.StatusBadRequest)
+		http.Error(w, "Неправильный CheckList ID", http.StatusBadRequest)
 		return
 	}
 
@@ -77,7 +77,7 @@ func CreateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	checklistID, err := strconv.ParseUint(vars["CheckListID"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid board ID", http.StatusBadRequest)
+		http.Error(w, "Неправильный board ID", http.StatusBadRequest)
 		return
 	}
 
@@ -87,7 +87,7 @@ func CreateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Неправильный request body", http.StatusBadRequest)
 		return
 	}
 
