@@ -99,3 +99,22 @@ func (r *Repository) UpdateMarkName(markName *models.MarkName, userLogin string)
 	}
 	return r.db.Save(markName).Error
 }
+
+func (r *Repository) GetTaskMarkNamesAndMarks(taskID uint) (*[]models.MarkName, *[]models.Mark, error) {
+	var markNames []models.MarkName
+	var marks []models.Mark
+
+	err := r.db.Model(&models.MarkName{}).
+		Preload("Mark").
+		Where("mark_names.task_id = ?", taskID).
+		Find(&markNames).Error
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for _, markName := range markNames {
+		marks = append(marks, markName.Mark)
+	}
+
+	return &markNames, &marks, nil
+}
