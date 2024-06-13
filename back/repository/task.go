@@ -4,7 +4,7 @@ import (
 	"backend/models"
 	"fmt"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Функция создания задания
