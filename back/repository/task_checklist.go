@@ -217,7 +217,7 @@ func (r *Repository) getNextChecklistElementOrder(checklistID uint) (uint, error
 func (r *Repository) updateChecklistElementOrders(checklistID, deletedOrder uint) error {
 	var elements []models.ChecklistElement
 	err := r.db.Where("checklist_id = ? AND element_order > ?", checklistID, deletedOrder).
-		Order("order ASC").
+		Order("element_order ASC").
 		Find(&elements).Error
 	if err != nil {
 		return err
