@@ -39,6 +39,11 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type MarkNameWithMark struct {
+		MarkName models.MarkName `json:"markName"`
+		Mark     models.Mark     `json:"mark"`
+	}
+
 	type ChecklistWithElements struct {
 		Checklist         models.Checklist          `json:"checklist"`
 		ChecklistElements []models.ChecklistElement `json:"checklistElements"`
@@ -52,7 +57,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		TaskDateEnd       *models.TaskDateEnd      `json:"taskDateEnd,omitempty"`
 		TaskNotifications *[]models.Notification   `json:"taskNotifications,omitempty"`
 		TaskMarks         *[]models.Mark           `json:"taskMarks,omitempty"`
-		TaskMarkNames     *[]models.MarkName       `json:"taskMarkNames,omitempty"`
+		TaskMarkNames     *[]MarkNameWithMark      `json:"taskMarkNames,omitempty"`
 		Checklists        *[]ChecklistWithElements `json:"checklists,omitempty"`
 	}
 
@@ -110,6 +115,15 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskNotifications, _ := repo.GetTaskNotifications(task.TaskID)
 			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
 			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
+			var markNamesWithMarks []MarkNameWithMark
+			if taskMarkNames != nil {
+				for _, markName := range *taskMarkNames {
+					markNamesWithMarks = append(markNamesWithMarks, MarkNameWithMark{
+						MarkName: markName,
+						Mark:     markName.Mark,
+					})
+				}
+			}
 			checklists, _ := repo.GetChecklistsByTaskID(task.TaskID)
 			checklistWithElements := []ChecklistWithElements{}
 			if checklists != nil {
@@ -134,7 +148,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				TaskDateEnd:       taskDateEnd,
 				TaskNotifications: taskNotifications,
 				TaskMarks:         taskMarks,
-				TaskMarkNames:     taskMarkNames,
+				TaskMarkNames:     &markNamesWithMarks,
 				Checklists:        &checklistWithElements,
 			})
 		}
