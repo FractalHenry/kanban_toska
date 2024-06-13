@@ -7,7 +7,12 @@ import (
 
 // Функция создания чек-листа
 func (r *Repository) CreateChecklist(checklist *models.Checklist, userLogin string) error {
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(checklist, userLogin)
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
@@ -20,7 +25,12 @@ func (r *Repository) CreateChecklist(checklist *models.Checklist, userLogin stri
 
 // Функция обновления чек-листа
 func (r *Repository) UpdateChecklist(checklist *models.Checklist, userLogin string) error {
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(checklist, userLogin)
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
@@ -38,7 +48,12 @@ func (r *Repository) DeleteChecklist(checklistID uint, userLogin string) error {
 		return err
 	}
 
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&checklist, userLogin)
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
@@ -53,19 +68,36 @@ func (r *Repository) DeleteChecklist(checklistID uint, userLogin string) error {
 func (r *Repository) GetChecklistByID(checklistID uint) (*models.Checklist, error) {
 	var checklist models.Checklist
 	if err := r.db.First(&checklist, checklistID).Error; err != nil {
-		return &checklist, err
+		return nil, err
 	}
 	return &checklist, nil
 }
 
 // Функция создания элемента чек-листа
 func (r *Repository) CreateChecklistElement(element *models.ChecklistElement, userLogin string) error {
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(element, userLogin)
+	checklist, err := r.GetChecklistByID(element.ChecklistID)
+	if err != nil {
+		return err
+	}
+
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
+		// Получаем следующий порядковый номер для нового элемента
+		order, err := r.getNextChecklistElementOrder(checklist.ChecklistID)
+		if err != nil {
+			return err
+		}
+		element.Order = order
+
 		return r.db.Create(element).Error
 	}
 	return fmt.Errorf("у пользователя нет прав для создания элемента чек-листа на этой доске")
@@ -73,7 +105,17 @@ func (r *Repository) CreateChecklistElement(element *models.ChecklistElement, us
 
 // Функция обновления элемента чек-листа
 func (r *Repository) UpdateChecklistElement(element *models.ChecklistElement, userLogin string) error {
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(element, userLogin)
+	checklist, err := r.GetChecklistByID(element.ChecklistID)
+	if err != nil {
+		return err
+	}
+
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
@@ -91,22 +133,72 @@ func (r *Repository) DeleteChecklistElement(elementID uint, userLogin string) er
 		return err
 	}
 
-	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&element, userLogin)
+	checklist, err := r.GetChecklistByID(element.ChecklistID)
+	if err != nil {
+		return err
+	}
+
+	task, err := r.GetTaskByID(checklist.TaskID)
+	if err != nil {
+		return err
+	}
+
+	_, _, roleOnSpace, boardRole, err := r.findBoardAndRoles(&task, userLogin)
 	if err != nil {
 		return err
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
+		// Обновляем порядковые номера остальных элементов чеклиста
+		err = r.updateChecklistElementOrders(element.ChecklistID, element.Order)
+		if err != nil {
+			return err
+		}
+
 		return r.db.Delete(&element).Error
 	}
 	return fmt.Errorf("у пользователя нет прав для удаления элемента чек-листа")
 }
 
 // Вспомогательная функция для получения элемента чек-листа по ID
-func (r *Repository) GetChecklistElementByID(elementID uint) (models.ChecklistElement, error) {
+func (r *Repository) GetChecklistElementByID(elementID uint) (*models.ChecklistElement, error) {
 	var element models.ChecklistElement
 	if err := r.db.First(&element, elementID).Error; err != nil {
-		return element, err
+		return nil, err
 	}
-	return element, nil
+	return &element, nil
+}
+
+// Вспомогательная функция для получения следующего порядкового номера для элемента чек-листа
+func (r *Repository) getNextChecklistElementOrder(checklistID uint) (uint, error) {
+	var maxOrder uint
+	err := r.db.Model(&models.ChecklistElement{}).
+		Where("checklist_id = ?", checklistID).
+		Select("COALESCE(MAX(order), 0)").
+		Scan(&maxOrder).Error
+	if err != nil {
+		return 0, err
+	}
+	return maxOrder + 1, nil
+}
+
+// Вспомогательная функция для обновления порядковых номеров элементов чек-листа после удаления одного из них
+func (r *Repository) updateChecklistElementOrders(checklistID, deletedOrder uint) error {
+	var elements []models.ChecklistElement
+	err := r.db.Where("checklist_id = ? AND order > ?", checklistID, deletedOrder).
+		Order("order ASC").
+		Find(&elements).Error
+	if err != nil {
+		return err
+	}
+
+	for _, element := range elements {
+		element.Order--
+		err = r.db.Save(&element).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

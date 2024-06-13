@@ -51,7 +51,7 @@ func main() {
 	// Task
 	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
 
-	router.Handle("/task/{taskId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskHandler))).Methods("PUT")
+	router.Handle("/updateTask/{TaskID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskHandler))).Methods("PUT")
 	router.Handle("/removeTask/{TaskID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler))).Methods("DELETE")
 
 	// Infoblock
@@ -65,6 +65,9 @@ func main() {
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateSpaceHandler))).Methods("PUT")
 	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceHandler))).Methods("DELETE")
 	router.Handle("/space", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateSpaceHandler))).Methods("POST")
+
+	// Checklist
+	router.Handle("/addCheckList/{TaskID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCheckListHandler))).Methods("POST")
 
 	// Protected
 	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
