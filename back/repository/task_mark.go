@@ -105,8 +105,8 @@ func (r *Repository) GetTaskMarkNamesAndMarks(taskID uint) (*[]models.MarkName, 
 	var marks []models.Mark
 
 	err := r.db.Model(&models.MarkName{}).
+		Where("task_id = ?", taskID).
 		Preload("Mark").
-		Where("mark_names.task_id = ?", taskID).
 		Find(&markNames).Error
 	if err != nil {
 		return nil, nil, err
