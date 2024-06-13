@@ -56,7 +56,6 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		TaskDateStart     *models.TaskDateStart    `json:"taskDateStart,omitempty"`
 		TaskDateEnd       *models.TaskDateEnd      `json:"taskDateEnd,omitempty"`
 		TaskNotifications *[]models.Notification   `json:"taskNotifications,omitempty"`
-		TaskMarks         *[]models.Mark           `json:"taskMarks,omitempty"`
 		TaskMarkNames     *[]MarkNameWithMark      `json:"taskMarkNames,omitempty"`
 		Checklists        *[]ChecklistWithElements `json:"checklists,omitempty"`
 	}
@@ -113,7 +112,6 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskDateStart, _ := repo.GetTaskStartDate(task.TaskID)
 			taskDateEnd, _ := repo.GetTaskEndDate(task.TaskID)
 			taskNotifications, _ := repo.GetTaskNotifications(task.TaskID)
-			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
 			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
 			var markNamesWithMarks []MarkNameWithMark
 			if taskMarkNames != nil {
@@ -147,7 +145,6 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				TaskDateStart:     taskDateStart,
 				TaskDateEnd:       taskDateEnd,
 				TaskNotifications: taskNotifications,
-				TaskMarks:         taskMarks,
 				TaskMarkNames:     &markNamesWithMarks,
 				Checklists:        &checklistWithElements,
 			})
