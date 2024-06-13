@@ -5,6 +5,18 @@ import (
 	"fmt"
 )
 
+func (r *Repository) FindUserRoleOnSpaceByUserAndSpace(userLogin string, spaceID uint) (*models.UserRoleOnSpace, error) {
+	var userRoleOnSpace models.UserRoleOnSpace
+	err := r.db.
+		Joins("JOIN role_on_spaces ON role_on_spaces.role_on_space_id = user_role_on_spaces.role_on_space_id").
+		Where("role_on_spaces.space_id = ? AND user_role_on_spaces.login = ?", spaceID, userLogin).
+		First(&userRoleOnSpace).Error
+	if err != nil {
+		return nil, err
+	}
+	return &userRoleOnSpace, nil
+}
+
 func (r *Repository) CreateRoleOnSpace(roleOnSpace *models.RoleOnSpace, userLogin string) error {
 	user, err := r.FindUserByLogin(userLogin)
 	if err != nil {
@@ -145,14 +157,16 @@ func (r *Repository) UpdateRoleOnBoard(roleOnBoard *models.RoleOnBoard, boardIDs
 	}
 }
 
-func (r *Repository) AssociateUserWithRoleOnSpace(userLogin, targetUserLogin string, roleOnSpaceID uint) error {
+func (r *Repository) AssociateUserWithRoleOnSpace(userLogin, targetUserLogin string, roleOnSpaceID, spaceID uint) error {
 	user, err := r.FindUserByLogin(userLogin)
 	if err != nil {
 		return fmt.Errorf("не удалось найти пользователя: %v", err)
 	}
 
 	var currentRole models.RoleOnSpace
-	err = r.db.Model(&models.RoleOnSpace{}).Where("role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", user.Login).First(&currentRole).Error
+	err = r.db.Model(&models.RoleOnSpace{}).
+		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", spaceID, user.Login).
+		First(&currentRole).Error
 	if err != nil {
 		return fmt.Errorf("не удалось найти роль пользователя: %v", err)
 	}
@@ -162,6 +176,12 @@ func (r *Repository) AssociateUserWithRoleOnSpace(userLogin, targetUserLogin str
 	if err != nil {
 		return fmt.Errorf("не удалось найти роль: %v", err)
 	}
+
+	// Проверяем, что RoleOnSpaceID принадлежит указанному SpaceID
+	if roleToAdd.SpaceID != spaceID {
+		return fmt.Errorf("роль не принадлежит указанному пространству")
+	}
+
 	if roleToAdd.IsOwner {
 		return fmt.Errorf("роль владельца не может быть привязана к пользователю")
 	}

@@ -113,3 +113,11 @@ func GetUsersNotOnSpace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func RemoveUserFromSpace(w http.ResponseWriter, r *http.Request) {
+
+}

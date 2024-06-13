@@ -3,6 +3,8 @@ package repository
 import (
 	"backend/models"
 	"fmt"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Функция создания задания
@@ -102,7 +104,7 @@ func (r *Repository) DeleteTask(taskID uint, userLogin string) error {
 // Функция получения всех заданий для карты
 func (r *Repository) GetCardTasks(cardID uint) ([]models.Task, error) {
 	var tasks []models.Task
-	if err := r.db.Where("card_id = ?", cardID).Find(&tasks).Error; err != nil {
+	if err := r.db.Where("card_id = ?", cardID).Find(&tasks).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 	return tasks, nil
@@ -111,7 +113,7 @@ func (r *Repository) GetCardTasks(cardID uint) ([]models.Task, error) {
 // Вспомогательная функция для получения задания по ID
 func (r *Repository) GetTaskByID(taskID uint) (models.Task, error) {
 	var task models.Task
-	if err := r.db.First(&task, taskID).Error; err != nil {
+	if err := r.db.First(&task, taskID).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return task, err
 	}
 	return task, nil
@@ -122,7 +124,7 @@ func (r *Repository) GetTaskNotifications(taskID uint) (*[]models.Notification, 
 	var taskDateEnd models.TaskDateEnd
 
 	err := r.db.Where("task_id = ?", taskID).First(&taskDateEnd).Error
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 
@@ -141,7 +143,7 @@ func (r *Repository) GetTaskNotifications(taskID uint) (*[]models.Notification, 
 func (r *Repository) GetTaskMarks(taskID uint) (*[]models.Mark, error) {
 	var marks []models.Mark
 	err := r.db.Where("task_id = ?", taskID).Find(&marks).Error
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 	return &marks, nil
@@ -154,7 +156,7 @@ func (r *Repository) GetTaskMarkNames(taskID uint) (*[]models.MarkName, error) {
 		Association("MarkName").
 		Find(&markNames)
 
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 
