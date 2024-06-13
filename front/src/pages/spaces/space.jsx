@@ -7,7 +7,7 @@ export const Space = ({space}) =>{
     return(
         <div className="outline btn-secondary flex flex-col p-8" >
             <div className="flex flex-row align-center">
-            Пространство пользователя {space.SpaceOwner}
+            Пространство {space.SpaceName}
             <div className="fill"/> 
             <Button cls="secondary" onClick={()=>openDialog(space)}>Добавить пользователя</Button>
             </div>

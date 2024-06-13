@@ -8,7 +8,7 @@ import { useToast } from "./Toast/toastprovider";
 const PanelItem = ({ space }) => {
   return (
     <div className="SpaceCard">
-      <h4> Пространство: {space.SpaceOwner} </h4>
+      <h4> Пространство: {space.SpaceName} </h4>
       <h5> Доски: </h5>
       {space.boards ? space.boards.map(
         (item, index) => (<BoardLink key={index} board={item} />)

@@ -12,7 +12,7 @@ const NewCheckBox = ({checklistid}) =>{
     const onSubmit = async ({}) =>{
         if(data.length==0)
             return;
-        const token = Cookies.get('authToken');
+            const token = Cookies.get('authToken');
             if (!token) {
                 navigate('/error/404');
                 return;
@@ -60,17 +60,95 @@ const NewCheckBox = ({checklistid}) =>{
 }
 
 
-export const CheckBox = ({checkboxgroup,children}) =>{
+export const CheckBox = ({checked, checkboxgroup,children,checkboxid}) =>{
+    const {showToast} = useToast();
+    const navigate = useNavigate();
+    const updateCheckElement = async () => {
+        const token = Cookies.get('authToken');
+        if (!token) {
+            navigate('/error/404');
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8000/updateCheckListElementState/${checkboxid}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'Checked': check
+                })
+            });
+            if (response.ok) {
+                window.location.reload(false);
+            } else {
+                throw new Error(response.statusText);
+            }
+        } catch (error) {
+            showToast("Произошла ошибка при создании элемента чек-листа. " + error);
+        }
+    }
+    const removeCheckElement = async () => {
+        const token = Cookies.get('authToken');
+        if (!token) {
+            navigate('/error/404');
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8000/deleteCheckListElement/${checkboxid}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.ok) {
+                window.location.reload(false);
+            } else {
+                throw new Error(response.statusText);
+            }
+        } catch (error) {
+            showToast("Произошла ошибка при удалении элемента чек-листа. " + error);
+        }
+    }
+    const [check,setCheked] = useState(checked);
     return(
-    <div className="flex flex-row">
-        <input type="checkbox" name={checkboxgroup}/>{children&&children} 
-        <div className="fill"/>
-        <X/>
-    </div>
+        <div className="flex flex-row">
+            <input type="checkbox" name={checkboxgroup} checked={check} onChange={()=>{setCheked(!check);updateCheckElement()}}/>
+            {children&&children} 
+            <div className="fill"/>
+            <X className="pointer" onClick={removeCheckElement}/>
+        </div>
     )
 }
 
-export const CheckListHeader = ({children})=>{
+export const CheckListHeader = ({children,checklistid})=>{
+    const {showToast} = useToast();
+    const navigate = useNavigate();
+    const remove = async () =>{
+        try
+        {
+            const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            const response = await fetch(`http://localhost:8000/removeChecklist/${checklistid}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+            });
+        if (response.ok) {
+            window.location.reload(false);
+        } else {
+            const error = await response.text();
+            showToast(error);
+        }
+        } catch (err) {
+            showToast("Произошла ошибка при отправке удалении чек-листа");
+        }
+    }
     return(
         <div className="flex flex-col">
             <hr/>
@@ -79,7 +157,7 @@ export const CheckListHeader = ({children})=>{
                 {children&&children}
             </h3>
             <div className="fill"/>
-            <Button cls="terminate"><X/>Удалить чек-лист</Button>
+            <Button cls="terminate" onClick={remove}><X/>Удалить чек-лист</Button>
         </div>
         <hr/>
         </div>

@@ -39,12 +39,38 @@ export const NewUser = ({spaceid}) =>{
         getRoles();
     }, [navigate]);
      
-    function onSubmit ()
-    {
-
-    }
+    const onSubmit = async () =>{
+        if (data.length==0 || currentRole=="Выберите роль")
+            return
+        const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:8000/space/${spaceid}/addUser`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'name': data,
+                        'role': currentRole
+                    })
+                });
+                if (response.ok) {
+                    window.location.reload(false);
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                showToast("Произошла ошибка при добавлении пользователя. " + error);
+            }
+        }
     function onAbort(){
-
+        setData('');
+        setRole('Выберите роль')
     }
     return(
         <div className="flex flex-col gap-8">

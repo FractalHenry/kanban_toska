@@ -6,6 +6,7 @@ import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
 import { NewTask } from "./newTask";
 let Task = ({onClick, task})=>{
+    console.log(task)
     const {showToast} = useToast()
     const navigate = useNavigate()
     const {openDialog} = useDialog();
@@ -33,26 +34,25 @@ let Task = ({onClick, task})=>{
             showToast("Произошла ошибка при отправке удалении карточки");
         }
     }
-    const marks = task.marks ? task.marks.map((item)=>{
+    const marks = task.taskMarks ? task.taskMarks.map((item)=>{
         return(
-            <div className="flex center markwrapper" id={item.id} style={{backgroundColor: item.color, borderColor: item.color}}>
-                <div className='mix'>{item.name}</div>
-                <Check></Check>
+            <div className="flex center markwrapper gap-8" id={item.mark.MarkID} style={{backgroundColor: item.mark.MarkColor, borderColor: item.mark.MarkColor}}>
+                <div className='mix'>{item.markName}</div>
+                <Check style={{color:"black"}}></Check>
             </div>
         )
     }) : null;
     return(
         <div className={`taskwrapper flex-row`} style={{backgroundColor: task.taskColor}} id={"Task:"+task.id} >
 
-            <div className="flex-col" onClick={onClick}>
+            <div className="flex-col gap-8" onClick={onClick}>
                 {task&&task.task.TaskName}
                 <div className='flex-row wrap gap-4'>
                 {marks}
-                {task.taskColor}
                 </div>
             </div>
             <div className='fill'></div>
-            <X className="pointer" onClick={remove}></X>
+            <X className=" h-8 w-8 pointer" onClick={remove}></X>
         </div>
     )
 }
