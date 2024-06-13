@@ -39,6 +39,11 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type MarkWithName struct {
+		Mark     models.Mark `json:"mark"`
+		MarkName string      `json:"markName"`
+	}
+
 	type ChecklistWithElements struct {
 		Checklist         models.Checklist          `json:"checklist"`
 		ChecklistElements []models.ChecklistElement `json:"checklistElements"`
@@ -51,8 +56,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		TaskDateStart     *models.TaskDateStart    `json:"taskDateStart,omitempty"`
 		TaskDateEnd       *models.TaskDateEnd      `json:"taskDateEnd,omitempty"`
 		TaskNotifications *[]models.Notification   `json:"taskNotifications,omitempty"`
-		TaskMarkNames     *[]models.MarkName       `json:"taskMarkNames,omitempty"`
-		TaskMarks         *[]models.Mark           `json:"taskMarks,omitempty"`
+		TaskMarks         *[]MarkWithName          `json:"taskMarks,omitempty"`
 		Checklists        *[]ChecklistWithElements `json:"checklists,omitempty"`
 	}
 
@@ -125,6 +129,14 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
+			marksWithName := []MarkWithName{}
+			for i := range *taskMarks {
+				marksWithName = append(marksWithName, MarkWithName{
+					Mark:     (*taskMarks)[i],
+					MarkName: (*taskMarkNames)[i].MarkName,
+				})
+			}
+
 			tasksWithDetails = append(tasksWithDetails, TaskWithDetails{
 				Task:              task,
 				TaskColor:         taskColor,
@@ -132,8 +144,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				TaskDateStart:     taskDateStart,
 				TaskDateEnd:       taskDateEnd,
 				TaskNotifications: taskNotifications,
-				TaskMarkNames:     taskMarkNames,
-				TaskMarks:         taskMarks,
+				TaskMarks:         &marksWithName,
 				Checklists:        &checklistWithElements,
 			})
 		}
