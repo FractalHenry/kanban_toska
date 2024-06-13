@@ -73,7 +73,7 @@ let Board = () =>{
     }
     return(
         <div className="">
-            <div className="header flex flex-row between p-8">
+            <div className="header flex flex-row between p-8 align-center">
                 <div className="h2"> Доска: {board && board.name}</div>
                 {isAuthor && <Button className="center" >Управление пользователями</Button>}
             </div>

@@ -13,7 +13,9 @@
   width: auto;
   height: 32px;
 }
-
+.whitebg{
+  background-color: white;
+}
 .word-break{
   word-break: break-all;
 }
@@ -31,17 +33,6 @@
 .overflow-y{
   overflow-y: scroll;
   flex-wrap: wrap;
-}
-.flex-col{
-  display: flex;
-  flex-direction: column;
-}
-.flex-row{
-  display: flex;
-  flex-direction: row;
-}
-.flex{
-  display: flex;
 }
 .wrapper{
   min-height: 85%;
@@ -116,6 +107,9 @@
 }
 .rounded-lg{
   border-radius: 32px;
+}
+.rounded-sm{
+  border-radius: 16px;
 }
 .line{
   stroke: var(--primary);

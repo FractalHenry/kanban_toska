@@ -10,10 +10,25 @@
   .fixed{
     position: fixed;
   }
-
   .between{
     justify-content: space-between;
   }
   .z-1{
     z-index: 1;
+  }
+
+  .flex-col{
+    display: flex;
+    flex-direction: column;
+  }
+  .flex-row{
+    display: flex;
+    flex-direction: row;
+  }
+  .flex-rrow{
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .flex{
+    display: flex;
   }

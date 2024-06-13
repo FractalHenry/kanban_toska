@@ -15,26 +15,25 @@ import { DialogProvider } from "./components/dialog/taskdialogprovider";
 function App() {
   
   return (
-    
-    <DialogProvider>
     <ToastProvider>
-      <AuthProvider> {/* Оборачиваем в AuthProvider */}
-        <div id="toast-root"></div>
-        <Header />
-          <Routes>
-            <Route path="/" element={<Welcome/>}/>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/reg" element={<Reg />} />
-            <Route path="/boards" element={<Boards />} />
-            <Route path="/board/:id" element={<Board />} />
-            <Route path="/protected/:login" element={<ProtectedPage />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/user/:login" element={<User />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-      </AuthProvider>
+      <DialogProvider>
+        <AuthProvider> {/* Оборачиваем в AuthProvider */}
+          <div id="toast-root"></div>
+          <Header />
+            <Routes>
+              <Route path="/" element={<Welcome/>}/>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/reg" element={<Reg />} />
+              <Route path="/boards" element={<Boards />} />
+              <Route path="/board/:id" element={<Board />} />
+              <Route path="/protected/:login" element={<ProtectedPage />} />
+              <Route path="/user" element={<User />} />
+              <Route path="/user/:login" element={<User />} />
+              <Route path="*" element={<Error />} />
+            </Routes>
+        </AuthProvider>
+      </DialogProvider>
     </ToastProvider>
-    </DialogProvider>
   );
 }
 
