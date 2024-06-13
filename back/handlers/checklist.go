@@ -52,7 +52,7 @@ func DeleteCheckListHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем ID задания из пути запроса
 	vars := mux.Vars(r)
-	checklistId, err := strconv.ParseUint(vars["CheckListID"], 10, 64)
+	checklistId, err := strconv.ParseUint(vars["checklistID"], 10, 64)
 	if err != nil {
 		http.Error(w, "Invalid CheckList ID", http.StatusBadRequest)
 		return
@@ -75,7 +75,7 @@ func CreateCheckListElementHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем ID доски из пути запроса
 	vars := mux.Vars(r)
-	checklistID, err := strconv.ParseUint(vars["checklistID"], 10, 64)
+	checklistID, err := strconv.ParseUint(vars["CheckListID"], 10, 64)
 	if err != nil {
 		http.Error(w, "Invalid board ID", http.StatusBadRequest)
 		return
