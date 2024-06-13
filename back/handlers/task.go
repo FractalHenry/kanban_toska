@@ -69,7 +69,7 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем ID задания из пути запроса
 	vars := mux.Vars(r)
-	taskID, err := strconv.ParseUint(vars["taskId"], 10, 64)
+	taskID, err := strconv.ParseUint(vars["TaskID"], 10, 64)
 	if err != nil {
 		http.Error(w, "Некорректный task ID", http.StatusBadRequest)
 		return
