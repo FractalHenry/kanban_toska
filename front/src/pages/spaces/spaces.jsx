@@ -35,7 +35,6 @@ export const Spaces = () =>{
     };
     fetchData();
     }, [navigate]);
-    console.log("Spaces", spaces)
 
     return(
         <div className="flex flex-col gap-8">

@@ -11,28 +11,30 @@ import { AuthProvider } from './components/AuthContext';
 import { ToastProvider } from "./components/Toast/toastprovider";
 import { Welcome } from "./pages/welcome/welcome";
 import { DialogProvider } from "./components/dialog/taskdialogprovider";
-
+import { UserDialogProvider } from "./components/dialog/userdialogprovider";
 function App() {
   
   return (
     <ToastProvider>
-      <DialogProvider>
-        <AuthProvider> {/* Оборачиваем в AuthProvider */}
-          <div id="toast-root"></div>
-          <Header />
-            <Routes>
-              <Route path="/" element={<Welcome/>}/>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/reg" element={<Reg />} />
-              <Route path="/boards" element={<Boards />} />
-              <Route path="/board/:id" element={<Board />} />
-              <Route path="/protected/:login" element={<ProtectedPage />} />
-              <Route path="/user" element={<User />} />
-              <Route path="/user/:login" element={<User />} />
-              <Route path="*" element={<Error />} />
-            </Routes>
-        </AuthProvider>
-      </DialogProvider>
+      <UserDialogProvider>
+        <DialogProvider>
+          <AuthProvider> {/* Оборачиваем в AuthProvider */}
+            <div id="toast-root"></div>
+            <Header />
+              <Routes>
+                <Route path="/" element={<Welcome/>}/>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/reg" element={<Reg />} />
+                <Route path="/boards" element={<Boards />} />
+                <Route path="/board/:id" element={<Board />} />
+                <Route path="/protected/:login" element={<ProtectedPage />} />
+                <Route path="/user" element={<User />} />
+                <Route path="/user/:login" element={<User />} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+          </AuthProvider>
+        </DialogProvider>
+      </UserDialogProvider>
     </ToastProvider>
   );
 }

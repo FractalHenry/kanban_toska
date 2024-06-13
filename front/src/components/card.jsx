@@ -6,7 +6,6 @@ import { useDialog } from "./dialog/taskdialogprovider";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
-import { useEffect } from "react";
 import { NewTask } from "./newTask";
 let Card = ({card}) =>{
     console.log(card)

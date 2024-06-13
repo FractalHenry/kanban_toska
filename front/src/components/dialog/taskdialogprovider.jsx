@@ -20,15 +20,69 @@ export const DialogProvider = ({ children }) => {
     const openDialog = (dialogContent) => {
         setDialog(dialogContent);
     };
-
+    console.log(task&& task.task.TaskID)
     const closeDialog = () => {
         setDialog(null);
     };
-    const updateTaskName = (txt) =>{
-        
+    const updateTaskName = async (txt) =>{
+        try
+        {
+            const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            const response = await fetch(`http://localhost:8000/updateTask/${task.task.TaskID}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body:{
+                'name': txt,
+                'color': task.taskColor,
+                'description':task.task.TaskDescription
+            }
+            });
+        if (response.ok) {
+            window.location.reload(false);
+        } else {
+            const error = await response.text();
+            showToast(error);
+        }
+        } catch (err) {
+            showToast("Произошла ошибка при отправке удалении карточки");
+        }
     }
-    const updateTaskDescription = (txt) =>{
-        
+    const updateTaskDescription = async (txt) =>{
+        try
+        {
+            const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            const response = await fetch(`http://localhost:8000/updateTask/${task.task.TaskID}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body:{
+                'name': task.task.TaskName,
+                'color': task.taskColor,
+                'description':txt
+            }
+            });
+        if (response.ok) {
+            window.location.reload(false);
+        } else {
+            const error = await response.text();
+            showToast(error);
+        }
+        } catch (err) {
+            showToast("Произошла ошибка при отправке удалении карточки");
+        }
     }
     const archiveTask = () =>{
         
@@ -44,7 +98,8 @@ export const DialogProvider = ({ children }) => {
             const response = await fetch(`http://localhost:8000/removeTask/${task.task.TaskID}`, {
             method: "DELETE",
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                
             }
             });
         if (response.ok) {
@@ -56,6 +111,16 @@ export const DialogProvider = ({ children }) => {
         } catch (err) {
             showToast("Произошла ошибка при отправке удалении карточки");
         }
+    }
+    const checklists = () =>{
+        console.log(task.checklists)
+        return task.checklists.map((checklist)=>(
+            <CheckList checklistid={checklist.checklist.ChecklistID}>
+                <CheckListHeader>
+                    {checklist.checklist.ChecklistName}
+                </CheckListHeader>
+            </CheckList>
+        ))
     }
     return (
         <DialogContext.Provider value={{ openDialog, closeDialog }}>
@@ -72,14 +137,10 @@ export const DialogProvider = ({ children }) => {
                     <DialogBody>
                         <div>
                             <h3>Описание задачи</h3>
-                            {task.task.description ? "": "У задачи ещё нет описания"}
-                            <Input isOwner={true} text={task.task.description} onSubmit={updateTaskDescription}/>
-                            <hr/>
+                            {task.task.TaskDescription ? "": "У задачи ещё нет описания"}
+                            <Input isOwner={true} text={task.task.TaskDescription} onSubmit={updateTaskDescription}/>
                         </div>
-                        <CheckList>
-                            <CheckListHeader>Hehe</CheckListHeader>
-                            <CheckBox>Test</CheckBox>
-                        </CheckList>
+                        {checklists()}
                         <NewCheckList taskid={task.task.TaskID}/>
                     </DialogBody>
                     <DialogFooter cn="flex flex-rrow align-center">

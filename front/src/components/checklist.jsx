@@ -4,12 +4,40 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
 import Button from "./button";
-const NewCheckBox = () =>{
+const NewCheckBox = ({checklistid}) =>{
     const [data,setData] = useState('');
     const [isEdit,setEdit] = useState(false);
-    const onSubmit = async () =>{
+    const {showToast} = useToast();
+    const navigate = useNavigate();
+    const onSubmit = async ({}) =>{
         if(data.length==0)
             return;
+        const token = Cookies.get('authToken');
+            if (!token) {
+                navigate('/error/404');
+                return;
+            }
+            try {
+                const response = await fetch(`http://localhost:8000/addCheckListElement/${checklistid}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'name': data
+                    })
+                });
+                if (response.ok) {
+                    window.location.reload(false);
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                showToast("Произошла ошибка при создании элемента чек-листа. " + error);
+            } finally {
+                setEdit(false);
+            }
     }
     function onAbort(){
         setEdit(false)
@@ -45,6 +73,7 @@ export const CheckBox = ({checkboxgroup,children}) =>{
 export const CheckListHeader = ({children})=>{
     return(
         <div className="flex flex-col">
+            <hr/>
         <div className="flex flex-row align-center">
             <h3>
                 {children&&children}
@@ -57,11 +86,11 @@ export const CheckListHeader = ({children})=>{
     )
 }
 
-export const CheckList = ({children}) =>{
+export const CheckList = ({checklistid,children}) =>{
     return(
     <div className="flex flex-col gap-8">
         {children && children}
-        <NewCheckBox/>
+        <NewCheckBox checklistid={checklistid}/>
     </div>)
 }
 export const NewCheckList =(taskid) =>{
