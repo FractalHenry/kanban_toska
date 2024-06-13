@@ -11,11 +11,9 @@ import (
 
 func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 
-	type CardResponse struct {
-		CardID        uint          `json:"id"`
-		CardName      string        `json:"name"`
-		CardInArchive bool          `json:"in_archive"`
-		Tasks         []models.Task `json:"tasks"`
+	type CardWithTasks struct {
+		Card  models.Card   `json:"card"`
+		Tasks []models.Task `json:"tasks"`
 	}
 
 	// Получаем ID доски из пути запроса
@@ -51,7 +49,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	response := struct {
 		ID         uint                        `json:"id"`
 		Name       string                      `json:"name"`
-		Cards      []CardResponse              `json:"cards"`
+		Cards      []CardWithTasks             `json:"cards"`
 		InfoBlocks []models.InformationalBlock `json:"infoBlocks"`
 		BoardUsers []struct {
 			Login   string `json:"login"`
@@ -66,7 +64,6 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		ID:         board.BoardID,
 		Name:       board.BoardName,
-		Cards:      make([]CardResponse, 0),
 		InfoBlocks: infoBlocks,
 		BoardUsers: make([]struct {
 			Login   string `json:"login"`
@@ -80,22 +77,18 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		}, 0),
 	}
 
-	if boardUsers != nil {
-		for _, card := range cards {
-			cardTasks, err := repo.GetCardTasks(card.CardID)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			cardResponse := CardResponse{
-				CardID:        card.CardID,
-				CardName:      card.CardName,
-				CardInArchive: card.CardInArchive,
-				Tasks:         cardTasks,
-			}
-			response.Cards = append(response.Cards, cardResponse)
+	// Заполняем информацию о карточках и задачах
+	for _, card := range cards {
+		cardTasks, err := repo.GetCardTasks(card.CardID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+
+		response.Cards = append(response.Cards, CardWithTasks{
+			Card:  card,
+			Tasks: cardTasks,
+		})
 	}
 
 	// Заполняем информацию о пользователях
