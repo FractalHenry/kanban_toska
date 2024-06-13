@@ -133,7 +133,12 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		} else {
-			err = repo.UpdateTaskDescription(TaskDescription, userLogin)
+			err = repo.DeleteTaskDescription(task.TaskID, userLogin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = repo.CreateTaskDescription(TaskDescription, userLogin)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
