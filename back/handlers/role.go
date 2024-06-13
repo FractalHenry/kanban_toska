@@ -10,7 +10,8 @@ import (
 )
 
 func GetSpaceRolesHandler(w http.ResponseWriter, r *http.Request) {
-	spaceID, err := strconv.Atoi(mux.Vars(r)["spaceId"])
+	vars := mux.Vars(r)
+	spaceID, err := strconv.ParseUint(vars["spaceId"], 10, 64)
 	if err != nil {
 		http.Error(w, "Неверный идентификатор пространства", http.StatusBadRequest)
 		return
@@ -27,26 +28,35 @@ func GetSpaceRolesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateSpaceRoleHandler(w http.ResponseWriter, r *http.Request) {
+	userLogin := r.Header.Get("login")
+
+	vars := mux.Vars(r)
+	spaceId, err := strconv.ParseUint(vars["spaceId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Неверный идентификатор пространства", http.StatusBadRequest)
+		return
+	}
+
 	var requestBody struct {
 		Name    string `json:"name"`
 		IsAdmin bool   `json:"is_admin"`
 		CanEdit bool   `json:"can_edit"`
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&requestBody)
+	err = json.NewDecoder(r.Body).Decode(&requestBody)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	roleOnSpace := models.RoleOnSpace{
+		SpaceID:         uint(spaceId),
 		RoleOnSpaceName: requestBody.Name,
 		IsAdmin:         requestBody.IsAdmin,
 		CanEdit:         requestBody.CanEdit,
 		IsOwner:         false,
 	}
 
-	userLogin := r.Context().Value("userLogin").(string)
 	err = repo.CreateRoleOnSpace(&roleOnSpace, userLogin)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -57,15 +67,16 @@ func CreateSpaceRoleHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteSpaceRoleHandler(w http.ResponseWriter, r *http.Request) {
-	roleOnSpaceID, err := strconv.Atoi(mux.Vars(r)["roleOnSpaceId"])
+	userLogin := r.Header.Get("login")
+
+	vars := mux.Vars(r)
+	roleOnSpaceId, err := strconv.ParseUint(vars["roleOnSpaceId"], 10, 64)
 	if err != nil {
 		http.Error(w, "Неверный идентификатор роли пространства", http.StatusBadRequest)
 		return
 	}
 
-	userLogin := r.Context().Value("userLogin").(string)
-
-	err = repo.DeleteRoleOnSpace(uint(roleOnSpaceID), userLogin)
+	err = repo.DeleteRoleOnSpace(uint(roleOnSpaceId), userLogin)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
