@@ -122,23 +122,22 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// Обновляем описание задания, если оно было передано
 	if reqBody.Description != "" {
 		taskDescription, _ := repo.GetTaskDescription(task.TaskID)
-		TaskDescription := &models.TaskDescription{
-			TaskDescription: reqBody.Description,
-			TaskID:          task.TaskID,
-		}
-		if taskDescription == "" {
-			err = repo.CreateTaskDescription(TaskDescription, userLogin)
+		if taskDescription != "" {
+			// Обновляем существующее описание задачи
+			err = repo.UpdateTaskDescription(&models.TaskDescription{
+				TaskDescription: reqBody.Description,
+				TaskID:          task.TaskID,
+			}, userLogin)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		} else {
-			err = repo.DeleteTaskDescription(task.TaskID, userLogin)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = repo.CreateTaskDescription(TaskDescription, userLogin)
+			// Создаем новое описание задачи
+			err = repo.CreateTaskDescription(&models.TaskDescription{
+				TaskDescription: reqBody.Description,
+				TaskID:          task.TaskID,
+			}, userLogin)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
