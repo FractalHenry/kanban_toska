@@ -117,6 +117,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 
 	// Создаем слайс для хранения пространств с дополнительной информацией
 	var spaceList []struct {
+		SpaceName  string `json:"SpaceName"`
 		SpaceID    uint   `json:"spaceId"`
 		SpaceOwner string `json:"SpaceOwner"`
 		Boards     []struct {
@@ -165,6 +166,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 		}
 
 		spaceList = append(spaceList, struct {
+			SpaceName  string `json:"SpaceName"`
 			SpaceID    uint   `json:"spaceId"`
 			SpaceOwner string `json:"SpaceOwner"`
 			Boards     []struct {
@@ -173,6 +175,7 @@ func GetUserSpaces(w http.ResponseWriter, r *http.Request) {
 			} `json:"boards"`
 			Users []string `json:"users"`
 		}{
+			SpaceName:  space.SpaceName,
 			SpaceID:    space.SpaceID,
 			SpaceOwner: SpaceOwner,
 			Boards:     boardList,
