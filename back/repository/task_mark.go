@@ -28,17 +28,17 @@ func (r *Repository) checkUserPermissionsForTask(taskID uint, userLogin string) 
 	}
 
 	var currentRoleOnSpace models.RoleOnSpace
-	if err := r.db.Model(&models.RoleOnSpace{}).
+	roleOnSpaceErr := r.db.Model(&models.RoleOnSpace{}).
 		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", board.SpaceID, user.Login).
-		First(&currentRoleOnSpace).Error; err != nil {
-		return err
-	}
+		First(&currentRoleOnSpace).Error
 
 	var currentBoardRole models.BoardRoleOnBoard
-	if err := r.db.Model(&models.BoardRoleOnBoard{}).
+	boardRoleErr := r.db.Model(&models.BoardRoleOnBoard{}).
 		Where("board_id = ? AND role_on_board_id IN (SELECT role_on_board_id FROM user_board_role_on_boards WHERE login = ?)", board.BoardID, user.Login).
-		First(&currentBoardRole).Error; err != nil {
-		return err
+		First(&currentBoardRole).Error
+
+	if roleOnSpaceErr != nil && boardRoleErr != nil {
+		return fmt.Errorf("у пользователя нет прав для выполнения действия")
 	}
 
 	if currentRoleOnSpace.IsOwner || currentRoleOnSpace.IsAdmin || currentRoleOnSpace.CanEdit || currentBoardRole.CanEdit {
