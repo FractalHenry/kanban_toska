@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (r *Repository) CreateTaskDescription(taskDescription *models.TaskDescription, userLogin string) error {
@@ -38,7 +39,10 @@ func (r *Repository) UpdateTaskDescription(taskDescription *models.TaskDescripti
 	}
 
 	if r.hasEditPermissions(roleOnSpace, boardRole) {
-		return r.db.Save(taskDescription).Error
+		return r.db.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "task_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"task_description"}),
+		}).Create(taskDescription).Error
 	} else {
 		return fmt.Errorf("у пользователя нет прав для изменения описания задания")
 	}
