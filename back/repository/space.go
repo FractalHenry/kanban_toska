@@ -190,3 +190,34 @@ func (r *Repository) GetSpaceUsers(spaceID uint) (*[]models.UserRoleOnSpace, err
 
 	return userRoleOnSpaces, nil
 }
+
+func (r *Repository) DeleteSpace(spaceID uint, userLogin string) error {
+	if err := r.checkUserPermissionsForSpace(spaceID, userLogin, "delete"); err != nil {
+		return err
+	}
+
+	// Удаляем все связанные доски и роли на досках
+	boards, err := r.GetSpaceBoards(spaceID)
+	if err != nil {
+		return err
+	}
+	for _, board := range boards {
+		if err := r.db.Where("board_id = ?", board.BoardID).Delete(&models.BoardRoleOnBoard{}).Error; err != nil {
+			return err
+		}
+	}
+	if err := r.db.Where("space_id = ?", spaceID).Delete(&models.Board{}).Error; err != nil {
+		return err
+	}
+
+	// Удаляем все роли на пространстве и связи пользователей с ролями
+	if err := r.db.Where("space_id = ?", spaceID).Delete(&models.UserRoleOnSpace{}).Error; err != nil {
+		return err
+	}
+	if err := r.db.Where("space_id = ?", spaceID).Delete(&models.RoleOnSpace{}).Error; err != nil {
+		return err
+	}
+
+	// Удаляем само пространство
+	return r.db.Delete(&models.Space{}, spaceID).Error
+}

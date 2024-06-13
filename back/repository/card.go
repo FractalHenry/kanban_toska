@@ -78,7 +78,7 @@ func (r *Repository) UpdateCard(card *models.Card, userLogin string) error {
 
 // Функция архивирования карточки
 func (r *Repository) ArchiveCard(cardID uint, userLogin string) error {
-	card, err := r.getCardByID(cardID)
+	card, err := r.GetCardByID(cardID)
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func (r *Repository) ArchiveCard(cardID uint, userLogin string) error {
 
 // Функция разархивирования карточки
 func (r *Repository) UnarchiveCard(cardID uint, userLogin string) error {
-	card, err := r.getCardByID(cardID)
+	card, err := r.GetCardByID(cardID)
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func (r *Repository) UnarchiveCard(cardID uint, userLogin string) error {
 
 // Функция удаления карточки
 func (r *Repository) DeleteCard(cardID uint, userLogin string) error {
-	card, err := r.getCardByID(cardID)
+	card, err := r.GetCardByID(cardID)
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func (r *Repository) GetBoardCards(boardID uint) ([]models.Card, error) {
 }
 
 // Вспомогательная функция для получения карточки по ID
-func (r *Repository) getCardByID(cardID uint) (models.Card, error) {
+func (r *Repository) GetCardByID(cardID uint) (models.Card, error) {
 	var card models.Card
 	if err := r.db.First(&card, cardID).Error; err != nil {
 		return card, err

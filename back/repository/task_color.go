@@ -9,7 +9,7 @@ import (
 )
 
 func (r *Repository) CreateTaskColor(taskColor *models.TaskColor, userLogin string) error {
-	task, err := r.getTaskByID(taskColor.TaskID)
+	task, err := r.GetTaskByID(taskColor.TaskID)
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func (r *Repository) CreateTaskColor(taskColor *models.TaskColor, userLogin stri
 }
 
 func (r *Repository) DeleteTaskColor(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -57,4 +57,12 @@ func (r *Repository) GetTaskColor(taskID uint) (string, error) {
 		return "", err
 	}
 	return taskColor.TaskColor, nil
+}
+
+func (r *Repository) UpdateTaskColor(taskColor *models.TaskColor, userLogin string) error {
+	if err := r.checkUserPermissionsForTask(taskColor.TaskID, userLogin); err != nil {
+		return err
+	}
+
+	return r.db.Save(taskColor).Error
 }

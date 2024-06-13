@@ -32,21 +32,43 @@ func main() {
 	router.HandleFunc("/register", handlers.Register).Methods("POST")
 	router.HandleFunc("/login", handlers.Login).Methods("POST")
 
-	// Определяем зыщищенные маршруты (нужно авторизоваться)
-	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
-	router.Handle("/user/{login}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserInfo))).Methods("GET")
-	router.Handle("/boards", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserBoards))).Methods("GET")
-	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
+	// User
 	router.Handle("/user", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserLogin))).Methods("GET")
-	router.Handle("/board", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateBoardHandler))).Methods("POST")
+	router.Handle("/user/{login}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserInfo))).Methods("GET")
 	router.Handle("/description", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateUserDescription))).Methods("PUT")
-	router.Handle("/board/{boardId}/card", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCardHandler))).Methods("POST")
-	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
+
+	// Board
+	router.Handle("/boards", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserBoards))).Methods("GET")
+	router.Handle("/board", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateBoardHandler))).Methods("POST")
 	router.Handle("/board/{boardId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetBoardDetailsHandler))).Methods("GET")
-	router.Handle("/board/{boardId}/Infoblock", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateInfoblockHandler))).Methods("POST")
+
+	// Card
+	router.Handle("/board/{boardId}/card", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateCardHandler))).Methods("POST")
 	router.Handle("/removeCard/{cardID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteCardHandler))).Methods("DELETE")
+
+	router.Handle("/card/{cardID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateCardHandler))).Methods("PUT")
+
+	// Task
+	router.Handle("/board/{boardId}/{cardId}/task", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler))).Methods("POST")
+
+	router.Handle("/task/{taskId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskHandler))).Methods("PUT")
+	router.Handle("/task/{taskId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler))).Methods("DELETE")
+
+	// Infoblock
+	router.Handle("/board/{boardId}/Infoblock", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateInfoblockHandler))).Methods("POST")
 	router.Handle("/removeInfoBlock/{InfoBlockID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteInfoblockHandler))).Methods("DELETE")
 	router.Handle("/updateInfoBlock/{InfoBlockID}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateInfoblockHandler))).Methods("PUT")
+
+	// Space
+	router.Handle("/spaces", middleware.AuthMiddleware(http.HandlerFunc(handlers.GetUserSpaces))).Methods("GET")
+
+	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.UpdateSpaceHandler))).Methods("PUT")
+	router.Handle("/space/{spaceId}", middleware.AuthMiddleware(http.HandlerFunc(handlers.DeleteSpaceHandler))).Methods("DELETE")
+	router.Handle("/space", middleware.AuthMiddleware(http.HandlerFunc(handlers.CreateSpaceHandler))).Methods("POST")
+
+	// Protected
+	router.Handle("/protected/{name}", middleware.AuthMiddleware(http.HandlerFunc(handlers.ProtectedEndpointWithLogin))).Methods("GET")
+
 	// Настройка CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Разрешенные источники

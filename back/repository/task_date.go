@@ -8,7 +8,7 @@ import (
 
 // Функция установки даты начала задачи
 func (r *Repository) SetTaskStartDate(taskID uint, startDate time.Time, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func (r *Repository) SetTaskStartDate(taskID uint, startDate time.Time, userLogi
 
 // Функция удаления даты начала задачи
 func (r *Repository) RemoveTaskStartDate(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (r *Repository) RemoveTaskStartDate(taskID uint, userLogin string) error {
 
 // Функция установки даты окончания задачи
 func (r *Repository) SetTaskEndDate(taskID uint, endDate time.Time, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (r *Repository) SetTaskEndDate(taskID uint, endDate time.Time, userLogin st
 
 // Функция удаления даты окончания задачи
 func (r *Repository) RemoveTaskEndDate(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}

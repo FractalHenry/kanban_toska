@@ -9,7 +9,7 @@ import (
 )
 
 func (r *Repository) UpdateTaskDescription(taskID uint, newDescription string, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func (r *Repository) UpdateTaskDescription(taskID uint, newDescription string, u
 }
 
 func (r *Repository) DeleteTaskDescription(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}

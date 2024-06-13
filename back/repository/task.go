@@ -33,7 +33,7 @@ func (r *Repository) UpdateTask(task *models.Task, userLogin string) error {
 
 // Функция архивирования задания
 func (r *Repository) ArchiveTask(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func (r *Repository) ArchiveTask(taskID uint, userLogin string) error {
 
 // Функция разархивирования задания
 func (r *Repository) UnarchiveTask(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (r *Repository) UnarchiveTask(taskID uint, userLogin string) error {
 
 // Функция удаления задания
 func (r *Repository) DeleteTask(taskID uint, userLogin string) error {
-	task, err := r.getTaskByID(taskID)
+	task, err := r.GetTaskByID(taskID)
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func (r *Repository) GetCardTasks(cardID uint) ([]models.Task, error) {
 }
 
 // Вспомогательная функция для получения задания по ID
-func (r *Repository) getTaskByID(taskID uint) (models.Task, error) {
+func (r *Repository) GetTaskByID(taskID uint) (models.Task, error) {
 	var task models.Task
 	if err := r.db.First(&task, taskID).Error; err != nil {
 		return task, err

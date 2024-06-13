@@ -62,3 +62,92 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// Отправляем ответ
 	w.WriteHeader(http.StatusCreated)
 }
+
+func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID задания из пути запроса
+	vars := mux.Vars(r)
+	taskID, err := strconv.ParseUint(vars["taskId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+
+	// Декодируем полученные данные
+	var reqBody struct {
+		Name  string `json:"name"`
+		Color string `json:"color"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Получаем задание из базы данных
+	task, err := repo.GetTaskByID(uint(taskID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Обновляем поля задания
+	task.TaskName = reqBody.Name
+
+	// Обновляем цвет задания, если он был передан
+	if reqBody.Color != "" {
+		taskColor, _ := repo.GetTaskColor(task.TaskID)
+		TaskColor := &models.TaskColor{
+			TaskColor: reqBody.Color,
+			TaskID:    task.TaskID,
+		}
+		if taskColor == "" {
+			err = repo.CreateTaskColor(TaskColor, userLogin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			err = repo.UpdateTaskColor(TaskColor, userLogin)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	}
+
+	// Обновляем задание в базе данных
+	err = repo.UpdateTask(&task, userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
+
+func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
+	// Получаем логин пользователя из заголовка
+	userLogin := r.Header.Get("login")
+
+	// Получаем ID задания из пути запроса
+	vars := mux.Vars(r)
+	taskID, err := strconv.ParseUint(vars["TaskID"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+
+	// Удаляем задание из базы данных
+	err = repo.DeleteTask(uint(taskID), userLogin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Отправляем ответ
+	w.WriteHeader(http.StatusOK)
+}
