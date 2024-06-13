@@ -108,7 +108,7 @@ type ChecklistElement struct {
 	ChecklistElementID   uint      `gorm:"column:checklist_element_id;primaryKey;autoIncrement"`
 	ChecklistElementName string    `gorm:"column:checklist_element_name;type:varchar(70);not null"`
 	Checked              bool      `gorm:"column:checked;not null;default:false"`
-	ElementOrder         uint      `gorm:"column:'element_order';not null"`
+	ElementOrder         uint      `gorm:"column:element_order;not null"`
 	ChecklistID          uint      `gorm:"column:checklist_id;not null"`
 	Checklist            Checklist `gorm:"foreignKey:ChecklistID"`
 }
