@@ -10,12 +10,6 @@ import (
 )
 
 func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
-
-	type CardWithTasks struct {
-		Card  models.Card   `json:"card"`
-		Tasks []models.Task `json:"tasks"`
-	}
-
 	// Получаем ID доски из пути запроса
 	vars := mux.Vars(r)
 	boardID, err := strconv.ParseUint(vars["boardId"], 10, 64)
@@ -45,6 +39,11 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type CardWithTasks struct {
+		Card  models.Card   `json:"card"`
+		Tasks []models.Task `json:"tasks"`
+	}
+
 	// Создаем ответ в формате JSON
 	response := struct {
 		ID         uint                        `json:"id"`
@@ -64,6 +63,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		ID:         board.BoardID,
 		Name:       board.BoardName,
+		Cards:      make([]CardWithTasks, 0),
 		InfoBlocks: infoBlocks,
 		BoardUsers: make([]struct {
 			Login   string `json:"login"`
