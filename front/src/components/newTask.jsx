@@ -7,7 +7,7 @@ import Cookies from "js-cookie"
 export const NewTask = ({boardid, cardid}) => {
     const [isEdit,setEdit] = useState(false);
     const [data, setData] = useState('');
-    const [colordata, setColor] = useState('');
+    const [colordata, setColor] = useState('#FFFFFF');
     const navigate = useNavigate();
     const { showToast } = useToast();
     const onSubmit = async () =>{

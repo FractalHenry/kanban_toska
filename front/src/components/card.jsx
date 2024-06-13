@@ -9,10 +9,11 @@ import Cookies from "js-cookie"
 import { useEffect } from "react";
 import { NewTask } from "./newTask";
 let Card = ({card}) =>{
+    console.log(card)
     const {showToast} = useToast()
     const navigate = useNavigate()
     const {openDialog} = useDialog();
-    const [tasks, setTasks] = useState();
+    const [tasks, setTasks] = useState("#FFFFFF");
     const remove = async () =>{
         try
         {
@@ -21,7 +22,7 @@ let Card = ({card}) =>{
                 navigate('/error/404');
                 return;
             }
-            const response = await fetch(`http://localhost:8000/removeCard/${card.CardID}`, {
+            const response = await fetch(`http://localhost:8000/removeCard/${card.card.CardID}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -43,18 +44,18 @@ let Card = ({card}) =>{
     return(
             <div className="flex-col cardwrapper gap-8">
                 <div className="flex flex-row between">
-                    <h1>{card.CardName}</h1>
+                    <h1>{card.card.CardName}</h1>
                     <X onClick={remove} className="pointer"/>
                 </div>
                 <hr/>
-                <div className="flex flex-col gap-8" id={"Card:"+ card.id}>
-                {tasks&&tasks.length > 0 ? 
-                (tasks.map((item) => {
+                <div className="flex flex-col gap-8" id={"Card:"+ card.card.CardID}>
+                {card.tasks && card.tasks.length > 0 ? 
+                (card.tasks.map((item) => {
                     return <Task task={item} onClick={() => handleTaskClick(item)}/>;
                 })) 
                 : (<div>No tasks available.</div>)}
                 </div>
-                <NewTask boardid={card.BoardID} cardid={card.CardID}/>
+                <NewTask boardid={card.card.BoardID} cardid={card.card.CardID}/>
             </div>
     )
 }

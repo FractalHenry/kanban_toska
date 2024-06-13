@@ -1,6 +1,6 @@
 export const Dialog = ({children}) =>{
     return(
-        <div className="z-1 flex flex-col max-y max-x absolute t-0 l-0 overflow-y overlay center">
+        <div className="z-1 flex flex-col max-y max-x absolute t-0 l-0 overflow-y overlay p-8 align-center">
             <div className="flex flex-col">
             {children}
             </div>
