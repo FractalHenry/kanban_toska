@@ -45,15 +45,15 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type TaskWithDetails struct {
-		Task              models.Task             `json:"task"`
-		TaskColor         string                  `json:"taskColor,omitempty"`
-		TaskDescription   string                  `json:"taskDescription,omitempty"`
-		TaskDateStart     *models.TaskDateStart   `json:"taskDateStart,omitempty"`
-		TaskDateEnd       *models.TaskDateEnd     `json:"taskDateEnd,omitempty"`
-		TaskNotifications *[]models.Notification  `json:"taskNotifications,omitempty"`
-		TaskMarks         *[]models.Mark          `json:"taskMarks,omitempty"`
-		TaskMarkNames     *[]models.MarkName      `json:"taskMarkNames,omitempty"`
-		Checklists        []ChecklistWithElements `json:"checklists,omitempty"`
+		Task              models.Task              `json:"task"`
+		TaskColor         string                   `json:"taskColor,omitempty"`
+		TaskDescription   string                   `json:"taskDescription,omitempty"`
+		TaskDateStart     *models.TaskDateStart    `json:"taskDateStart,omitempty"`
+		TaskDateEnd       *models.TaskDateEnd      `json:"taskDateEnd,omitempty"`
+		TaskNotifications *[]models.Notification   `json:"taskNotifications,omitempty"`
+		TaskMarks         *[]models.Mark           `json:"taskMarks,omitempty"`
+		TaskMarkNames     *[]models.MarkName       `json:"taskMarkNames,omitempty"`
+		Checklists        *[]ChecklistWithElements `json:"checklists,omitempty"`
 	}
 
 	type CardWithTasks struct {
@@ -111,7 +111,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 			taskMarks, _ := repo.GetTaskMarks(task.TaskID)
 			taskMarkNames, _ := repo.GetTaskMarkNames(task.TaskID)
 			checklists, _ := repo.GetChecklistsByTaskID(task.TaskID)
-			var checklistWithElements []ChecklistWithElements
+			checklistWithElements := []ChecklistWithElements{}
 			if checklists != nil {
 				for _, checklist := range *checklists {
 					checklistElements, err := repo.GetChecklistElementsByChecklistID(checklist.ChecklistID)
@@ -135,7 +135,7 @@ func GetBoardDetailsHandler(w http.ResponseWriter, r *http.Request) {
 				TaskNotifications: taskNotifications,
 				TaskMarks:         taskMarks,
 				TaskMarkNames:     taskMarkNames,
-				Checklists:        checklistWithElements,
+				Checklists:        &checklistWithElements,
 			})
 		}
 
