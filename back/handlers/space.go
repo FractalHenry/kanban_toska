@@ -145,7 +145,7 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 
 func RemoveUserFromSpace(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	_, err := strconv.ParseUint(vars["spaceID"], 10, 64)
+	spaceID, err := strconv.ParseUint(vars["spaceID"], 10, 64)
 	if err != nil {
 		http.Error(w, "Некорректный space ID", http.StatusBadRequest)
 		return
@@ -162,7 +162,7 @@ func RemoveUserFromSpace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = repo.DeleteUserRoleOnSpace(userLogin, reqBody.TargetUserLogin)
+	err = repo.DeleteUserRoleOnSpace(userLogin, reqBody.TargetUserLogin, uint(spaceID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

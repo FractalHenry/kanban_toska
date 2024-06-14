@@ -545,7 +545,7 @@ func (r *Repository) GetSpaceRoles(spaceID uint) ([]models.RoleOnSpace, error) {
 	return roles, nil
 }
 
-func (r *Repository) DeleteUserRoleOnSpace(userLogin, targetUserLogin string) error {
+func (r *Repository) DeleteUserRoleOnSpace(userLogin, targetUserLogin string, spaceID uint) error {
 	// Найти пользователя, который выполняет удаление
 	currentUser, err := r.FindUserByLogin(userLogin)
 	if err != nil {
@@ -561,7 +561,7 @@ func (r *Repository) DeleteUserRoleOnSpace(userLogin, targetUserLogin string) er
 	// Найти роль целевого пользователя на пространстве
 	var targetRole models.RoleOnSpace
 	err = r.db.Model(&models.RoleOnSpace{}).
-		Where("role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", targetUser.Login).
+		Where("space_id = ? AND role_on_space_id IN (SELECT role_on_space_id FROM user_role_on_spaces WHERE login = ?)", spaceID, targetUser.Login).
 		First(&targetRole).Error
 	if err != nil {
 		return err
