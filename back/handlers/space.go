@@ -75,7 +75,7 @@ func CreateSpaceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 
@@ -128,6 +128,7 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 		TargetUserLogin string `json:"targetUserLogin"`
 		RoleOnSpaceID   uint   `json:"roleOnSpaceID"`
 	}
+
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
 		http.Error(w, "Некорректный request body", http.StatusBadRequest)
