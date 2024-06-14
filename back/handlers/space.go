@@ -16,7 +16,7 @@ func DeleteSpaceHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	spaceID, err := strconv.ParseUint(vars["spaceId"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid space ID", http.StatusBadRequest)
+		http.Error(w, "Некорректный space ID", http.StatusBadRequest)
 		return
 	}
 
@@ -49,7 +49,7 @@ func UpdateSpaceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 
@@ -109,7 +109,7 @@ func GetUsersNotOnSpace(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 }
@@ -118,7 +118,7 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	spaceID, err := strconv.ParseUint(vars["spaceID"], 10, 64)
 	if err != nil {
-		http.Error(w, "Invalid space ID", http.StatusBadRequest)
+		http.Error(w, "Некорректный ID", http.StatusBadRequest)
 		return
 	}
 
@@ -130,7 +130,7 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 
