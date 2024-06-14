@@ -38,7 +38,7 @@ export const NewUser = ({spaceid}) =>{
     }, [navigate]);
      
     const onSubmit = async () =>{
-        if (data.length==0 || currentRole=="Выберите роль")
+        if (data.length==0 || currentRole==0)
             return
         const token = Cookies.get('authToken');
             console.log(JSON.stringify({
@@ -80,7 +80,7 @@ export const NewUser = ({spaceid}) =>{
             <div className="flex flex-row gap-8">
             <input placeholder="Имя пользователя" value={data} onChange={(e)=>setData(e.target.value)}/>
             <select onChange={(e)=>{setRole(e.target.value);console.log(e.target.value)}}>
-                <option>Выберите роль</option>
+                <option id="0">Выберите роль</option>
                 {roles && roles.map((item)=>(<option value={item.RoleOnSpaceID} id={item.RoleOnSpaceID} key={item.RoleOnSpaceID}>{item.RoleOnSpaceName}</option>))}
             </select>
             <Check className={`${data.length > 0 ? '' : 'btn-disabled'} pointer`} onClick={onSubmit}/>

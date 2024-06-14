@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -119,10 +120,16 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 	spaceID, err := strconv.ParseUint(vars["spaceID"], 10, 64)
 	if err != nil {
 		http.Error(w, "Некорректный ID", http.StatusBadRequest)
+		log.Printf("Error parsing spaceID: %v", err)
 		return
 	}
 
 	userLogin := r.Header.Get("login")
+	if userLogin == "" {
+		http.Error(w, "login header is missing", http.StatusBadRequest)
+		log.Println("login header is missing")
+		return
+	}
 
 	var reqBody struct {
 		TargetUserLogin string `json:"targetUserLogin"`
@@ -132,16 +139,19 @@ func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
 		http.Error(w, "Некорректный request body", http.StatusBadRequest)
+		log.Printf("Error decoding request body: %v", err)
 		return
 	}
 
 	err = repo.AssociateUserWithRoleOnSpace(userLogin, reqBody.TargetUserLogin, reqBody.RoleOnSpaceID, uint(spaceID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error associating user with role on space: %v", err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
+	log.Println("User successfully added to space")
 }
 
 func RemoveUserFromSpace(w http.ResponseWriter, r *http.Request) {
