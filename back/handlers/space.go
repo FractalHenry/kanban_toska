@@ -178,17 +178,28 @@ func DeleteSpaceRole(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userLogin := r.Header.Get("login")
+	if userLogin == "" {
+		http.Error(w, "login header is missing", http.StatusBadRequest)
+		return
+	}
 
 	var reqBody struct {
-		RoleOnSpaceID uint `json:"roleOnSpaceID"`
+		RoleOnSpaceID string `json:"roleOnSpaceID"`
 	}
+
 	err = json.NewDecoder(r.Body).Decode(&reqBody)
 	if err != nil {
 		http.Error(w, "Некорректный request body", http.StatusBadRequest)
 		return
 	}
 
-	err = repo.DeleteRoleOnSpace(reqBody.RoleOnSpaceID, userLogin)
+	roleOnSpaceID, err := strconv.ParseUint(reqBody.RoleOnSpaceID, 10, 64)
+	if err != nil {
+		http.Error(w, "Некорректный RoleOnSpaceID", http.StatusBadRequest)
+		return
+	}
+
+	err = repo.DeleteRoleOnSpace(uint(roleOnSpaceID), userLogin)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
