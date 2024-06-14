@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"
 import { useToast } from "./Toast/toastprovider";
 let Header = () =>{
-    const { isLoggedIn,currentUser, login , logout} = useContext(AuthContext);
+    const { isLoggedIn, currentUser, login , logout} = useContext(AuthContext);
     return(
         <div className="flex-row header p-4">
             <img className="logo" src={logo} alt=""/>
