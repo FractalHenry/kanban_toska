@@ -101,19 +101,6 @@ func CreateSpaceHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetUsersNotOnSpace(w http.ResponseWriter, r *http.Request) {
-	// Декодируем полученные данные
-	var reqBody struct {
-		SpaceID string `json:"spaceID"`
-	}
-
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
-	if err != nil {
-		http.Error(w, "Некорректный request body", http.StatusBadRequest)
-		return
-	}
-}
-
 func AddUserToSpace(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	spaceID, err := strconv.ParseUint(vars["spaceID"], 10, 64)
