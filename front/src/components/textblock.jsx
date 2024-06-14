@@ -11,7 +11,6 @@ export const TextBlock = ({textblock}) =>{
     const [isEditing,setEditing] = useState(false)
     const [headerState,setHead] = useState(textblock.Header)
     const [bodyState,setBody] = useState(textblock.Body)
-    console.log(textblock)
     const remove = async () =>{
         try
         {

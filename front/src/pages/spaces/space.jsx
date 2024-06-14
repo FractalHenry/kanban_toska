@@ -12,7 +12,7 @@ export const Space = ({space}) =>{
             <Button cls="secondary" onClick={()=>openDialog(space)}>Добавить пользователя</Button>
             </div>
             <div className="p-8 center gap-8 flex flex-row">
-            {space.boards ? space.boards.map((item)=>(<BoardCard board={item} owner={space.SpaceOwner}/>)): "There is no boards yet"}
+            {space.boards ? space.boards.map((item,index)=>(<BoardCard key={index} board={item} owner={space.SpaceOwner}/>)): "There is no boards yet"}
             </div>
             <hr></hr>
             <NewBoard spaceid={space.spaceId}/>

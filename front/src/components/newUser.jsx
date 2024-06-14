@@ -9,7 +9,6 @@ export const NewUser = ({spaceid}) =>{
     const [data,setData] = useState('');
     const [roles,setRoles] = useState([]);
     const [currentRole,setRole] = useState('');
-    console.log(currentRole)
     useEffect(() => {
         const getRoles = async () => {
             const token = Cookies.get('authToken');
@@ -27,7 +26,6 @@ export const NewUser = ({spaceid}) =>{
                 if (response.ok) {
                     const responseData = await response.json(); // Parse the JSON data
                     setRoles(responseData);
-                    console.log(responseData);
                 } else {
                     throw new Error(response.statusText);
                 }
@@ -43,6 +41,10 @@ export const NewUser = ({spaceid}) =>{
         if (data.length==0 || currentRole=="Выберите роль")
             return
         const token = Cookies.get('authToken');
+            console.log(JSON.stringify({
+                'targetUserLogin': data,
+                'roleOnSpaceID': currentRole
+            }))
             if (!token) {
                 navigate('/error/404');
                 return;
@@ -55,8 +57,8 @@ export const NewUser = ({spaceid}) =>{
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        'name': data,
-                        'role': currentRole
+                        'targetUserLogin': data,
+                        'roleOnSpaceID': currentRole
                     })
                 });
                 if (response.ok) {
@@ -77,9 +79,9 @@ export const NewUser = ({spaceid}) =>{
             <h3>Добавить пользователя на пространство</h3>
             <div className="flex flex-row gap-8">
             <input placeholder="Имя пользователя" value={data} onChange={(e)=>setData(e.target.value)}/>
-            <select onChange={(e)=>setRole(e.target.value)}>
+            <select onChange={(e)=>{setRole(e.target.value);console.log(e.target.value)}}>
                 <option>Выберите роль</option>
-                {roles && roles.map((item)=>(<option key={item.RoleOnSpaceID}>{item.RoleOnSpaceName}</option>))}
+                {roles && roles.map((item)=>(<option value={item.RoleOnSpaceID} id={item.RoleOnSpaceID} key={item.RoleOnSpaceID}>{item.RoleOnSpaceName}</option>))}
             </select>
             <Check className={`${data.length > 0 ? '' : 'btn-disabled'} pointer`} onClick={onSubmit}/>
             <X className="pointer" onClick={onAbort}/>

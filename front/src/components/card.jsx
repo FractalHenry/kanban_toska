@@ -8,7 +8,6 @@ import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
 import { NewTask } from "./newTask";
 let Card = ({card}) =>{
-    console.log(card)
     const {showToast} = useToast()
     const navigate = useNavigate()
     const {openDialog} = useDialog();
@@ -49,8 +48,8 @@ let Card = ({card}) =>{
                 <hr/>
                 <div className="flex flex-col gap-8" id={"Card:"+ card.card.CardID}>
                 {card.tasks && card.tasks.length > 0 ? 
-                (card.tasks.map((item) => {
-                    return <Task task={item} onClick={() => handleTaskClick(item)}/>;
+                (card.tasks.map((item,index) => {
+                    return <Task key={index} task={item} onClick={() => handleTaskClick(item)}/>;
                 })) 
                 : (<div>No tasks available.</div>)}
                 </div>

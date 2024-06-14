@@ -45,23 +45,18 @@ let Board = () =>{
     };
     fetchData();
     }, [navigate]);
-    function handleUserManage() {
-        console.log(board.spaceUsers);
-        openDialog(board.spaceUsers,board.boardUsers);
-    }
     return(
         <div className="">
             <div className="header flex flex-row between p-8 align-center">
                 <div className="h2"> Доска: {board && board.name}</div>
-                {isAuthor && <Button className="center" onClick={handleUserManage} >Управление пользователями</Button>}
             </div>
             <div className="flex-row mt-8 mb-8 ml-8">
                 <div className="boardinfo overflow-y no-oveflow-x">
-                    {board && board.infoBlocks.map((item)=>(<TextBlock textblock={item}/>))}
+                    {board && board.infoBlocks.map((item,index)=>(<TextBlock key={index} textblock={item}/>))}
                     <NewInfoBlock boardid={id}/>
                 </div>
                 <div className="cardswrapper">
-                    {board&& board.cards.map((item)=>(<Card card={item} boardid={id}/>))}
+                    {board&& board.cards.map((item,index)=>(<Card key={index} card={item} boardid={id}/>))}
                     <NewCard boardid={id}/>
                 </div>
             </div>

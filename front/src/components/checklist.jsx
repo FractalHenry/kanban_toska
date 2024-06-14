@@ -63,7 +63,8 @@ const NewCheckBox = ({checklistid}) =>{
 export const CheckBox = ({checked, checkboxgroup,children,checkboxid}) =>{
     const {showToast} = useToast();
     const navigate = useNavigate();
-    const updateCheckElement = async () => {
+    const [check,setCheked] = useState(checked);
+    const updateCheckElement = async (ch) => {
         const token = Cookies.get('authToken');
         if (!token) {
             navigate('/error/404');
@@ -77,11 +78,10 @@ export const CheckBox = ({checked, checkboxgroup,children,checkboxid}) =>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    'Checked': check
+                    'Checked': ch
                 })
             });
             if (response.ok) {
-                window.location.reload(false);
             } else {
                 throw new Error(response.statusText);
             }
@@ -111,10 +111,9 @@ export const CheckBox = ({checked, checkboxgroup,children,checkboxid}) =>{
             showToast("Произошла ошибка при удалении элемента чек-листа. " + error);
         }
     }
-    const [check,setCheked] = useState(checked);
     return(
         <div className="flex flex-row">
-            <input type="checkbox" name={checkboxgroup} checked={check} onChange={()=>{setCheked(!check);updateCheckElement()}}/>
+            <input type="checkbox" name={checkboxgroup} checked={check} onChange={()=>{setCheked(!check);updateCheckElement(!check)}}/>
             {children&&children} 
             <div className="fill"/>
             <X className="pointer" onClick={removeCheckElement}/>

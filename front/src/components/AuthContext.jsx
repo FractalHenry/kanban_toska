@@ -15,7 +15,6 @@ function AuthProvider(props) {
     const fetchData = async () => {
       const token = Cookies.get('authToken');
       if (!token) {
-      navigate('/error/404');
       return;
       }
       try {

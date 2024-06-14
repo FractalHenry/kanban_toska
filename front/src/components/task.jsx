@@ -6,7 +6,6 @@ import { useToast } from "./../components/Toast/toastprovider";
 import Cookies from "js-cookie"
 import { NewTask } from "./newTask";
 let Task = ({onClick, task})=>{
-    console.log(task)
     const {showToast} = useToast()
     const navigate = useNavigate()
     const {openDialog} = useDialog();

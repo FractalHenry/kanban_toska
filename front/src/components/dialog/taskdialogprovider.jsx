@@ -21,7 +21,6 @@ export const DialogProvider = ({ children }) => {
     const openDialog = (dialogContent) => {
         setDialog(dialogContent);
     };
-    console.log(task&& task.task.TaskID)
     const closeDialog = () => {
         setDialog(null);
     };
@@ -113,7 +112,6 @@ export const DialogProvider = ({ children }) => {
         }
     }
     const checklists = () =>{
-        console.log(task.checklists)
         return task.checklists.map((checklist)=>(
             <CheckList checklistid={checklist.checklist.ChecklistID}>
                 <CheckListHeader checklistid={checklist.checklist.ChecklistID}>
